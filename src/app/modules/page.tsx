@@ -19,7 +19,7 @@ const modules = [
     title: "Transformative Silence: Accessing Inner Wisdom",
     description: "Connect with the Source. Experience deep silence not as emptiness, but as a fullness of power that enables you to discern right from wrong.",
     image: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?q=80&w=800&auto=format&fit=crop", // Placeholder: Light/Silence
-    href: "/modules/silence",
+    href: "/modules/transformative-silence",
     number: 3,
   },
 ];

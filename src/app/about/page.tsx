@@ -35,7 +35,7 @@ export default function AboutPage() {
               Evidence-Based Interventions Show Promise
             </h3>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-white p-6 rounded-xl">
+              <div className="bg-white/60 backdrop-blur-md border border-teal-100/50 p-6 rounded-xl shadow-lg">
                 <h4 className="font-bold text-text-main mb-3">Mindfulness-Based Programs</h4>
                 <ul className="space-y-2 text-text-muted text-sm">
                   <li className="flex items-start">
@@ -53,7 +53,7 @@ export default function AboutPage() {
                 </ul>
               </div>
 
-              <div className="bg-white p-6 rounded-xl">
+              <div className="bg-white/60 backdrop-blur-md border border-teal-100/50 p-6 rounded-xl shadow-lg">
                 <h4 className="font-bold text-text-main mb-3">Self-Awareness Practices</h4>
                 <ul className="space-y-2 text-text-muted text-sm">
                   <li className="flex items-start">
@@ -94,7 +94,7 @@ export default function AboutPage() {
                 "Mental Clarity",
                 "Inner Peace"
               ].map((skill) => (
-                <div key={skill} className="bg-white p-4 rounded-lg shadow-sm border border-teal-100">
+                <div key={skill} className="bg-white/50 backdrop-blur-md border border-teal-200/30 p-4 rounded-lg shadow-md hover:shadow-lg transition-all hover:bg-white/60">
                   <span className="font-semibold text-text-main">{skill}</span>
                 </div>
               ))}
