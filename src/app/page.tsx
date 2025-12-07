@@ -53,7 +53,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Logo */}
-            <div className="flex justify-center lg:justify-start">
+            <div className="flex justify-center lg:justify-center">
               <div className="relative group">
                 {/* Animated glow effect */}
                 {/* <div className="absolute -inset-6 bg-gradient-to-r from-primary/20 via-teal-500/20 to-blue-500/20 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div> */}
