@@ -29,7 +29,7 @@ const facilitators = [
 const creativeTeam = [
   { name: "Guruprasad", role: "Technical Lead" },
   { name: "Chaitanya", role: "Creative Coordinator" },
-  { name: "Tanu", role: "Graphic Designer" },
+  // { name: "Tanu", role: "Graphic Designer" },
   { name: "Janhvi", role: "Creative Coordinator" },
   { name: "Ravleen", role: "Content Coordinator" },
   { name: "Dhiraj", role: "Content Creator" },

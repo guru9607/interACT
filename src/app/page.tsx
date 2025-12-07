@@ -48,6 +48,57 @@ export default function Home() {
       {/* Stats Counter */}
       <StatsCounter />
 
+      {/* What is interACT? - Logo Section */}
+      <section className="py-20 bg-gradient-to-b from-white to-cream">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Logo */}
+            <div className="flex justify-center lg:justify-start">
+              <div className="relative group">
+                {/* Animated glow effect */}
+                {/* <div className="absolute -inset-6 bg-gradient-to-r from-primary/20 via-teal-500/20 to-blue-500/20 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div> */}
+                {/* <div className="absolute -inset-4 bg-gradient-to-br from-primary/10 to-teal-400/10 rounded-full blur-xl opacity-40"></div> */}
+                <Image
+                  src="/logo.png"
+                  alt="interACT Logo - Rediscover Your Core Goodness"
+                  width={450}
+                  height={450}
+                  className="relative z-10 w-full max-w-md mx-auto drop-shadow-2xl transition-transform duration-300 group-hover:scale-105"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Right Column - Content */}
+            <div className="text-center lg:text-left">
+              <h2 className="text-4xl md:text-5xl font-bold text-text-main mb-6 leading-tight">
+                What is <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">interACT</span>?
+              </h2>
+              <p className="text-lg md:text-xl text-text-muted leading-relaxed mb-8">
+                <strong className="text-text-main">interACT</strong> is a transformative awareness and 
+                self-development journey that merges spiritual insight with practical tools for 
+                personal growth, tailored especially for <strong className="text-primary">youth, emerging leaders and global citizens</strong>.
+              </p>
+              <div className="inline-flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/modules"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  Explore Modules
+                  <ArrowRight className="ml-2" size={20} />
+                </Link>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-teal-50 transition-all"
+                >
+                  Learn More
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* The Challenge We Face */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,12 +273,12 @@ export default function Home() {
       </section>
 
       {/* SDG Section - Two Column Layout */}
-      <section className="py-24 bg-gradient-to-b from-white to-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <section className="py-20 bg-gradient-to-b from-white to-cream">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Text Content */}
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-text-main leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-4xl font-bold text-text-main leading-tight">
                 interACT and the UN Sustainable Development Goals
               </h2>
               

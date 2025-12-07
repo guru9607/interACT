@@ -122,35 +122,40 @@ export default function AboutPage() {
       */}
 
       {/* Our Approach */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-b from-white to-teal-50/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="order-2 lg:order-1">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1 relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-teal-500/20 rounded-3xl blur-2xl opacity-30"></div>
               <Image
-                src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop"
-                alt="Peaceful meditation and inner reflection"
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop"
+                alt="Diverse group of young people collaborating and connecting"
                 width={600}
                 height={600}
-                className="rounded-3xl shadow-2xl object-cover w-full h-full"
+                className="rounded-3xl shadow-2xl object-cover w-full h-full relative z-10"
               />
             </div>
             <div className="order-1 lg:order-2">
-              <h2 className="text-3xl md:text-4xl font-bold text-text-main mb-6">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-teal-100 text-teal-700 text-sm font-medium mb-4">
+                <Sparkles size={14} className="mr-2" />
+                Experience-Driven Learning
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-text-main mb-6 leading-tight">
                 Our Approach
               </h2>
               <div className="space-y-4 text-lg text-text-muted leading-relaxed mb-8">
                 <p>
-                  We deliver this core message in a subtle, story-led format. We don't just teach 
-                  concepts; we guide you to <em className="text-primary font-semibold">experience</em> them.
+                  We deliver this core message in a subtle, <strong className="text-text-main">story-led format</strong>. 
+                  We don't just teach concepts; we guide you to <em className="text-primary font-semibold">experience</em> them.
                 </p>
                 <p>
-                  Through the ACT framework (Awareness, Contemplation, Transformative Silence), we provide a practical 
-                  pathway to a life lived with integrity and empathy.
+                  Through the <strong className="text-text-main">ACT framework</strong> (Awareness, Contemplation, Transformative Silence), 
+                  we provide a practical pathway to a life lived with integrity and empathy.
                 </p>
               </div>
               <Link
                 href="/modules"
-                className="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-md hover:shadow-lg"
+                className="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 Explore the Modules
                 <ArrowRight className="ml-2" size={20} />

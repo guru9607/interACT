@@ -32,8 +32,8 @@ export default function JoinPage() {
                 <div className="flex items-start">
                   <Calendar className="text-primary mt-1 mr-4" size={24} />
                   <div>
-                    <h3 className="font-bold text-text-main">Global Youth Summit 2025</h3>
-                    <p className="text-text-muted">January 15th, 2025</p>
+                    <h3 className="font-bold text-text-main">Global Youth Summit 2026</h3>
+                    <p className="text-text-muted">January 15th, 2026</p>
                   </div>
                 </div>
                 
