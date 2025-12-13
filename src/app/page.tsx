@@ -49,15 +49,12 @@ export default function Home() {
       <StatsCounter />
 
       {/* What is interACT? - Logo Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-cream">
+      {/* <section className="py-20 bg-gradient-to-b from-white to-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Logo */}
+
             <div className="flex justify-center lg:justify-center">
               <div className="relative group">
-                {/* Animated glow effect */}
-                {/* <div className="absolute -inset-6 bg-gradient-to-r from-primary/20 via-teal-500/20 to-blue-500/20 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div> */}
-                {/* <div className="absolute -inset-4 bg-gradient-to-br from-primary/10 to-teal-400/10 rounded-full blur-xl opacity-40"></div> */}
                 <Image
                   src="/logo.png"
                   alt="interACT Logo - Rediscover Your Core Goodness"
@@ -69,7 +66,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Column - Content */}
+            
             <div className="text-center lg:text-left">
               <h2 className="text-4xl md:text-5xl font-bold text-text-main mb-6 leading-tight">
                 What is <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">interACT</span>?
@@ -97,7 +94,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* The Challenge We Face */}
       <section className="py-20 bg-white">
