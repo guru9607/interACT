@@ -280,7 +280,7 @@ export default function TransformativeSilenceModule() {
             Completed All Modules!
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            You've completed the ACT journey. Continue practicing and exploring your inner self.
+            You've completed the interACT journey. Continue practicing and exploring your inner self.
           </p>
           <Link
             href="/modules"

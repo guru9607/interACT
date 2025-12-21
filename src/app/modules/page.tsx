@@ -30,7 +30,7 @@ export default function ModulesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-6">
-            ACT Modules
+            interACT Modules
           </h1>
           <p className="text-xl text-text-muted max-w-3xl mx-auto">
             Explore our structured pathway to inner resilience. Each module is designed 

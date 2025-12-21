@@ -12,7 +12,7 @@ export default function AboutPage() {
           <div className="text-center">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm text-primary text-sm font-medium mb-6 shadow-sm">
               <Sparkles size={16} className="mr-2" />
-              Discover the Inner Me
+              Rediscover the Inner Me
             </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-main mb-6 tracking-tight leading-tight">
               What is <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">interACT</span>?
@@ -79,7 +79,7 @@ export default function AboutPage() {
               How interACT Makes a Difference
             </h3>
             <p className="text-lg text-text-muted leading-relaxed mb-8">
-              Our ACT framework (Awareness, Contemplation, Transformative Silence) is grounded in 
+              Our interACT framework (Awareness, Contemplation, Transformative Silence) is grounded in 
               evidence-based practices from positive psychology, mindfulness research, and contemplative science. 
               We provide accessible, culturally-sensitive tools that empower youth to develop:
             </p>
@@ -149,7 +149,7 @@ export default function AboutPage() {
                   We don't just teach concepts; we guide you to <em className="text-primary font-semibold">experience</em> them.
                 </p>
                 <p>
-                  Through the <strong className="text-text-main">ACT framework</strong> (Awareness, Contemplation, Transformative Silence), 
+                  Through the <strong className="text-text-main">interACT framework</strong> (Awareness, Contemplation, Transformative Silence), 
                   we provide a practical pathway to a life lived with integrity and empathy.
                 </p>
               </div>
