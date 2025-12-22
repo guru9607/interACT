@@ -32,14 +32,14 @@ export default function FacilitatorsPage() {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold text-text-main mb-6 tracking-tight leading-tight">
-            Join Us in This <br />
+            Join us in this <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400">
               Transformative Journey
             </span>
           </h1>
           <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed font-light">
-            We are looking for dedicated souls to help facilitate our interACT workshops. 
-            If you are passionate about youth empowerment and spiritual growth, 
+            We are looking for dedicated instruments to join us as facilitators on our interACT journey.
+            If you are passionate about empowering youth and young adults and helping them rediscover their core goodness,
             we invite you to register below.
           </p>
         </motion.div>
