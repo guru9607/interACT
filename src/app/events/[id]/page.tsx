@@ -126,6 +126,17 @@ export default function EventDetailPage() {
     }
   };
 
+  // Helper to format date
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -182,7 +193,7 @@ export default function EventDetailPage() {
           <div className="flex flex-wrap gap-6 text-lg text-text-muted mb-6">
             <span className="flex items-center">
               <Calendar size={20} className="mr-2 text-primary" />
-              {event.date}
+              {formatDate(event.date)}
             </span>
             <span className="flex items-center">
               <Clock size={20} className="mr-2 text-primary" />

@@ -29,7 +29,8 @@ export default function JoinPage() {
         const { data, error } = await supabase
           .from('events')
           .select('*')
-          .order('id', { ascending: true });
+          .gte('date', new Date().toISOString().split('T')[0]) // Filter: Date must be today or future
+          .order('date', { ascending: true }); // Order by date (soonest first)
         
         if (error) throw error;
         if (data) setEvents(data as Event[]);
@@ -134,9 +135,6 @@ export default function JoinPage() {
             ) : (
               <div className="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                 <p className="text-text-muted">No upcoming events scheduled for this region yet.</p>
-                <button className="mt-4 text-primary font-medium hover:underline">
-                  Sign up for alerts
-                </button>
               </div>
             )}
           </div>
