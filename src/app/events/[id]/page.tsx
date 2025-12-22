@@ -231,7 +231,7 @@ export default function EventDetailPage() {
                   <div key={index} className="flex flex-col sm:flex-row gap-6 p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex-shrink-0">
                       <Image
-                        src={facilitator.image_url}
+                        src={facilitator.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(facilitator.name)}&background=2A9D8F&color=fff&size=200`}
                         alt={facilitator.name}
                         width={120}
                         height={120}
