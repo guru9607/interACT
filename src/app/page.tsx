@@ -46,7 +46,7 @@ export default function Home() {
       </section>
 
       {/* Stats Counter */}
-      <StatsCounter />
+      {/* <StatsCounter /> */}
 
       {/* What is interACT? - Logo Section */}
       {/* <section className="py-20 bg-gradient-to-b from-white to-cream">

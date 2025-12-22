@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Users, Globe, Calendar } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 interface StatItemProps {
   icon: React.ReactNode;
@@ -37,7 +38,7 @@ function StatItem({ icon, label, targetValue, suffix = "+" }: StatItemProps) {
   }, []);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || targetValue === 0) return;
 
     const duration = 2000; // 2 seconds
     const steps = 60;
@@ -74,24 +75,70 @@ function StatItem({ icon, label, targetValue, suffix = "+" }: StatItemProps) {
 }
 
 export default function StatsCounter() {
+  const [stats, setStats] = useState({
+    participants: 0,
+    countries: 0,
+    events: 0
+  });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        // 1. Fetch Events Count
+        const { count: eventsCount, error: eventsError } = await supabase
+          .from('events')
+          .select('*', { count: 'exact', head: true });
+
+        // 2. Fetch Registrations Count (Participants)
+        const { count: participantsCount, error: participantsError } = await supabase
+          .from('registrations')
+          .select('*', { count: 'exact', head: true });
+
+        // 3. Fetch Unique Countries from Registrations
+        // Note: For large datasets, use a database function or distinct select. 
+        // For now, client-side distinct is okay for typical website scale.
+        const { data: countriesData, error: countriesError } = await supabase
+          .from('registrations')
+          .select('country');
+
+        if (eventsError) console.error("Error fetching events count:", eventsError);
+        if (participantsError) console.error("Error fetching participants count:", participantsError);
+        if (countriesError) console.error("Error fetching countries:", countriesError);
+
+        const uniqueCountries = new Set(countriesData?.map(r => r.country).filter(Boolean)).size;
+
+        setStats({
+          events: eventsCount || 0,
+          participants: participantsCount || 0,
+          countries: uniqueCountries || 0
+        });
+
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    }
+
+    fetchStats();
+  }, []);
+
   return (
     <section className="py-20 bg-gradient-to-b from-white to-teal-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-12">
           <StatItem
             icon={<Users size={32} />}
-            label="Participants"
-            targetValue={1000}
+            label="Total Participants"
+            targetValue={stats.participants}
           />
           <StatItem
             icon={<Globe size={32} />}
-            label="Countries"
-            targetValue={150}
+            label="Countries Reached"
+            targetValue={stats.countries}
           />
           <StatItem
             icon={<Calendar size={32} />}
             label="Planned Events"
-            targetValue={50}
+            targetValue={stats.events}
           />
         </div>
       </div>
