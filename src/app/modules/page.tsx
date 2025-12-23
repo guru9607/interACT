@@ -4,7 +4,7 @@ const modules = [
   {
     title: "Awareness: Connecting with Innate Goodness",
     description: "Recognize yourself as a spiritual being. Learn to distinguish the 'Inner Me' from your physical role and access your innate qualities of peace and truth.",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop", // Placeholder: Zen/Peace
+    image: "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=800&auto=format&fit=crop", // Serene person reflecting awareness
     href: "/modules/awareness",
     number: 1,
   },
@@ -18,7 +18,7 @@ const modules = [
   {
     title: "Transformative Silence: Accessing Inner Wisdom",
     description: "Connect with the Source. Experience deep silence not as emptiness, but as a fullness of power that enables you to discern right from wrong.",
-    image: "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?q=80&w=800&auto=format&fit=crop", // Placeholder: Light/Silence
+    image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=800&auto=format&fit=crop", // Placeholder: Light/Silence
     href: "/modules/transformative-silence",
     number: 3,
   },
