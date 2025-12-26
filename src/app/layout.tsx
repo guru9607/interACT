@@ -11,7 +11,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "interACT | Rediscover Your Inner Strength",
+  title: "interACT | Rediscover Your Core Goodness",
   description: "A global youth initiative to help you reconnect with your inner self through Awareness, Contemplation, and Transformative Silence.",
 };
 
