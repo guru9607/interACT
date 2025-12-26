@@ -59,6 +59,7 @@ export default function EventDetailPage() {
           return;
         }
 
+        /* 
         // Fetch facilitators for this event
         const { data: facilitatorLinks, error: linksError } = await supabase
           .from('event_facilitators')
@@ -79,11 +80,12 @@ export default function EventDetailPage() {
           if (facilitatorsError) throw facilitatorsError;
           facilitators = facilitatorsData || [];
         }
+        */
 
         // Combine event data with facilitators
         setEvent({
           ...eventData,
-          facilitators
+          facilitators: [] // facilitators
         });
       } catch (err: any) {
         console.error('Error fetching event:', err);
@@ -235,7 +237,7 @@ export default function EventDetailPage() {
             </section>
 
             {/* Facilitators */}
-            <section>
+            {/* <section>
               <h2 className="text-3xl font-bold text-text-main mb-6">Meet Your Facilitators</h2>
               <div className="space-y-6">
                 {event.facilitators.map((facilitator, index) => (
@@ -257,7 +259,7 @@ export default function EventDetailPage() {
                   </div>
                 ))}
               </div>
-            </section>
+            </section> */}
           </div>
 
           {/* Sidebar - Registration */}
