@@ -49,18 +49,9 @@ export default function TeamPage() {
     setTimeout(() => setSelectedMember(null), 300); 
   };
 
-  // Keywords that define "Core Team"
-  const coreKeywords = ['chairperson', 'advisor', 'technical lead', 'coordinator', 'founder', 'leader', 'head'];
-  
-  const coreTeam = team.filter(m => {
-    const role = (m.role || "").toLowerCase();
-    return coreKeywords.some(keyword => role.includes(keyword));
-  });
-  
-  const ambassadorTeam = team.filter(m => {
-    const role = (m.role || "").toLowerCase();
-    return !coreKeywords.some(keyword => role.includes(keyword));
-  });
+  const leadershipTeam = team.filter(m => m.category?.toLowerCase() === 'leadership');
+  const ambassadorTeam = team.filter(m => m.category?.toLowerCase() === 'global ambassadors');
+  const otherTeam = team.filter(m => !['leadership', 'global ambassadors'].includes(m.category?.toLowerCase() || ''));
 
   return (
     <div className="bg-white min-h-screen py-24">
@@ -89,14 +80,14 @@ export default function TeamPage() {
           <div className="space-y-24">
             
             {/* Leadership Section - Large Cards */}
-            {coreTeam.length > 0 && (
+            {leadershipTeam.length > 0 && (
               <section>
                  <div className="flex items-center gap-4 mb-10">
                     <h2 className="text-2xl font-bold text-text-main">Leadership</h2>
                     <div className="h-px flex-1 bg-teal-100"></div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {coreTeam.map((person) => (
+                  {leadershipTeam.map((person) => (
                     <div 
                       key={person.id} 
                       onClick={() => openModal(person)}
@@ -157,8 +148,40 @@ export default function TeamPage() {
               </section>
             )}
 
+            {/* Other Team Members Section (if any uncategorized) */}
+            {otherTeam.length > 0 && (
+              <section>
+                <div className="flex items-center gap-4 mb-10">
+                    <h2 className="text-2xl font-bold text-text-main">Team Members</h2>
+                    <div className="h-px flex-1 bg-teal-100"></div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {otherTeam.map((person) => (
+                    <div 
+                      key={person.id} 
+                      onClick={() => openModal(person)}
+                      className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all cursor-pointer group"
+                    >
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-teal-50">
+                        <Image
+                          src={person.image_url || getInitialsAvatar(person.name)}
+                          alt={person.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0 text-left">
+                        <h4 className="text-sm font-bold text-text-main truncate group-hover:text-primary">{person.name}</h4>
+                        <p className="text-xs text-text-muted truncate">{person.role || person.country}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* Combined Section Fallback: If filtering returns nothing but team has data, show everyone as cards */}
-            {team.length > 0 && coreTeam.length === 0 && ambassadorTeam.length === 0 && (
+            {team.length > 0 && leadershipTeam.length === 0 && ambassadorTeam.length === 0 && otherTeam.length === 0 && (
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                   {team.map((person) => (
                     <div key={person.id} onClick={() => openModal(person)} className="group bg-white rounded-3xl p-8 border border-gray-100 hover:border-teal-100 text-center">
