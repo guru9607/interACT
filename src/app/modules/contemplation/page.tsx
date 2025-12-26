@@ -88,15 +88,7 @@ const steps = [
 ];
 
 export default function ContemplationModule() {
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
-  const toggleStep = (stepNumber: number) => {
-    setCompletedSteps(prev => 
-      prev.includes(stepNumber) 
-        ? prev.filter(n => n !== stepNumber)
-        : [...prev, stepNumber]
-    );
-  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -140,10 +132,10 @@ export default function ContemplationModule() {
             </div>
             <div className="bg-white/60 backdrop-blur-md border border-teal-100/50 p-4 rounded-lg shadow-sm">
               <div className="flex items-center text-text-muted mb-1">
-                <CheckCircle size={16} className="mr-2" />
-                <span className="text-sm">Progress</span>
+                <Target size={16} className="mr-2" />
+                <span className="text-sm">Format</span>
               </div>
-              <div className="text-2xl font-bold text-text-main">{completedSteps.length}/5</div>
+              <div className="text-2xl font-bold text-text-main">Self-Paced</div>
             </div>
           </div>
         </div>
@@ -196,18 +188,14 @@ export default function ContemplationModule() {
             {steps.map((step) => (
               <div 
                 key={step.number}
-                className={`bg-white border-2 rounded-2xl overflow-hidden transition-all ${
-                  completedSteps.includes(step.number) 
-                    ? 'border-green-400' 
-                    : 'border-gray-200 hover:border-primary'
-                }`}
+                className="bg-white border-2 rounded-2xl overflow-hidden border-gray-100 hover:border-teal-200 transition-all shadow-sm hover:shadow-md"
               >
                 {/* Step Header */}
                 <div className="bg-gradient-to-r from-teal-50 to-blue-50 p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
                           {step.number}
                         </div>
                         <div>
@@ -219,16 +207,6 @@ export default function ContemplationModule() {
                         </div>
                       </div>
                     </div>
-                    <button
-                      onClick={() => toggleStep(step.number)}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        completedSteps.includes(step.number)
-                          ? 'bg-green-500 text-white'
-                          : 'bg-white text-primary border border-primary hover:bg-primary hover:text-white'
-                      }`}
-                    >
-                      {completedSteps.includes(step.number) ? '✓ Completed' : 'Mark Complete'}
-                    </button>
                   </div>
                 </div>
 
