@@ -6,8 +6,8 @@ import { Sparkles } from "lucide-react";
 
 export default function FacilitatorsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 via-cream to-white py-24 md:py-32">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-gradient-to-b from-teal-50 via-cream to-white py-24 md:py-32 overflow-x-hidden">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute -top-10 -left-20 w-72 h-72 bg-teal-200/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
         <div className="absolute -bottom-10 -right-20 w-96 h-96 bg-cream/50 rounded-full blur-3xl -z-10"></div>
@@ -31,7 +31,7 @@ export default function FacilitatorsPage() {
             </p>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold text-text-main mb-6 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-text-main mb-6 tracking-tight leading-tight">
             Join us in this <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400">
               Transformative Journey

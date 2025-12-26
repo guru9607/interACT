@@ -59,7 +59,7 @@ export default function Footer() {
               <FacebookIcon className="w-6 h-6" />
             </a>
             <a 
-              href="mailto:help@theinteract.org" 
+              href="mailto:support@theinteract.org" 
               className="text-text-muted hover:text-primary transition-colors"
             >
               <span className="sr-only">Email</span>
