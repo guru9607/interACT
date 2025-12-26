@@ -24,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-teal-50 via-cream to-white">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-50"></div>
@@ -50,7 +50,7 @@ export default function Home() {
               A Global Youth Initiative
             </motion.div>
             
-            <h1 className="text-5xl md:text-7xl font-bold text-text-main mb-8 tracking-tight leading-[1.1]">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-text-main mb-8 tracking-tight leading-[1.1]">
               Rediscover your <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400">
                 Core Goodness
@@ -81,7 +81,7 @@ export default function Home() {
       </section>
 
       {/* The Challenge We Face */}
-      <section className="py-24 bg-white relative">
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             <motion.div 
@@ -104,13 +104,13 @@ export default function Home() {
               </div>
             </motion.div>
             <motion.div 
-              className="relative"
+              className="relative overflow-visible"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <div className="absolute inset-0 bg-teal-600/5 rounded-[2rem] transform rotate-3 scale-105"></div>
+              <div className="absolute inset-0 bg-teal-600/5 rounded-[2rem] transform rotate-2 scale-105"></div>
               <Image
                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop"
                 alt="Diverse group of young people connecting"
@@ -192,7 +192,7 @@ export default function Home() {
       </section>
 
       {/* ACT Framework Intro */}
-      <section className="py-24 bg-cream">
+      <section className="py-24 bg-cream overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -259,7 +259,7 @@ export default function Home() {
       </section>
 
       {/* SDG Section - Two Column Layout */}
-      <section className="py-24 bg-white border-t border-teal-50">
+      <section className="py-24 bg-white border-t border-teal-50 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Text Content */}
