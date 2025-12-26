@@ -6,18 +6,10 @@ import { useEffect, useState } from "react";
 const getInitialsAvatar = (name: string) => 
   `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2A9D8F&color=fff&size=400`;
 
-interface TeamMember {
-  id: number;
-  name: string;
-  role: string;
-  bio: string | null;
-  image_url: string | null;
-  country: string | null;
-  category: string;
-}
+import { ITeamMember } from "@/types/team";
 
 interface TeamModalProps {
-  member: TeamMember | null;
+  member: ITeamMember | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -82,13 +74,15 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
           <div className="w-full md:w-3/5 p-8 flex flex-col justify-center">
             {member && (
               <>
-                <div className="mb-2">
-                  <span className="inline-block px-3 py-1 bg-teal-50 text-primary text-xs font-bold uppercase tracking-wider rounded-full mb-3">
-                    {member.category}
-                  </span>
-                  <h2 className="text-3xl font-bold text-text-main mb-1">{member.name}</h2>
-                  <p className="text-lg text-primary font-medium">{member.role}</p>
-                </div>
+                {member.category && (
+                  <div className="mb-2">
+                    <span className="inline-block px-3 py-1 bg-teal-50 text-primary text-xs font-bold uppercase tracking-wider rounded-full mb-3">
+                      {member.category}
+                    </span>
+                  </div>
+                )}
+                <h2 className="text-3xl font-bold text-text-main mb-1">{member.name}</h2>
+                <p className="text-lg text-primary font-medium">{member.role}</p>
 
                 {member.country && (
                   <div className="flex items-center text-text-muted text-sm font-medium mb-6">
