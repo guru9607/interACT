@@ -94,12 +94,13 @@ export default function TeamPage() {
                       className="group bg-white rounded-3xl overflow-hidden transition-all duration-300 cursor-pointer flex flex-col items-center text-center px-6 py-10 border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:-translate-y-2"
                     >
                       <div className="w-32 h-32 mb-6 rounded-full p-1 bg-teal-50 group-hover:bg-teal-400 transition-colors">
-                        <div className="w-full h-full rounded-full overflow-hidden relative bg-white">
+                        <div className="w-full h-full rounded-full overflow-hidden relative bg-white aspect-square">
                           <Image
                             src={person.image_url || getInitialsAvatar(person.name)}
                             alt={person.name}
                             fill
                             className="object-cover"
+                            sizes="128px"
                           />
                         </div>
                       </div>
@@ -130,12 +131,13 @@ export default function TeamPage() {
                       onClick={() => openModal(person)}
                       className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all cursor-pointer group"
                     >
-                      <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-teal-50">
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-teal-50 aspect-square">
                         <Image
                           src={person.image_url || getInitialsAvatar(person.name)}
                           alt={person.name}
                           fill
                           className="object-cover"
+                          sizes="40px"
                         />
                       </div>
                       <div className="flex-1 min-w-0 text-left">
@@ -162,12 +164,13 @@ export default function TeamPage() {
                       onClick={() => openModal(person)}
                       className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all cursor-pointer group"
                     >
-                      <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-teal-50">
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-teal-50 aspect-square">
                         <Image
                           src={person.image_url || getInitialsAvatar(person.name)}
                           alt={person.name}
                           fill
                           className="object-cover"
+                          sizes="40px"
                         />
                       </div>
                       <div className="flex-1 min-w-0 text-left">
