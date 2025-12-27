@@ -75,12 +75,12 @@ export default function FacilitatorForm() {
         <div className="grid md:grid-cols-2 gap-6">
           {/* Full Name */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Full Name</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Full Name <span className="text-red-500">*</span></label>
             <input
               required
               type="text"
               name="full_name"
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               value={formData.full_name}
               onChange={handleChange}
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
@@ -89,12 +89,12 @@ export default function FacilitatorForm() {
 
           {/* Email */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Email Address</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Email Address <span className="text-red-500">*</span></label>
             <input
               required
               type="email"
               name="email"
-              placeholder="john@example.com"
+              placeholder="primary.email@example.com"
               value={formData.email}
               onChange={handleChange}
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
@@ -103,24 +103,31 @@ export default function FacilitatorForm() {
 
           {/* Phone No */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Phone Number</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Phone Number <span className="text-red-500">*</span></label>
             <input
+              required
               type="tel"
               name="phone_no"
-              placeholder="+1 234 567 890"
+              placeholder="Include country code (e.g., +1...)"
               value={formData.phone_no}
               onChange={handleChange}
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.value = target.value.replace(/[^0-9+\s-]/g, '');
+              }}
+              pattern="[\+]?[0-9\s-]{8,}"
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
             />
           </div>
 
           {/* Gyan Age */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Gyan Age (Years)</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Gyan Age (Years) <span className="text-red-500">*</span></label>
             <input
+              required
               type="text"
               name="gyan_age"
-              placeholder="5 Years"
+              placeholder="e.g., 8 Years"
               value={formData.gyan_age}
               onChange={handleChange}
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
@@ -129,11 +136,12 @@ export default function FacilitatorForm() {
 
           {/* Profession */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Profession</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Profession <span className="text-red-500">*</span></label>
             <input
+              required
               type="text"
               name="profession"
-              placeholder="Educator / Engineer / Student"
+              placeholder="Current occupation or background"
               value={formData.profession}
               onChange={handleChange}
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
@@ -142,7 +150,7 @@ export default function FacilitatorForm() {
 
           {/* Country */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Country</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Country <span className="text-red-500">*</span></label>
             <select
               required
               name="country"
@@ -354,11 +362,12 @@ export default function FacilitatorForm() {
 
           {/* Centre Incharge Name */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-teal-900 ml-1">Centre Incharge Name</label>
+            <label className="text-sm font-semibold text-teal-900 ml-1">Centre Incharge Name <span className="text-red-500">*</span></label>
             <input
+              required
               type="text"
               name="centre_incharge_name"
-              placeholder="Sister BK Name"
+              placeholder="Name of presiding Teacher/In-charge"
               value={formData.centre_incharge_name}
               onChange={handleChange}
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
@@ -371,7 +380,7 @@ export default function FacilitatorForm() {
             <input
               type="email"
               name="centre_email"
-              placeholder=""
+              placeholder="official.centre@brahmakumaris.org"
               value={formData.centre_email}
               onChange={handleChange}
               className="w-full px-5 py-3.5 bg-white border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none"
