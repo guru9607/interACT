@@ -7,82 +7,83 @@ import { useState } from "react";
 const steps = [
   {
     number: 1,
-    title: "Understanding the Observer",
+    title: "Arriving in the Present Moment",
     duration: "15 min",
-    overview: "Discover the concept of self-awareness and the 'observer mind' - the part of you that can watch your thoughts without being controlled by them.",
+    overview: "This session gently guides participants to bring their attention into the present moment, away from past memories and future concerns. By settling awareness in the “now,” participants naturally experience stillness and the first glimpse of inner peace.",
     objectives: [
-      "Define self-awareness and its importance",
-      "Understand the observer perspective",
-      "Recognize the difference between reacting and responding"
+      "Experience the present moment as a state of inner awareness",
+      "Recognize how attention often drifts into past and future",
+      "Sense calm and stability that arise from being fully present"
     ],
     activity: {
-      name: "Self-Reflection Journal",
-      type: "PDF Worksheet",
-      description: "A guided journaling exercise to help you begin observing your thoughts and emotions."
+      name: "Present-Moment Grounding Practice (5-4-3-2-1)",
+      type: "Guided Practice + PDF Worksheet",
+      description: "A simple grounding exercise that gently brings awareness into the present moment by engaging the senses, helping participants experience calm, stability, and inner presence."
     }
+
   },
   {
     number: 2,
-    title: "Recognizing Patterns",
+    title: "Observing with Awareness",
     duration: "20 min",
-    overview: "Learn to identify automatic thoughts, emotional triggers, and habitual reactions that shape your daily experience.",
+    overview: "After arriving in the present moment, participants are guided to observe their thoughts and emotions as they arise—without trying to change, judge, or suppress them. This gentle observation allows clarity to emerge naturally and helps participants experience the difference between awareness and identification.",
     objectives: [
-      "Identify common thought patterns",
-      "Recognize emotional triggers",
-      "Understand the thought-emotion-behavior cycle"
+      "Observe thoughts and emotions without getting carried away by them",
+      "Recognize the space between awareness and reaction",
+      "Experience clarity as a natural outcome of observation"
     ],
     activity: {
-      name: "Thought Pattern Tracker",
-      type: "PDF Worksheet",
-      description: "Track your thoughts and emotions over 3 days to discover recurring patterns."
+      name: "Thought & Emotion Observation",
+      type: "Guided Practice + Reflection PDF",
+      description: "A guided awareness exercise to help participants observe thoughts and emotions without judgment, allowing clarity and inner stability to emerge naturally."
     }
   },
   {
     number: 3,
-    title: "Body-Mind Connection",
-    duration: "25 min",
-    overview: "Explore how physical sensations relate to emotions and thoughts, developing somatic awareness.",
+    title: "Clarity Through Recognizing Patterns",
+    duration: "20 min",
+    overview: "With clarity established through observation, participants are guided to notice recurring mental, emotional, and behavioral patterns. Instead of analyzing or labeling themselves, they learn to recognize these patterns as conditioned responses—seen clearly through awareness.",
     objectives: [
-      "Understand the mind-body connection",
-      "Practice body scan meditation",
-      "Recognize physical signs of stress and calm"
+      "Identify recurring thought and emotional patterns",
+      "Recognize personal triggers without self-judgment",
+      "Understand how awareness reveals patterns naturally"
     ],
     activity: {
-      name: "Body Scan Practice Guide",
-      type: "PDF + Audio",
-      description: "A guided body scan meditation with accompanying practice guide."
+      name: "Pattern Awareness Tracker",
+      type: "PDF Worksheet",
+      description: "A simple tracking exercise to help participants recognize recurring thought and emotional patterns through clarity and observation, without judgment."
     }
   },
   {
     number: 4,
-    title: "Values Clarification",
-    duration: "30 min",
-    overview: "Discover your core values and learn how living in alignment with them creates authenticity and purpose.",
+    title: "Redirecting Awareness to Innate Goodness",
+    duration: "25 min",
+    overview: "Once patterns are clearly recognized, participants are gently guided to shift their attention toward their innate qualities of peace, love, and truth. Instead of fixing or resisting patterns, awareness is redirected to inner goodness—allowing natural balance and emotional stability to emerge.",
     objectives: [
-      "Identify your top 5 core values",
-      "Understand the role of values in decision-making",
-      "Assess current alignment with values"
+      "Understand redirection as a shift of awareness, not effort",
+      "Experience inner peace beyond mental patterns",
+      "Reconnect with innate qualities of love and truth"
     ],
     activity: {
-      name: "Personal Values Card Sort",
-      type: "Interactive PDF",
-      description: "Sort through 50+ values to discover what truly matters to you."
+      name: "Inner Quality Awareness Practice",
+      type: "Guided Practice + Reflection PDF",
+      description: "A guided awareness exercise that helps participants redirect attention from habitual patterns to their innate qualities of peace, love, and truth."
     }
   },
   {
     number: 5,
-    title: "Daily Awareness Practice",
+    title: "Bringing Awareness into Daily Life",
     duration: "Ongoing",
-    overview: "Integrate awareness practices into your daily routine with practical techniques and a 7-day challenge.",
+    overview: "This step helps participants gently carry the awareness they’ve experienced into everyday moments. Rather than practicing something new, they learn to pause, notice, and return to inner peace and clarity during regular activities like work, conversations, and decisions.",
     objectives: [
-      "Establish a daily awareness practice",
-      "Use mindful moments throughout the day",
-      "Track progress and insights"
+      "Apply awareness during normal daily situations",
+      "Pause before reacting and respond with clarity",
+      "Stay connected to inner peace amidst activity"
     ],
     activity: {
-      name: "7-Day Awareness Challenge",
-      type: "PDF Tracker",
-      description: "A week-long challenge with daily prompts and reflection questions."
+      name: "Everyday Awareness Practice",
+      type: "7-Day Guided Practice + Reflection PDF",
+      description: "A simple daily practice that helps participants pause during routine moments and reconnect with awareness and inner calm."
     }
   }
 ];
@@ -106,7 +107,7 @@ export default function AwarenessModule() {
                 Module 1
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-4">
-                Awareness: Connecting with Your Authentic Self
+                Awareness: Connecting with Innate Goodness
               </h1>
               <p className="text-xl text-text-muted max-w-3xl">
                 Develop self-awareness to recognize your thoughts, emotions, and patterns without judgment.
@@ -159,21 +160,18 @@ export default function AwarenessModule() {
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Connect with your body's wisdom through somatic awareness</span>
+                  <span>How to pause inner storm and respond with clarity</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Clarify your core values and live more authentically</span>
+                  <span>Align everyday actions with inner values rather than external pressure</span>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-text-main mb-3">Why It Matters</h3>
               <p className="text-text-muted leading-relaxed">
-                Self-awareness is the foundation of personal growth and emotional intelligence. 
-                Research shows that individuals with higher self-awareness experience less stress, 
-                make better decisions, and have more fulfilling relationships. This module provides 
-                practical tools to develop this essential skill.
+                When we reconnect with our innate goodness, life begins to flow from clarity rather than conflict. Awareness of inner peace, love, and truth creates emotional balance, strengthens decision-making, and allows relationships to grow from authenticity instead of reaction.
               </p>
             </div>
           </div>

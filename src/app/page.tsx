@@ -58,7 +58,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-text-muted mb-10 leading-relaxed max-w-2xl mx-auto font-light">
-              In a world of noise, find your inner clarity. <span className="font-medium text-teal-700">interACT</span> helps you reconnect with your authentic self through awareness and transformative silence.
+              In a world of noise, find your inner clarity. <span className="font-medium text-teal-700">interACT</span> helps you reconnect with your <span className="text-teal-700 font-semibold">innate goodness</span> through awareness and transformative silence.
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -154,12 +154,12 @@ export default function Home() {
                 <div className="w-14 h-14 bg-teal-500/30 rounded-2xl flex items-center justify-center mb-6 text-white border border-white/20">
                   <Sparkles size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Inner Clarity</h3>
+                <h3 className="text-xl font-bold text-white mb-3">Innate Awareness</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
-                  Gain a clear perspective on your life and goals by quieting the noise around you.
+                  Rediscover your "Inner Me"—independent of roles and labels—and observe life with clarity.
                 </p>
              </motion.div>
-
+ 
              {/* Benefit 2 */}
              <motion.div 
                variants={fadeInUp}
@@ -168,12 +168,12 @@ export default function Home() {
                 <div className="w-14 h-14 bg-teal-500/30 rounded-2xl flex items-center justify-center mb-6 text-white border border-white/20">
                   <Shield size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Resilience</h3>
+                <h3 className="text-xl font-bold text-white mb-3">Internal Resilience</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
-                  Build the emotional strength to navigate challenges with grace and confidence.
+                  Build a strong inner core that remains stable regardless of external pressures or praise.
                 </p>
              </motion.div>
-
+ 
              {/* Benefit 3 */}
              <motion.div 
                variants={fadeInUp}
@@ -182,9 +182,9 @@ export default function Home() {
                 <div className="w-14 h-14 bg-teal-500/30 rounded-2xl flex items-center justify-center mb-6 text-white border border-white/20">
                   <Zap size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Ethical Leadership</h3>
+                <h3 className="text-xl font-bold text-white mb-3">Inner Wisdom</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
-                  Lead with integrity and compassion, inspiring others through your example.
+                  Access deep discernment through silence, connecting with the source of all powers.
                 </p>
              </motion.div>
           </motion.div>
@@ -223,7 +223,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-text-main mb-4">Awareness</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
-                Recognize yourself as a spiritual being—the "Inner Me"—distinct from your physical role.
+                Rediscover your innate goodness by observing your thoughts and emotions without judgment.
               </p>
             </motion.div>
 
@@ -237,7 +237,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-text-main mb-4">Contemplation</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
-                Nurture your innate qualities of peace, love, and truth to build unshakeable self-worth.
+                Strengthen your inner core and build internal resilience to shift focus from external validation.
               </p>
             </motion.div>
 
@@ -251,7 +251,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-text-main mb-4">Transformative Silence</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
-                Connect with the Source to access inner wisdom and discern right from wrong.
+                Access inner wisdom and clarity by connecting with the source of all powers in deep stillness.
               </p>
             </motion.div>
           </motion.div>

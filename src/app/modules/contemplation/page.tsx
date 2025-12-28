@@ -2,87 +2,86 @@
 
 import Link from "next/link";
 import { ArrowLeft, Download, CheckCircle, Clock, Target } from "lucide-react";
-import { useState } from "react";
 
 const steps = [
   {
     number: 1,
-    title: "Building Your Inner Foundation",
+    title: "The Power of Focused Reflection",
     duration: "20 min",
-    overview: "Discover the power of intentional contemplation and how regular reflection strengthens your sense of self.",
+    overview: "Move from casual thinking to deep, intentional reflection. Learn how to direct your mind toward qualities like peace and love to begin strengthening your inner foundation.",
     objectives: [
-      "Understand the difference between thinking and contemplation",
-      "Learn the benefits of daily reflection practice",
-      "Create a personal contemplation space"
+      "Understand the difference between ordinary thinking and focused contemplation",
+      "Learn to create a mental space for inner reflection",
+      "Begin directing thoughts toward innate goodness"
     ],
     activity: {
-      name: "Sacred Space Setup Guide",
+      name: "The Contemplation Anchor",
       type: "PDF Guide",
-      description: "Design a physical and mental space dedicated to your contemplation practice."
+      description: "Learn to stabilize your mind by focusing on a single core quality of your choice."
     }
   },
   {
     number: 2,
-    title: "Cultivating Inner Peace",
+    title: "Nurturing Innate Self-Worth",
     duration: "25 min",
-    overview: "Explore techniques to access and maintain inner peace, even amid external chaos.",
+    overview: "Shift from building worth based on achievements or external praise to recognizing worth that is innate. Contemplate your value as a being of peace and love.",
     objectives: [
-      "Practice peace contemplation meditation",
-      "Identify peace disruptors in daily life",
-      "Develop peace anchor phrases"
+      "Identify the difference between earned self-esteem and innate self-worth",
+      "Contemplate inner qualities as the source of true value",
+      "Practice self-appreciation without the need for comparison"
     ],
     activity: {
-      name: "Peace Meditation Series",
-      type: "Audio + PDF",
-      description: "Guided meditations on peace with accompanying reflection prompts."
+      name: "Innate Value Journal",
+      type: "PDF Worksheet",
+      description: "A reflection exercise to help you disconnect your self-worth from external outcomes."
     }
   },
   {
     number: 3,
-    title: "Strengthening Core Virtues",
+    title: "Building Inner Strength & Resilience",
     duration: "30 min",
-    overview: "Learn to contemplate and embody virtues like love, compassion, courage, and truth.",
+    overview: "Use contemplation to build a 'shock-absorber' within. By focusing on your internal stability, you become less affected by external chaos and setbacks.",
     objectives: [
-      "Identify your natural virtues and areas for growth",
-      "Practice virtue contemplation",
-      "Create personal affirmations"
+      "Develop the capacity to remain stable during external changes",
+      "Contemplate the quality of inner strength and spiritual power",
+      "Learn to use your 'inner core' as a refuge during pressure"
     ],
     activity: {
-      name: "Virtue Contemplation Workbook",
-      type: "Interactive PDF",
-      description: "Deep-dive exercises for 8 core virtues with daily contemplation practices."
+      name: "Resilience Contemplation Guide",
+      type: "Audio + PDF",
+      description: "A guided contemplation focused on tapping into your stable inner core."
     }
   },
   {
     number: 4,
-    title: "Connecting with Purpose",
+    title: "Shifting from External to Internal",
     duration: "35 min",
-    overview: "Use contemplative practices to discover and clarify your life's purpose and meaning.",
+    overview: "Explore how seeking appreciation from others creates emotional dependency. Learn to validate yourself through connection with your core qualities.",
     objectives: [
-      "Explore 'big picture' questions through contemplation",
-      "Define your personal mission statement",
-      "Align daily actions with purpose"
+      "Recognize patterns of seeking external approval",
+      "Contemplate self-sufficiency and emotional independence",
+      "Experience the freedom of internal validation"
     ],
     activity: {
-      name: "Purpose Discovery Journey",
-      type: "PDF Workbook",
-      description: "A structured process to uncover and articulate your unique life purpose."
+      name: "The Validation Shift",
+      type: "Self-Reflection PDF",
+      description: "A checklist and reflection guide to help you move from 'needing' to 'sharing' your qualities."
     }
   },
   {
     number: 5,
-    title: "Daily Contemplation Rituals",
+    title: "Living with Unshakeable Resilience",
     duration: "Ongoing",
-    overview: "Integrate contemplation into your daily routine with morning and evening rituals.",
+    overview: "Integrate contemplation into daily interactions. Learn to keep your 'inner core' strong while navigating the pressures and interactions of the world.",
     objectives: [
-      "Establish morning and evening contemplation rituals",
-      "Use contemplative prompts throughout the day",
-      "Track insights and growth"
+      "Practice staying centered during daily pressure",
+      "Embody innate qualities in social interactions",
+      "Maintain resilience as a consistent state of being"
     ],
     activity: {
-      name: "30-Day Contemplation Challenge",
-      type: "PDF Journal",
-      description: "A month-long guided challenge with daily themes and reflection questions."
+      name: "7-Day Resilience Challenge",
+      type: "PDF Journal + Tracker",
+      description: "A week-long practice to apply contemplation insights in real-world situations."
     }
   }
 ];
@@ -109,7 +108,7 @@ export default function ContemplationModule() {
                 Contemplation: Strengthening Your Inner Core
               </h1>
               <p className="text-xl text-text-muted max-w-3xl">
-                Nurture your innate qualities of peace, love, and truth to build unshakeable self-worth.
+                Nurture your core goodness through focused reflection to build unshakeable self-worth and internal resilience.
               </p>
             </div>
           </div>
@@ -151,28 +150,26 @@ export default function ContemplationModule() {
               <ul className="space-y-2 text-text-muted">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Develop a consistent contemplation practice to strengthen inner qualities</span>
+                  <span>Nurture core goodness through focused reflection and contemplation</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Cultivate peace, love, compassion, and other core virtues</span>
+                  <span>Build unshakeable self-worth and inner strength from within</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Discover and articulate your unique life purpose</span>
+                  <span>Shift focus from external validation to internal resilience</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Create daily rituals that reinforce your authentic self</span>
+                  <span>Reduce susceptibility to external pressures of the outside world</span>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-text-main mb-3">Why It Matters</h3>
               <p className="text-text-muted leading-relaxed">
-                Contemplation goes beyond awareness—it actively nurtures the qualities you want to embody. 
-                Research in positive psychology shows that regular contemplation of virtues and values leads 
-                to greater life satisfaction, resilience, and meaning. This module will help you internalize your best self.
+                Once we're aware of our core goodness, we can nurture it. This step involves focused reflection to build self-worth and inner resilience. By contemplating these positive qualities within ourselves, we shift our focus from external validation to internal strength, making us naturally less susceptible to the pressures of the outside world.
               </p>
             </div>
           </div>

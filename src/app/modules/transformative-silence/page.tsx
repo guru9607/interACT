@@ -7,82 +7,82 @@ import { useState } from "react";
 const steps = [
   {
     number: 1,
-    title: "Understanding Transformative Silence",
-    duration: "15 min",
-    overview: "Discover what makes silence 'transformative' versus just quiet, and learn the science behind stillness.",
+    title: "Beyond Quietness: Freedom of Thought",
+    duration: "20 min",
+    overview: "Define silence as inner freedom. Learn to identify and move beyond negative, waste, and ordinary thoughts to reach a state of pure, presence-filled clarity.",
     objectives: [
-      "Distinguish between silence and stillness",
-      "Understand the neuroscience of silence",
-      "Identify barriers to experiencing deep silence"
+      "Identify 'waste thoughts' that drain inner energy",
+      "Experience the difference between physical quiet and mental freedom",
+      "Practice quietening the ordinary to access the extraordinary"
     ],
     activity: {
-      name: "Silence Exploration Journal",
-      type: "PDF Workbook",
-      description: "Guided prompts to explore your relationship with silence and noise."
+      name: "Waste Thought Audit",
+      type: "Reflection PDF",
+      description: "A tool to track mental chatter and consciously shift toward meaningful silence."
     }
   },
   {
     number: 2,
-    title: "Calming the Mental Chatter",
+    title: "The Lab of Inner Discernment",
     duration: "25 min",
-    overview: "Learn techniques to quiet the constant stream of thoughts and access deeper layers of consciousness.",
+    overview: "Use deep experience to discern between Right and Wrong, True and False. Silence becomes the laboratory where clarity reveals the path forward.",
     objectives: [
-      "Practice thought observation without engagement",
-      "Use breath techniques to calm the mind",
-      "Develop a 'mental pause' skill"
+      "Establish a criteria for inner truth based on original qualities",
+      "Observe choices in the light of deep silence",
+      "Recognize the 'False' influences that cloud judgment"
     ],
     activity: {
-      name: "Mind-Quieting Toolkit",
-      type: "Audio + PDF",
-      description: "5 different techniques for calming mental chatter with guided audio practices."
+      name: "True vs. False Exploration",
+      type: "Socratic Reflection PDF",
+      description: "Bring a dilemma into silence and discern the direction that aligns with your innate goodness."
     }
   },
   {
     number: 3,
-    title: "Connecting with Inner Wisdom",
+    title: "Connecting with the Unlimited Source",
     duration: "30 min",
-    overview: "Access your innate wisdom and intuition through deep silence and learn to trust your inner guidance.",
+    overview: "Concentrate on the Unlimited Source of all Powers and Support. Define this source of energy as the Universal anchor that empowers your inner being.",
     objectives: [
-      "Distinguish between mental chatter and inner wisdom",
-      "Practice 'listening within' meditation",
-      "Develop trust in intuitive insights"
+      "Understand the 'Source' as a constant reservoir of spiritual energy",
+      "Practice focused concentration (meditation) to bridge with this energy",
+      "Experience a sense of belonging and support beyond the self"
     ],
     activity: {
-      name: "Inner Wisdom Practice Series",
-      type: "PDF + Audio",
-      description: "Progressive meditations to deepen your connection with inner guidance."
+      name: "Source Connection Meditation",
+      type: "Guided Audio Practice",
+      description: "A step-by-step concentration exercise to connect with the source of empowerment."
     }
   },
   {
     number: 4,
-    title: "Silence in Nature and Sacred Spaces",
+    title: "Strengthening Original Qualities",
     duration: "30 min",
-    overview: "Explore how natural and sacred environments amplify the power of transformative silence.",
+    overview: "Use the energy from the Source to strengthen and stabilize your original qualities of peace, love, and truth, making them unshakeable.",
     objectives: [
-      "Experience silence in nature mindfully",
-      "Create or find your sacred silence space",
-      "Understand the role of environment in deep practice"
+      "Internalize energy to feed your inner core",
+      "Learn to stabilize qualities so they aren't lost in external noise",
+      "Experience the sustainable change that comes from inner recharging"
     ],
     activity: {
-      name: "Nature Silence Quest",
-      type: "PDF Guide",
-      description: "A structured outdoor silence practice with reflection prompts and guidelines."
+      name: "Energy Stabilization Practice",
+      type: "Visual PDF Guide",
+      description: "Techniques to 'lock in' the qualities experienced during deep silence."
     }
   },
   {
     number: 5,
-    title: "Living from the Silence",
+    title: "Withdrawing Strength for Change",
     duration: "Ongoing",
-    overview: "Integrate moments of transformative silence into daily life and learn to act from a place of inner stillness.",
+    overview: "Access the power to bring about real life changes. Withdraw strength from your silent connection to make choices that are sustainable and powerful.",
     objectives: [
-      "Establish daily silence rituals",
-      "Practice 'acting from stillness' in daily situations",
-      "Maintain silence as an anchor throughout the day"
+      "Convert silent experience into active willpower",
+      "Implement sustainable changes in behavior and lifestyle",
+      "Bring the strength of silence into every real-world interaction"
     ],
     activity: {
-      name: "21-Day Silence Integration Challenge",
-      type: "PDF Tracker",
-      description: "Three weeks of progressive practices to make silence your foundation."
+      name: "Transformation Blueprint",
+      type: "21-Day Implementation Tracker",
+      description: "A practical tracker to ensure silent insights lead to tangible life shifts."
     }
   }
 ];
@@ -106,10 +106,10 @@ export default function TransformativeSilenceModule() {
                 Module 3
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-4">
-                Transformative Silence: Connecting with the Source
+                Transformative Silence: Accessing Inner Wisdom
               </h1>
               <p className="text-xl text-text-muted max-w-3xl">
-                Connect with your inner wisdom to access clarity and discern right from wrong.
+                Create a space for deep connection with your inner discernment and connect with the source of all powers.
               </p>
             </div>
           </div>
@@ -151,29 +151,26 @@ export default function TransformativeSilenceModule() {
               <ul className="space-y-2 text-text-muted">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Experience deep transformative silence that goes beyond mere quietness</span>
+                  <span>Experience silence as freedom from negative, waste, and ordinary thoughts</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Quiet mental chatter and access deeper layers of consciousness</span>
+                  <span>Discern between Right and Wrong, True and False through deep experience</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Connect with your inner wisdom and develop intuitive discernment</span>
+                  <span>Connect with the Unlimited Source to withdraw strength for life changes</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Integrate silence as a foundation for clarity in daily life</span>
+                  <span>Stabilize your original qualities through sustainable inner transformation</span>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-text-main mb-3">Why It Matters</h3>
               <p className="text-text-muted leading-relaxed">
-                In our hyper-connected world, silence is revolutionary. Neuroscience shows that periods 
-                of deep silence promote neurogenesis, reduce stress hormones, and enhance creativity. 
-                More importantly, silence creates space for your authentic self to emerge and your inner 
-                wisdom to speak. This module teaches you to access this power.
+                Transformative Silence is far more than mere quietness—it is a state of inner freedom from negative, waste, and ordinary thoughts. In this space, you can discern between Truth and Falsehood and concentrate on the Unlimited Source of all Powers and Support. This connection allows you to withdraw the strength needed to bring about sustainable, life-changing transformation.
               </p>
             </div>
           </div>
