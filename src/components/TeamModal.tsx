@@ -65,7 +65,7 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
                  src={member.image_url || getInitialsAvatar(member.name)}
                  alt={member.name}
                  fill
-                 className="object-cover object-center"
+                 className="object-cover object-[center_20%]"
                />
              )}
           </div>
@@ -84,7 +84,7 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
                 <h2 className="text-3xl font-bold text-text-main mb-1">{member.name}</h2>
                 <p className="text-lg text-primary font-medium">{member.role}</p>
 
-                {member.country && (
+                {member.country && member.category?.toLowerCase() !== 'global ambassadors' && (
                   <div className="flex items-center text-text-muted text-sm font-medium mb-6">
                     <MapPin size={16} className="mr-1.5 text-teal-400" />
                     {member.country}

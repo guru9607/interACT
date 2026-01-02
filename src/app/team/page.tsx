@@ -142,7 +142,7 @@ export default function TeamPage() {
                       </div>
                       <div className="flex-1 min-w-0 text-left">
                         <h4 className="text-sm font-bold text-text-main truncate group-hover:text-primary">{person.name}</h4>
-                        <p className="text-xs text-text-muted truncate">{person.role || person.country}</p>
+                        <p className="text-xs text-text-muted truncate">{person.role}</p>
                       </div>
                     </div>
                   ))}
