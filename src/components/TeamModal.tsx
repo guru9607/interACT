@@ -65,7 +65,7 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
                  src={member.image_url || getInitialsAvatar(member.name)}
                  alt={member.name}
                  fill
-                 className="object-cover"
+                 className="object-cover object-center"
                />
              )}
           </div>

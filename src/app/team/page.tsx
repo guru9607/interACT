@@ -99,7 +99,7 @@ export default function TeamPage() {
                             src={person.image_url || getInitialsAvatar(person.name)}
                             alt={person.name}
                             fill
-                            className="object-cover"
+                            className="object-cover object-[center_20%]"
                             sizes="128px"
                           />
                         </div>
@@ -136,7 +136,7 @@ export default function TeamPage() {
                           src={person.image_url || getInitialsAvatar(person.name)}
                           alt={person.name}
                           fill
-                          className="object-cover"
+                          className="object-cover object-[center_10%]"
                           sizes="40px"
                         />
                       </div>
@@ -169,7 +169,7 @@ export default function TeamPage() {
                           src={person.image_url || getInitialsAvatar(person.name)}
                           alt={person.name}
                           fill
-                          className="object-cover"
+                          className="object-cover object-[center_10%]"
                           sizes="40px"
                         />
                       </div>
