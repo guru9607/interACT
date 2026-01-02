@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ArrowLeft, Download, CheckCircle, Clock, Target } from "lucide-react";
-import { useState } from "react";
 
 const steps = [
   {
@@ -43,8 +42,8 @@ const steps = [
     duration: "30 min",
     overview: "Concentrate on the Unlimited Source of all Powers and Support. Define this source of energy as the Universal anchor that empowers your inner being.",
     objectives: [
-      "Understand the 'Source' as a constant reservoir of spiritual energy",
-      "Practice focused concentration (meditation) to bridge with this energy",
+      "Understand the 'Source' as a constant reservoir of inner energy",
+      "Practice focused concentration to connect with this energy",
       "Experience a sense of belonging and support beyond the self"
     ],
     activity: {
@@ -109,7 +108,7 @@ export default function TransformativeSilenceModule() {
                 Transformative Silence: Accessing Inner Wisdom
               </h1>
               <p className="text-xl text-text-muted max-w-3xl">
-                Create a space for deep connection with your inner discernment and connect with the source of all powers.
+                Experience inner freedom from negative thoughts and connect with the Source of all powers to bring about sustainable life changes.
               </p>
             </div>
           </div>

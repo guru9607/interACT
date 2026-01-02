@@ -156,7 +156,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">Innate Awareness</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
-                  Rediscover your "Inner Me"—independent of roles and labels—and observe life with clarity.
+                  Recognize yourself as a living being with innate qualities of peace and love. Understand that your thoughts are the seeds of your life's outcomes.
                 </p>
              </motion.div>
  
@@ -170,7 +170,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">Internal Resilience</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
-                  Build a strong inner core that remains stable regardless of external pressures or praise.
+                  Build deep self-worth and inner strength. Shift focus from external validation to stable internal factors like security and character.
                 </p>
              </motion.div>
  
@@ -184,7 +184,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">Inner Wisdom</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
-                  Access deep discernment through silence, connecting with the source of all powers.
+                  Access deep discernment through silence. Connect with the ultimate source of power to bring about sustainable change and clarity.
                 </p>
              </motion.div>
           </motion.div>
@@ -223,7 +223,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-text-main mb-4">Awareness</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
-                Rediscover your innate goodness by observing your thoughts and emotions without judgment.
+                Connect with your innate goodness. Recognize yourself as a living being, an eternal energy with qualities of Peace, Love, and Truth.
               </p>
             </motion.div>
 
@@ -237,7 +237,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-text-main mb-4">Contemplation</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
-                Strengthen your inner core and build internal resilience to shift focus from external validation.
+                Strengthen your inner core through reflection. Learn to shift your focus from external validation to internal resilience and deep self-worth.
               </p>
             </motion.div>
 
@@ -251,7 +251,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-text-main mb-4">Transformative Silence</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
-                Access inner wisdom and clarity by connecting with the source of all powers in deep stillness.
+                Access inner wisdom. Discern between truth and false, and connect with the Source of power to stabilize your original qualities.
               </p>
             </motion.div>
           </motion.div>

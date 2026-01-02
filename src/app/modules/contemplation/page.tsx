@@ -24,11 +24,12 @@ const steps = [
     number: 2,
     title: "Nurturing Innate Self-Worth",
     duration: "25 min",
-    overview: "Shift from building worth based on achievements or external praise to recognizing worth that is innate. Contemplate your value as a being of peace and love.",
+    overview: "Directly experience your innate qualities. Learn the distinction between stable internal self-worth and fluid external self-esteem, building a foundation that doesn't depend on praise or achievements.",
     objectives: [
-      "Identify the difference between earned self-esteem and innate self-worth",
-      "Contemplate inner qualities as the source of true value",
-      "Practice self-appreciation without the need for comparison"
+      "Understand Self-Worth: A deep, stable sense of self-value based on internal security and character",
+      "Understand Self-Esteem & Self-Confidence: Fluid feelings based on capabilities and external success",
+      "Build Self-Respect: Learning to honor your own ideas, beliefs, decisions, and values",
+      "Experience direct connection with the real self through sustained inner attention"
     ],
     activity: {
       name: "Innate Value Journal",
@@ -43,7 +44,7 @@ const steps = [
     overview: "Use contemplation to build a 'shock-absorber' within. By focusing on your internal stability, you become less affected by external chaos and setbacks.",
     objectives: [
       "Develop the capacity to remain stable during external changes",
-      "Contemplate the quality of inner strength and spiritual power",
+      "Contemplate the quality of inner strength and inner power",
       "Learn to use your 'inner core' as a refuge during pressure"
     ],
     activity: {
@@ -150,26 +151,26 @@ export default function ContemplationModule() {
               <ul className="space-y-2 text-text-muted">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Nurture core goodness through focused reflection and contemplation</span>
+                  <span>Shift from external validation to deep, internal resilience</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Build unshakeable self-worth and inner strength from within</span>
+                  <span>Directly experience innate qualities through sustained inner attention</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Shift focus from external validation to internal resilience</span>
+                  <span>Understand the difference between fluid self-esteem and stable self-worth</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Reduce susceptibility to external pressures of the outside world</span>
+                  <span>Build self-respect by honoring your inner beliefs, values, and decisions</span>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-text-main mb-3">Why It Matters</h3>
               <p className="text-text-muted leading-relaxed">
-                Once we're aware of our core goodness, we can nurture it. This step involves focused reflection to build self-worth and inner resilience. By contemplating these positive qualities within ourselves, we shift our focus from external validation to internal strength, making us naturally less susceptible to the pressures of the outside world.
+                Once we're aware of our core goodness, we can nurture it. This step involves focused reflection to build self-worth and inner strength. By contemplating these positive qualities within ourselves, we shift our focus from external validation to internal resilience, making us naturally less susceptible to the pressures of the outside world.
               </p>
             </div>
           </div>

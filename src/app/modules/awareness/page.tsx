@@ -110,7 +110,7 @@ export default function AwarenessModule() {
                 Awareness: Connecting with Innate Goodness
               </h1>
               <p className="text-xl text-text-muted max-w-3xl">
-                Develop self-awareness to recognize your thoughts, emotions, and patterns without judgment.
+                Recognize yourself as a living being, an eternal energy, and rediscover your innate qualities of peace, love, and truth.
               </p>
             </div>
           </div>
@@ -152,26 +152,26 @@ export default function AwarenessModule() {
               <ul className="space-y-2 text-text-muted">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Develop the ability to observe your thoughts and emotions without being controlled by them</span>
+                  <span>Recognize yourself as a living being residing in the body</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Recognize automatic patterns and triggers that influence your behavior</span>
+                  <span>Identify your 8 original qualities: Peace, Love, Happiness, Purity, Willpower, Bliss, Wisdom, and Truth</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>How to pause inner storm and respond with clarity</span>
+                  <span>Understand how every thought you create is the seed of all outcomes</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">✓</span>
-                  <span>Align everyday actions with inner values rather than external pressure</span>
+                  <span>Develop a feeling of being an observer of your thoughts and emotions</span>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-text-main mb-3">Why It Matters</h3>
               <p className="text-text-muted leading-relaxed">
-                When we reconnect with our innate goodness, life begins to flow from clarity rather than conflict. Awareness of inner peace, love, and truth creates emotional balance, strengthens decision-making, and allows relationships to grow from authenticity instead of reaction.
+                This is the starting point of the interACT journey. We guide participants to recognize and feel the presence of their innate qualities—not as concepts to be learned, but as feelings to be experienced. By becoming aware of this inherent goodness, we lay the foundation for a life of purpose and clarity.
               </p>
             </div>
           </div>
