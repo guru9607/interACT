@@ -10,7 +10,9 @@ type Event = {
   id: number;
   title: string;
   date: string;
-  time: string;
+  start_time: string;
+  end_time: string | null;
+  timezone: string;
   location: string;
   region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
   type: "Online" | "In-Person" | "Hybrid";
@@ -45,6 +47,16 @@ export default function JoinPage() {
   }, []);
 
   const filteredEvents = events.filter((event) => event.region === activeRegion);
+
+  // Helper to format 24h time to 12h
+  const formatTime = (time: string) => {
+    if (!time) return "";
+    const [hours, minutes] = time.split(':');
+    const h = parseInt(hours);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${h12}:${minutes} ${ampm}`;
+  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -117,11 +129,11 @@ export default function JoinPage() {
                         <div className="flex items-center gap-4 text-sm text-text-muted">
                           <span className="flex items-center">
                             <Calendar size={14} className="mr-1.5" />
-                            {event.date}
+                            {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                           <span className="flex items-center">
                             <Clock size={14} className="mr-1.5" />
-                            {event.time}
+                            {formatTime(event.start_time)} ({event.timezone})
                           </span>
                         </div>
                       </div>
@@ -136,7 +148,7 @@ export default function JoinPage() {
               <div className="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                 <p className="text-text-muted">No upcoming events scheduled for this region yet.</p>
               </div>
-            )}
+            ) }
           </div>
         </div>
       </div>

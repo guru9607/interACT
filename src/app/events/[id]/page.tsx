@@ -20,7 +20,9 @@ type Event = {
   id: number;
   title: string;
   date: string;
-  time: string;
+  start_time: string;
+  end_time: string | null;
+  timezone: string;
   location: string;
   region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
   type: "Online" | "In-Person" | "Hybrid";
@@ -139,6 +141,16 @@ export default function EventDetailPage() {
     });
   };
 
+  // Helper to format 24h time to 12h
+  const formatTime = (time: string) => {
+    if (!time) return "";
+    const [hours, minutes] = time.split(':');
+    const h = parseInt(hours);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${h12}:${minutes} ${ampm}`;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -199,7 +211,9 @@ export default function EventDetailPage() {
             </span>
             <span className="flex items-center">
               <Clock size={20} className="mr-2 text-primary" />
-              {event.time}
+              {formatTime(event.start_time)}
+              {event.end_time ? ` - ${formatTime(event.end_time)}` : ''}
+              {` (${event.timezone})`}
             </span>
             <span className="flex items-center">
               <MapPin size={20} className="mr-2 text-primary" />
