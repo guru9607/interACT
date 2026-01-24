@@ -198,11 +198,11 @@ export default function TeamPage() {
                       </div>
                       <h3 className="text-lg font-bold text-text-main mb-1 truncate w-full group-hover:text-primary transition-colors">{person.name}</h3>
                       <p className="text-teal-600 font-semibold text-[11px] uppercase tracking-widest mb-3 h-8 flex items-center justify-center line-clamp-2 px-2">{person.role}</p>
-                      {person.country && (
+                      {/* {person.country && (
                         <div className="inline-flex items-center text-[10px] uppercase tracking-widest text-text-muted bg-gray-50 px-2.5 py-0.5 rounded-full font-bold">
                           <MapPin size={9} className="mr-1" /> {person.country}
                         </div>
-                      )}
+                      )} */}
                     </div>
                   ))}
                 </div>
@@ -232,9 +232,9 @@ export default function TeamPage() {
                         />
                       </div>
                       <h4 className="text-sm font-bold text-text-main mb-0.5 group-hover:text-primary transition-colors">{person.name}</h4>
-                      <div className="flex items-center text-[10px] text-text-muted font-bold">
+{/* <div className="flex items-center text-[10px] text-text-muted font-bold">
                          <MapPin size={8} className="mr-1" /> {person.country}
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>
