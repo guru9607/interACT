@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Calendar, MapPin, Clock, Globe, ChevronRight } from "lucide-react";
+import { Calendar, MapPin, Clock, Globe, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 // Event Data Type
@@ -14,8 +14,11 @@ type Event = {
   end_time: string | null;
   timezone: string;
   location: string;
+  country: string;
   region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
   type: "Online" | "In-Person" | "Hybrid";
+  status?: "upcoming" | "completed";
+  image_url?: string;
 };
 
 const regions = ["Americas", "Europe", "Africa", "Asia", "Oceania"] as const;
@@ -23,19 +26,37 @@ const regions = ["Americas", "Europe", "Africa", "Asia", "Oceania"] as const;
 export default function JoinPage() {
   const [activeRegion, setActiveRegion] = useState<typeof regions[number]>("Asia");
   const [events, setEvents] = useState<Event[]>([]);
+  const [pastEvents, setPastEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const { data, error } = await supabase
+        setLoading(true);
+        const today = new Date().toISOString().split('T')[0];
+
+        // Fetch upcoming events
+        const { data: upcomingData, error: upcomingError } = await supabase
           .from('events')
           .select('*')
-          .gte('date', new Date().toISOString().split('T')[0]) // Filter: Date must be today or future
-          .order('date', { ascending: true }); // Order by date (soonest first)
+          .eq('status', 'upcoming')
+          .gte('date', today)
+          .order('date', { ascending: true });
         
-        if (error) throw error;
-        if (data) setEvents(data as Event[]);
+        if (upcomingError) throw upcomingError;
+        setEvents((upcomingData || []) as Event[]);
+
+        // Fetch limited past/completed events
+        const { data: completedData, error: completedError } = await supabase
+          .from('events')
+          .select('*')
+          .eq('status', 'completed')
+          .order('date', { ascending: false })
+          .limit(6);
+        
+        if (completedError) throw completedError;
+        setPastEvents((completedData || []) as Event[]);
+
       } catch (err) {
         console.error('Error fetching events:', err);
       } finally {
@@ -77,11 +98,11 @@ export default function JoinPage() {
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
         <div className="space-y-8">
           
           {/* Region Tabs */}
-          <div className="flex flex-wrap gap-2 p-1 bg-gray-100/50 rounded-xl">
+          <div className="max-w-5xl mx-auto flex flex-wrap gap-2 p-1 bg-gray-100/50 rounded-xl">
             {regions.map((region) => (
               <button
                 key={region}
@@ -98,7 +119,7 @@ export default function JoinPage() {
           </div>
 
           {/* Event Cards */}
-          <div className="space-y-4">
+          <div className="max-w-5xl mx-auto space-y-4">
             {loading ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -120,7 +141,7 @@ export default function JoinPage() {
                           </span>
                           <span className="text-xs text-text-muted flex items-center">
                             <MapPin size={12} className="mr-1" />
-                            {event.location}
+                            {event.location}, {event.country}
                           </span>
                         </div>
                         <h3 className="text-xl font-bold text-text-main mb-1 group-hover:text-primary transition-colors">
@@ -150,6 +171,51 @@ export default function JoinPage() {
               </div>
             ) }
           </div>
+
+          {/* Past Events Gallery */}
+          {!loading && pastEvents.length > 0 && (
+            <div className="pt-20">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-text-main mb-4">Past Impacts</h2>
+                <p className="text-text-muted">Glimpses into our previous gatherings and milestones</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {pastEvents.map((event) => (
+                  <Link key={event.id} href={`/events/${event.id}`}>
+                    <div className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:border-teal-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                      <div className="aspect-[4/3] relative overflow-hidden bg-gray-100">
+                        {event.image_url ? (
+                          <img 
+                            src={event.image_url} 
+                            alt={event.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            <ImageIcon size={48} />
+                          </div>
+                        )}
+                        <div className="absolute top-4 left-4">
+                           <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-bold text-teal-600 shadow-sm">
+                             COMPLETED
+                           </span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <h3 className="text-lg font-bold text-text-main mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+                          {event.title}
+                        </h3>
+                        <div className="flex items-center gap-3 text-xs text-text-muted">
+                          <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                          <span className="flex items-center gap-1"><MapPin size={12} /> {event.country || "India"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

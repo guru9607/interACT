@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import FeedbackForm from "@/components/FeedbackForm";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Facilitator Type
 type Facilitator = {
@@ -24,8 +26,13 @@ type Event = {
   end_time: string | null;
   timezone: string;
   location: string;
+  country: string;
   region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
   type: "Online" | "In-Person" | "Hybrid";
+  status: "upcoming" | "completed";
+  image_url: string | null;
+  image_urls: string[] | null;
+  act_module: "awareness" | "contemplation" | "transformative_silence" | "combined" | null;
   description: string;
   agenda: string[];
   facilitators: Facilitator[];
@@ -37,6 +44,8 @@ export default function EventDetailPage() {
   const router = useRouter();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,6 +98,23 @@ export default function EventDetailPage() {
           ...eventData,
           facilitators: [] // facilitators
         });
+
+        // Fetch 5-star testimonials for this event
+        const { data: feedbackData } = await supabase
+          .from('event_feedback')
+          .select('*')
+          .eq('event_id', eventId)
+          .order('submitted_at', { ascending: false });
+        
+        if (feedbackData) {
+          // Filter for 5-star ratings only
+          const fiveStarFeedback = feedbackData.filter(feedback => {
+            const responses = feedback.responses;
+            // Check if any scale question has a rating of 5
+            return Object.values(responses).some(val => val === '5');
+          });
+          setTestimonials(fiveStarFeedback.slice(0, 4)); // Show max 4 testimonials
+        }
       } catch (err: any) {
         console.error('Error fetching event:', err);
         setError(err.message);
@@ -180,45 +206,93 @@ export default function EventDetailPage() {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"></div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <Link href="/join" className="inline-flex items-center text-primary hover:text-primary-hover mb-6 font-medium">
-            <ArrowLeft size={20} className="mr-2" />
-            Back to Events
-          </Link>
-          
-          <div className="flex items-center gap-3 mb-4">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-              event.type === "Online" ? "bg-blue-100 text-blue-700" :
-              event.type === "In-Person" ? "bg-green-100 text-green-700" :
-              "bg-purple-100 text-purple-700"
-            }`}>
-              {event.type}
-            </span>
-            <span className="text-text-muted flex items-center">
-              <Globe size={16} className="mr-1.5" />
-              {event.region}
-            </span>
-          </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Hero Content */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <Link href="/join" className="inline-flex items-center text-primary hover:text-primary-hover mb-6 font-medium">
+                <ArrowLeft size={20} className="mr-2" />
+                Back to Events
+              </Link>
+              
+              <div className="flex items-center gap-3 mb-4">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  event.status === "completed" ? "bg-teal-100 text-teal-700" :
+                  event.type === "Online" ? "bg-blue-100 text-blue-700" :
+                  event.type === "In-Person" ? "bg-green-100 text-green-700" :
+                  "bg-purple-100 text-purple-700"
+                }`}>
+                  {event.status === "completed" ? "Completed" : event.type}
+                </span>
+                <span className="text-text-muted flex items-center">
+                  <Globe size={16} className="mr-1.5" />
+                  {event.region}
+                </span>
+              </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-main mb-6 leading-tight">
-            {event.title}
-          </h1>
+              <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-6 leading-tight">
+                {event.title}
+              </h1>
 
-          <div className="flex flex-wrap gap-6 text-lg text-text-muted mb-6">
-            <span className="flex items-center">
-              <Calendar size={20} className="mr-2 text-primary" />
-              {formatDate(event.date)}
-            </span>
-            <span className="flex items-center">
-              <Clock size={20} className="mr-2 text-primary" />
-              {formatTime(event.start_time)}
-              {event.end_time ? ` - ${formatTime(event.end_time)}` : ''}
-              {` (${event.timezone})`}
-            </span>
-            <span className="flex items-center">
-              <MapPin size={20} className="mr-2 text-primary" />
-              {event.location}
-            </span>
+              <div className="flex flex-wrap gap-6 text-lg text-text-muted mb-6">
+                <span className="flex items-center">
+                  <Calendar size={20} className="mr-2 text-primary" />
+                  {formatDate(event.date)}
+                </span>
+                <span className="flex items-center">
+                  <Clock size={20} className="mr-2 text-primary" />
+                  {formatTime(event.start_time)}
+                  {event.end_time ? ` - ${formatTime(event.end_time)}` : ''}
+                  {` (${event.timezone})`}
+                </span>
+                <span className="flex items-center">
+                  <MapPin size={20} className="mr-2 text-primary" />
+                  {event.location}
+                  {event.country && `, ${event.country}`}
+                </span>
+              </div>
+
+              {/* Quick Action for Feedback */}
+              {event.status === "completed" && event.act_module && (
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  onClick={() => setShowFeedbackForm(true)}
+                  className="mt-4 px-8 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center gap-3 w-fit cursor-pointer"
+                >
+                  <Send size={20} className="fill-white/20" />
+                  <span>Share Your Experience</span>
+                </motion.button>
+              )}
+            </div>
+
+            {/* Event Post-Photo or Placeholder */}
+            {event.status === "completed" && (
+              <div className="space-y-6">
+                <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                  {event.image_url ? (
+                    <img src={event.image_url} alt={event.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-teal-50 flex items-center justify-center text-teal-200">
+                      <ImageIcon size={64} />
+                    </div>
+                  )}
+                </div>
+                
+                {/* Secondary Gallery */}
+                {event.image_urls && event.image_urls.length > 1 && (
+                  <div className="grid grid-cols-4 gap-4">
+                    {event.image_urls.slice(1).map((url, i) => (
+                      <div key={i} className="aspect-square rounded-2xl overflow-hidden border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+                        <img src={url} alt={`${event.title} ${i+2}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -250,6 +324,37 @@ export default function EventDetailPage() {
               </div>
             </section>
 
+            {/* Testimonials Section - Only for completed events with 5-star feedback */}
+            {event.status === "completed" && testimonials.length > 0 && (
+              <section>
+                <h2 className="text-3xl font-bold text-text-main mb-6">Participant Experiences</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {testimonials.map((testimonial, index) => {
+                    const responses = testimonial.responses;
+                    
+                    // Prioritize Question 1 (Realization) or Question 3/2 (Empowerment)
+                    // Never show Question 4 (Suggestions)
+                    const mainQuote = responses.q1 || responses.q3 || responses.q2 || "A deeply transformative experience.";
+                    
+                    return (
+                      <div key={index} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div className="flex gap-1 mb-4">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star key={star} size={18} className="fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
+                        <p className="text-text-muted italic mb-4 line-clamp-4">"{mainQuote}"</p>
+                        <p className="text-sm font-semibold text-text-main">
+                          {testimonial.first_name ? `— ${testimonial.first_name}` : "— Anonymous Participant"}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+
             {/* Facilitators */}
             {/* <section>
               <h2 className="text-3xl font-bold text-text-main mb-6">Meet Your Facilitators</h2>
@@ -279,10 +384,20 @@ export default function EventDetailPage() {
           {/* Sidebar - Registration */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 bg-white rounded-2xl shadow-xl shadow-teal-900/5 border border-teal-100 p-8">
-              <h3 className="text-2xl font-bold text-text-main mb-2">Register Now</h3>
-              <p className="text-text-muted mb-6 text-sm">Secure your spot for this transformative event.</p>
+              <h3 className="text-2xl font-bold text-text-main mb-2">
+                {event.status === "completed" ? "Event Completed" : "Register Now"}
+              </h3>
+              <p className="text-text-muted mb-6 text-sm">
+                {event.status === "completed" 
+                  ? "This event has already taken place. We hope to see you at our next one!" 
+                  : "Secure your spot for this transformative event."}
+              </p>
               
-              {submitted ? (
+              {event.status === "completed" ? (
+                <Link href="/join" className="block w-full py-3.5 bg-gray-100 text-text-main text-center font-bold rounded-xl hover:bg-gray-200 transition-all">
+                  Browse Upcoming Events
+                </Link>
+              ) : submitted ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
                     <CheckCircle2 size={32} />
@@ -400,6 +515,16 @@ export default function EventDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Feedback Form Modal */}
+      {showFeedbackForm && event.act_module && (
+        <FeedbackForm
+          eventId={event.id}
+          eventTitle={event.title}
+          actModule={event.act_module}
+          onClose={() => setShowFeedbackForm(false)}
+        />
+      )}
     </div>
   );
 }

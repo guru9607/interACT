@@ -1,0 +1,434 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { 
+  Plus, 
+  History, 
+  CheckCircle2, 
+  Image as ImageIcon, 
+  Loader2, 
+  AlertCircle,
+  Calendar,
+  MapPin,
+  Clock,
+  ArrowRight
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Simple secret for temporary access
+const DASHBOARD_SECRET = "interact2026"; // You can change this or move to .env
+
+export default function EventsDashboard() {
+  const searchParams = useSearchParams();
+  const secret = searchParams.get("secret");
+  const [activeTab, setActiveTab] = useState<"create" | "manage">("create");
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState<any[]>([]);
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    if (secret === DASHBOARD_SECRET) {
+      setAuthorized(true);
+      fetchUpcomingEvents();
+    }
+  }, [secret]);
+
+  async function fetchUpcomingEvents() {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .or("status.eq.upcoming,status.is.null") // Handle events with NULL status
+      .order("date", { ascending: true });
+    
+    if (data) setEvents(data);
+    setLoading(false);
+  }
+
+  if (!authorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="max-w-md w-full text-center space-y-6">
+          <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto">
+            <AlertCircle size={40} />
+          </div>
+          <h1 className="text-2xl font-bold text-text-main">Access Denied</h1>
+          <p className="text-text-muted">
+            This is a protected page. Please use the correct link provided to facilitators.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50/50 pb-20">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-text-main">Events Dashboard</h1>
+              <p className="text-sm text-text-muted">Manage upcoming and completed events</p>
+            </div>
+            <div className="flex bg-gray-100 p-1 rounded-xl">
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === "create" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                }`}
+              >
+                <Plus size={16} />
+                Create Event
+              </button>
+              <button
+                onClick={() => setActiveTab("manage")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === "manage" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                }`}
+              >
+                <History size={16} />
+                Complete Events
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <AnimatePresence mode="wait">
+          {activeTab === "create" ? (
+            <motion.div
+              key="create"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <CreateEventForm onSuccess={() => setActiveTab("manage")} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="manage"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <ManageEventsList events={events} loading={loading} onRefresh={fetchUpcomingEvents} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+    </div>
+  );
+}
+
+function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    date: "",
+    start_time: "",
+    location: "",
+    region: "Asia",
+    type: "In-Person",
+    description: "",
+    agenda: "",
+    act_module: "combined", 
+    country: "",
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Standardize agenda (split by lines into array)
+    const processedAgenda = formData.agenda
+      .split("\n")
+      .map(item => item.trim())
+      .filter(item => item !== "");
+
+    const { error } = await supabase.from("events").insert([{ 
+      ...formData, 
+      agenda: processedAgenda, // Store as array
+      status: "upcoming" 
+    }]);
+    if (!error) {
+      alert("Event created successfully!");
+      onSuccess();
+    } else {
+      alert("Error: " + error.message);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-teal-900/5">
+      <h2 className="text-xl font-bold text-text-main mb-6">Create New Event</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Event Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              required
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Date <span className="text-red-500">*</span>
+            </label>
+            <input
+              required
+              type="date"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Country <span className="text-red-500">*</span>
+            </label>
+            <input
+              required
+              placeholder="e.g. India"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.country}
+              onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Start Time (24h format) <span className="text-red-500">*</span>
+            </label>
+            <input
+              required
+              type="time"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.start_time}
+              onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Location <span className="text-red-500">*</span>
+            </label>
+            <input
+              required
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.location}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Region <span className="text-red-500">*</span>
+            </label>
+            <select
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.region}
+              onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+            >
+              <option value="Americas">Americas</option>
+              <option value="Europe">Europe</option>
+              <option value="Africa">Africa</option>
+              <option value="Asia">Asia</option>
+              <option value="Oceania">Oceania</option>
+            </select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-text-main">
+              Type <span className="text-red-500">*</span>
+            </label>
+            <select
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              value={formData.type}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            >
+              <option value="In-Person">In-Person</option>
+              <option value="Online">Online</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-text-main">
+            Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            required
+            rows={3}
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="What is this event about?"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-text-main">Event Agenda (One item per line) <span className="text-red-500">*</span></label>
+          <textarea
+            required
+            rows={4}
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+            value={formData.agenda}
+            onChange={(e) => setFormData({ ...formData, agenda: e.target.value })}
+            placeholder="Introduction&#10;Workshop Session&#10;Meditation&#10;Closing"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-text-main">
+            ACT Module <span className="text-red-500">*</span>
+          </label>
+          <select
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+            value={formData.act_module}
+            onChange={(e) => setFormData({ ...formData, act_module: e.target.value })}
+          >
+            <option value="awareness">Awareness (A) - Who am I?</option>
+            <option value="contemplation">Contemplation (C) - What are my qualities?</option>
+            <option value="transformative_silence">Transformative Silence (T) - How am I empowering myself?</option>
+            <option value="combined">Combined (Full ACT Workshop)</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          {loading ? <Loader2 className="animate-spin" /> : <><Plus size={20} /> Create Upcoming Event</>}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function ManageEventsList({ events, loading, onRefresh }: { events: any[], loading: boolean, onRefresh: () => void }) {
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<Record<number, File[]>>({});
+
+  const handleComplete = async (eventId: number) => {
+    const files = selectedFiles[eventId];
+    if (!files || files.length === 0) return alert("Please select at least one event photo!");
+    
+    // File size validation (2MB limit per file)
+    const MAX_SIZE = 2 * 1024 * 1024;
+    for (const file of files) {
+      if (file.size > MAX_SIZE) {
+        return alert(`File "${file.name}" is too large! Please keep each image under 2MB.`);
+      }
+    }
+    
+    setUpdatingId(eventId);
+    try {
+      const imageUrls: string[] = [];
+
+      // Upload all images
+      for (const file of files) {
+        const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("event-images")
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from("event-images")
+          .getPublicUrl(fileName);
+        
+        imageUrls.push(publicUrl);
+      }
+
+      // Update Event with the list of URLs
+      const { data: updateData, error: updateError } = await supabase
+        .from("events")
+        .update({ 
+          status: "completed", 
+          image_url: imageUrls[0], 
+          image_urls: imageUrls 
+        })
+        .eq("id", eventId)
+        .select(); // Critical: Select ensures we see if the update actually happened
+
+      if (updateError) throw updateError;
+      if (!updateData || updateData.length === 0) {
+        throw new Error("Update failed. Check your Supabase RLS policies for the 'events' table.");
+      }
+
+      alert(`Event marked as completed with ${imageUrls.length} photos!`);
+      // Clear files for this event
+      setSelectedFiles(prev => {
+        const next = { ...prev };
+        delete next[eventId];
+        return next;
+      });
+      onRefresh();
+    } catch (err: any) {
+      console.error("DEBUG: Dashboard Upload/Update failed", err);
+      alert("Something went wrong! Error: " + err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  if (loading) return <div className="text-center py-20"><Loader2 className="animate-spin mx-auto text-primary" size={32} /></div>;
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-xl font-bold text-text-main">Upcoming Events (To be completed)</h2>
+      {events.length === 0 ? (
+        <div className="bg-white p-12 rounded-3xl text-center border border-dashed border-gray-200">
+          <p className="text-text-muted">No upcoming events found.</p>
+        </div>
+      ) : (
+        events.map((event) => (
+          <div key={event.id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+            <div className="flex flex-col md:flex-row justify-between gap-6">
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-text-main">{event.title}</h3>
+                <div className="flex flex-wrap gap-4 text-sm text-text-muted">
+                  <span className="flex items-center gap-1.5"><Calendar size={14} /> {event.date}</span>
+                  <span className="flex items-center gap-1.5"><MapPin size={14} /> {event.location}</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 min-w-[250px]">
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple // Added multiple
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      setSelectedFiles(prev => ({ ...prev, [event.id]: files }));
+                    }}
+                    className="hidden"
+                    id={`file-${event.id}`}
+                  />
+                  <label
+                    htmlFor={`file-${event.id}`}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-text-main rounded-xl transition-all cursor-pointer text-sm"
+                  >
+                    <ImageIcon size={16} />
+                    {selectedFiles[event.id]?.length > 0 ? `${selectedFiles[event.id].length} Photos Selected` : "Select Event Photos"}
+                  </label>
+                </div>
+                <button
+                  onClick={() => handleComplete(event.id)}
+                  disabled={updatingId !== null || !selectedFiles[event.id]?.length}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl transition-all disabled:opacity-50 text-sm font-medium"
+                >
+                  {updatingId === event.id ? <Loader2 className="animate-spin" size={16} /> : <><CheckCircle2 size={16} /> Mark Completed</>}
+                </button>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
