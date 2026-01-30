@@ -5,7 +5,7 @@ Welcome to the updated interACT platform! We've implemented several new features
 ## 1. Managing Events
 
 Access the **Events Dashboard** using your unique link:
-`/events-dashboard?secret=interact2026`
+`https://www.theinteract.org/events-dashboard?secret=interact2026`
 
 ### Create an Event
 - **Details Matters**: All fields (Title, Date, Time, Location, Region, Type, Description, and Agenda) are now required.
