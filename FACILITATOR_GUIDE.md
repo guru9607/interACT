@@ -17,6 +17,9 @@ Access the **Events Dashboard** using your unique link:
     - **Location**: The specific venue name (e.g., *Vishwa Pariwartan Bhavan, Pune*).
     - **Country**: The country name (e.g., *India*). This is used for the "Past Impacts" gallery.
 - **ACT Module**: Select the specific module for the event. This determines which feedback questions participants will see.
+- **Registrations & Export**:
+    - Under the **"Complete Events"** tab, each event now shows the total number of participants registered.
+    - Click **"Export [X] Participants"** to download a CSV file of all registrations (Name, Email, Phone, Country).
 
 ### Assigning Hosts to Past Events
 - New events require a host selection at creation.

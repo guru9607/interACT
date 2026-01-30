@@ -13,7 +13,9 @@ import {
   Calendar,
   MapPin,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Download,
+  Users
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -40,6 +42,7 @@ function DashboardContent() {
   const [events, setEvents] = useState<any[]>([]);
   const [authorized, setAuthorized] = useState(false);
   const [conductors, setConductors] = useState<any[]>([]);
+  const [regCounts, setRegCounts] = useState<Record<number, number>>({});
 
   useEffect(() => {
     if (secret === DASHBOARD_SECRET) {
@@ -80,7 +83,31 @@ function DashboardContent() {
       .or("status.eq.upcoming,status.is.null,and(status.eq.completed,image_url.is.null)")
       .order("date", { ascending: true });
     
-    if (data) setEvents(data);
+    if (data) {
+      setEvents(data);
+      
+      // Fetch registration counts for ALL events to ensure we have data
+      const { data: countData, error: countError } = await supabase
+        .from('registrations')
+        .select('event_id');
+      
+      if (countError) {
+        console.error("DEBUG: Error fetching registration counts:", countError);
+      }
+
+      if (countData) {
+        console.log(`DEBUG: Found ${countData.length} total registrations across all events`);
+        const counts: Record<number, number> = {};
+        countData.forEach(r => {
+          const eid = Number(r.event_id);
+          counts[eid] = (counts[eid] || 0) + 1;
+        });
+        console.log("DEBUG: Final registration counts object:", counts);
+        setRegCounts(counts);
+      } else {
+        console.log("DEBUG: No registration data returned from Supabase");
+      }
+    }
     setLoading(false);
   }
 
@@ -121,7 +148,10 @@ function DashboardContent() {
                 Create Event
               </button>
               <button
-                onClick={() => setActiveTab("manage")}
+                onClick={() => {
+                  setActiveTab("manage");
+                  fetchUpcomingEvents();
+                }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   activeTab === "manage" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
                 }`}
@@ -152,7 +182,7 @@ function DashboardContent() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <ManageEventsList events={events} loading={loading} conductors={conductors} onRefresh={fetchUpcomingEvents} />
+              <ManageEventsList events={events} loading={loading} conductors={conductors} onRefresh={fetchUpcomingEvents} regCounts={regCounts} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -396,9 +426,53 @@ function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, con
   );
 }
 
-function ManageEventsList({ events, loading, conductors, onRefresh }: { events: any[], loading: boolean, conductors: any[], onRefresh: () => Promise<void> }) {
+function ManageEventsList({ events, loading, conductors, onRefresh, regCounts }: { events: any[], loading: boolean, conductors: any[], onRefresh: () => Promise<void>, regCounts: Record<number, number> }) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<number, File[]>>({});
+  const [fetchingRegs, setFetchingRegs] = useState<number | null>(null);
+
+  const downloadRegistrations = async (eventId: number, eventTitle: string) => {
+    setFetchingRegs(eventId);
+    try {
+      const { data, error } = await supabase
+        .from('registrations')
+        .select('full_name, email, phone, country, created_at')
+        .eq('event_id', eventId);
+
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        alert("No registrations found for this event.");
+        return;
+      }
+
+      // Generate CSV
+      const headers = ["Full Name", "Email", "Phone", "Country", "Registration Date"];
+      const csvContent = [
+        headers.join(","),
+        ...data.map(row => [
+          `"${(row.full_name || "").replace(/"/g, '""')}"`,
+          `"${(row.email || "").replace(/"/g, '""')}"`,
+          `"${(row.phone || "").replace(/"/g, '""')}"`,
+          `"${(row.country || "").replace(/"/g, '""')}"`,
+          `"${new Date(row.created_at).toLocaleDateString()}"`
+        ].join(","))
+      ].join("\n");
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `registrations_${eventTitle.replace(/[^a-z0-0]/gi, '_').toLowerCase()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      alert("Error exporting registrations: " + err.message);
+    } finally {
+      setFetchingRegs(null);
+    }
+  };
 
   const handleComplete = async (eventId: number) => {
     const files = selectedFiles[eventId];
@@ -499,6 +573,14 @@ function ManageEventsList({ events, loading, conductors, onRefresh }: { events: 
                 <div className="flex flex-wrap gap-4 text-sm text-text-muted">
                   <span className="flex items-center gap-1.5"><Calendar size={14} /> {event.date}</span>
                   <span className="flex items-center gap-1.5"><MapPin size={14} /> {event.location}</span>
+                  <button 
+                    onClick={() => downloadRegistrations(event.id, event.title)}
+                    disabled={fetchingRegs === event.id}
+                    className="flex items-center gap-1.5 text-primary hover:text-primary-hover font-medium transition-all"
+                  >
+                    {fetchingRegs === event.id ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                    Export {regCounts[event.id] || 0} Participant{regCounts[event.id] === 1 ? "" : "s"}
+                  </button>
                 </div>
               </div>
               <div className="flex flex-col gap-3 min-w-[250px]">
