@@ -8,16 +8,25 @@ Access the **Events Dashboard** using your unique link:
 `https://www.theinteract.org/events-dashboard?secret=interact2026`
 
 ### Create an Event
-- **Details Matters**: All fields (Title, Date, Time, Location, Region, Type, Description, and Agenda) are now required.
+- **Details Matters**: All fields (Title, Date, Time, Location, Region, Type, Description, and Agenda) are required.
+- **Host / Conductor selection**: 
+    - You MUST select a host from the dropdown list.
+    - We have simplified it to a single list containing both **Registered Facilitators** and **Core Team Members**.
+    - The selected host's name will be prominently displayed in the header of the Event Detail page.
 - **Location vs. Country**:
     - **Location**: The specific venue name (e.g., *Vishwa Pariwartan Bhavan, Pune*).
     - **Country**: The country name (e.g., *India*). This is used for the "Past Impacts" gallery.
 - **ACT Module**: Select the specific module for the event. This determines which feedback questions participants will see.
 
+### Assigning Hosts to Past Events
+- New events require a host selection at creation.
+- For historical events (created before this feature), hosts are updated directly in the database. 
+- **SQL Tip**: Use `UPDATE events SET conductor_type = 'team', conductor_id = '3' WHERE id = 1;`
+
 ### Completing an Event
 - Once an event is over, find it in the "Events Management" section.
 - **Enable Feedback Instantly**: You can now click **"Mark Completed"** even if you don't have photos yet! This will immediately enable the "Share Experience" button for participants.
-- **Add Photos Later**: Events marked as completed but missing photos will stay in your dashboard. You can upload photos at any time to showcase them in the "Past Impacts" gallery.
+- **Add Photos Later**: Events marked as completed but missing photos will stay in your dashboard. You can upload multiple photos to showcase them in the "Past Impacts" gallery.
 
 ## 2. The Feedback System
 
