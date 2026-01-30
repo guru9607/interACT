@@ -189,6 +189,29 @@ export default function EventDetailPage() {
 
       if (supabaseError) throw supabaseError;
 
+      // Trigger registration email
+      try {
+        const emailRes = await fetch('/api/send-registration-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: registrationData.email,
+            name: registrationData.full_name,
+            eventTitle: event?.title,
+            eventDate: event ? formatDate(event.date) : '',
+            eventLocation: event?.location,
+          }),
+        });
+        
+        if (!emailRes.ok) {
+          const errorData = await emailRes.json();
+          console.error('Email API failed:', errorData);
+          alert(`Note: Registration successful, but confirmation email failed: ${errorData.details || errorData.error}`);
+        }
+      } catch (emailErr) {
+        console.error('Failed to trigger confirmation email:', emailErr);
+      }
+
       setSubmitted(true);
     } catch (err: any) {
       console.error('Error submitting registration:', err);
