@@ -15,9 +15,9 @@ Access the **Events Dashboard** using your unique link:
 - **ACT Module**: Select the specific module for the event. This determines which feedback questions participants will see.
 
 ### Completing an Event
-- Once an event is over, find it in the "Complete Events" tab.
-- **Photos are Required**: You must upload at least one photo (and can upload multiple) to mark an event as completed.
-- Completing an event moves it to the **"Past Impacts"** gallery on the Join page and enables the feedback system for that event.
+- Once an event is over, find it in the "Events Management" section.
+- **Enable Feedback Instantly**: You can now click **"Mark Completed"** even if you don't have photos yet! This will immediately enable the "Share Experience" button for participants.
+- **Add Photos Later**: Events marked as completed but missing photos will stay in your dashboard. You can upload photos at any time to showcase them in the "Past Impacts" gallery.
 
 ## 2. The Feedback System
 

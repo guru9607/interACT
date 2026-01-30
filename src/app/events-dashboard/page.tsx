@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { 
@@ -21,6 +21,18 @@ import { motion, AnimatePresence } from "framer-motion";
 const DASHBOARD_SECRET = "interact2026"; // You can change this or move to .env
 
 export default function EventsDashboard() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="animate-spin text-primary" size={40} />
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+function DashboardContent() {
   const searchParams = useSearchParams();
   const secret = searchParams.get("secret");
   const [activeTab, setActiveTab] = useState<"create" | "manage">("create");
@@ -40,7 +52,7 @@ export default function EventsDashboard() {
     const { data, error } = await supabase
       .from("events")
       .select("*")
-      .or("status.eq.upcoming,status.is.null") // Handle events with NULL status
+      .or("status.eq.upcoming,status.is.null,and(status.eq.completed,image_url.is.null)")
       .order("date", { ascending: true });
     
     if (data) setEvents(data);
@@ -314,13 +326,20 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
 
   const handleComplete = async (eventId: number) => {
     const files = selectedFiles[eventId];
-    if (!files || files.length === 0) return alert("Please select at least one event photo!");
+    const hasFiles = files && files.length > 0;
+    
+    if (!hasFiles) {
+      const confirmComplete = window.confirm("Mark this event as completed without photos? (You can add them later)");
+      if (!confirmComplete) return;
+    }
     
     // File size validation (2MB limit per file)
-    const MAX_SIZE = 2 * 1024 * 1024;
-    for (const file of files) {
-      if (file.size > MAX_SIZE) {
-        return alert(`File "${file.name}" is too large! Please keep each image under 2MB.`);
+    if (hasFiles) {
+      const MAX_SIZE = 2 * 1024 * 1024;
+      for (const file of files) {
+        if (file.size > MAX_SIZE) {
+          return alert(`File "${file.name}" is too large! Please keep each image under 2MB.`);
+        }
       }
     }
     
@@ -328,30 +347,34 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
     try {
       const imageUrls: string[] = [];
 
-      // Upload all images
-      for (const file of files) {
-        const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("event-images")
-          .upload(fileName, file);
+      if (hasFiles) {
+        // Upload all images
+        for (const file of files) {
+          const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from("event-images")
+            .upload(fileName, file);
 
-        if (uploadError) throw uploadError;
+          if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage
-          .from("event-images")
-          .getPublicUrl(fileName);
-        
-        imageUrls.push(publicUrl);
+          const { data: { publicUrl } } = supabase.storage
+            .from("event-images")
+            .getPublicUrl(fileName);
+          
+          imageUrls.push(publicUrl);
+        }
       }
 
-      // Update Event with the list of URLs
+      const updateDataObj: any = { status: "completed" };
+      if (imageUrls.length > 0) {
+        updateDataObj.image_url = imageUrls[0];
+        updateDataObj.image_urls = imageUrls;
+      }
+
+      // Update Event with the list of URLs (if any)
       const { data: updateData, error: updateError } = await supabase
         .from("events")
-        .update({ 
-          status: "completed", 
-          image_url: imageUrls[0], 
-          image_urls: imageUrls 
-        })
+        .update(updateDataObj)
         .eq("id", eventId)
         .select(); // Critical: Select ensures we see if the update actually happened
 
@@ -360,7 +383,7 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
         throw new Error("Update failed. Check your Supabase RLS policies for the 'events' table.");
       }
 
-      alert(`Event marked as completed with ${imageUrls.length} photos!`);
+      alert(hasFiles ? `Event marked as completed with ${imageUrls.length} photos!` : "Event marked as completed! Users can now share feedback.");
       // Clear files for this event
       setSelectedFiles(prev => {
         const next = { ...prev };
@@ -380,7 +403,8 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-bold text-text-main">Upcoming Events (To be completed)</h2>
+      <h2 className="text-xl font-bold text-text-main">Events Management</h2>
+      <p className="text-sm text-text-muted -mt-4">Upcoming events or completed events missing photos</p>
       {events.length === 0 ? (
         <div className="bg-white p-12 rounded-3xl text-center border border-dashed border-gray-200">
           <p className="text-text-muted">No upcoming events found.</p>
@@ -390,7 +414,12 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
           <div key={event.id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-2">
-                <h3 className="text-lg font-bold text-text-main">{event.title}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-text-main">{event.title}</h3>
+                  {event.status === "completed" && (
+                    <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-bold rounded-full">ENROLLED/COMPLETED</span>
+                  )}
+                </div>
                 <div className="flex flex-wrap gap-4 text-sm text-text-muted">
                   <span className="flex items-center gap-1.5"><Calendar size={14} /> {event.date}</span>
                   <span className="flex items-center gap-1.5"><MapPin size={14} /> {event.location}</span>
@@ -419,10 +448,12 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
                 </div>
                 <button
                   onClick={() => handleComplete(event.id)}
-                  disabled={updatingId !== null || !selectedFiles[event.id]?.length}
+                  disabled={updatingId !== null}
                   className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl transition-all disabled:opacity-50 text-sm font-medium"
                 >
-                  {updatingId === event.id ? <Loader2 className="animate-spin" size={16} /> : <><CheckCircle2 size={16} /> Mark Completed</>}
+                  {updatingId === event.id ? <Loader2 className="animate-spin" size={16} /> : (
+                    <>{event.status === "completed" ? <><Plus size={16} /> Add Photos</> : <><CheckCircle2 size={16} /> Mark Completed</>}</>
+                  )}
                 </button>
               </div>
             </div>
