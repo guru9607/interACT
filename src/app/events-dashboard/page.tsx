@@ -39,13 +39,38 @@ function DashboardContent() {
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
   const [authorized, setAuthorized] = useState(false);
+  const [conductors, setConductors] = useState<any[]>([]);
 
   useEffect(() => {
     if (secret === DASHBOARD_SECRET) {
       setAuthorized(true);
       fetchUpcomingEvents();
+      fetchConductors();
     }
   }, [secret]);
+
+  async function fetchConductors() {
+    try {
+      // Fetch both with separate calls to catch individual errors
+      const { data: teamData, error: teamError } = await supabase.from('teams').select('id, name').order('name');
+      const { data: facData, error: facError } = await supabase.from('facilitators').select('id, full_name');
+      
+      if (teamError) console.error("DEBUG: teamError", teamError);
+      if (facError) console.error("DEBUG: facError", facError);
+
+      const teamList = teamData?.map(t => ({ id: t.id, name: t.name, type: 'team' })) || [];
+      const facList = facData?.map(f => ({ id: f.id, name: f.full_name, type: 'facilitator' })) || [];
+      
+      console.log(`DEBUG: Found ${teamList.length} Team members and ${facList.length} Facilitators`);
+
+      setConductors([
+        ...teamList,
+        ...facList
+      ]);
+    } catch (err) {
+      console.error("Error in fetchConductors:", err);
+    }
+  }
 
   async function fetchUpcomingEvents() {
     setLoading(true);
@@ -118,7 +143,7 @@ function DashboardContent() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <CreateEventForm onSuccess={() => setActiveTab("manage")} />
+              <CreateEventForm conductors={conductors} onSuccess={() => setActiveTab("manage")} />
             </motion.div>
           ) : (
             <motion.div
@@ -127,7 +152,7 @@ function DashboardContent() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <ManageEventsList events={events} loading={loading} onRefresh={fetchUpcomingEvents} />
+              <ManageEventsList events={events} loading={loading} conductors={conductors} onRefresh={fetchUpcomingEvents} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -136,7 +161,7 @@ function DashboardContent() {
   );
 }
 
-function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
+function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, conductors: any[] }) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -149,6 +174,8 @@ function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
     agenda: "",
     act_module: "combined", 
     country: "",
+    conductor_id: "" as string,
+    conductor_type: "" as string,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -308,6 +335,55 @@ function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
             <option value="combined">Combined (Full ACT Workshop)</option>
           </select>
         </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-text-main">
+            Host / Conductor <span className="text-red-500">*</span>
+          </label>
+          <div className="space-y-3">
+            <select
+            required
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+            value={`${formData.conductor_type}:${formData.conductor_id}`}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (!val) {
+                setFormData({ ...formData, conductor_type: "", conductor_id: "" });
+                return;
+              }
+              const [type, id] = val.split(":");
+              setFormData({ 
+                ...formData, 
+                conductor_type: type, 
+                conductor_id: id 
+              });
+            }}
+          >
+            <option value="">Select a conductor...</option>
+            
+            <optgroup label="Registered Facilitators">
+              {conductors.filter(c => c.type === 'facilitator').length > 0 ? (
+                conductors.filter(c => c.type === 'facilitator').map((c) => (
+                  <option key={`fac-${c.id}`} value={`facilitator:${c.id}`}>
+                    {c.name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No facilitators registered yet</option>
+              )}
+            </optgroup>
+ 
+            <optgroup label="Core Team">
+              {conductors.filter(c => c.type === 'team').map((c) => (
+                <option key={`team-${c.id}`} value={`team:${c.id}`}>
+                  {c.name}
+                </option>
+              ))}
+            </optgroup>
+          </select>
+          <p className="text-[10px] text-text-muted ml-1">This person will be featured on the event page.</p>
+          </div>
+        </div>
         <button
           type="submit"
           disabled={loading}
@@ -320,7 +396,7 @@ function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
   );
 }
 
-function ManageEventsList({ events, loading, onRefresh }: { events: any[], loading: boolean, onRefresh: () => void }) {
+function ManageEventsList({ events, loading, conductors, onRefresh }: { events: any[], loading: boolean, conductors: any[], onRefresh: () => Promise<void> }) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<number, File[]>>({});
 
@@ -390,7 +466,7 @@ function ManageEventsList({ events, loading, onRefresh }: { events: any[], loadi
         delete next[eventId];
         return next;
       });
-      onRefresh();
+      await onRefresh();
     } catch (err: any) {
       console.error("DEBUG: Dashboard Upload/Update failed", err);
       alert("Something went wrong! Error: " + err.message);

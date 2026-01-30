@@ -93,10 +93,52 @@ export default function EventDetailPage() {
         }
         */
 
-        // Combine event data with facilitators
+        // Initialize facilitators list
+        let facilitators: Facilitator[] = [];
+
+        // Fetch conductor details
+        if (eventData.conductor_id && eventData.conductor_type) {
+          try {
+            if (eventData.conductor_type === 'team') {
+              const { data: teamConductor } = await supabase
+                .from('teams')
+                .select('name, role, bio, image_url')
+                .eq('id', eventData.conductor_id.toString())
+                .single();
+              
+              if (teamConductor) {
+                facilitators = [{
+                  name: teamConductor.name,
+                  role: teamConductor.role || "Core Team Member",
+                  bio: teamConductor.bio || "Dedicated member of the interACT core team.",
+                  image_url: teamConductor.image_url || ""
+                }];
+              }
+            } else if (eventData.conductor_type === 'facilitator') {
+              const { data: facConductor } = await supabase
+                .from('facilitators')
+                .select('full_name, profession, country')
+                .eq('id', eventData.conductor_id.toString())
+                .single();
+              
+              if (facConductor) {
+                facilitators = [{
+                  name: facConductor.full_name,
+                  role: facConductor.profession || "Certified Facilitator",
+                  bio: facConductor.country ? `Certified interACT Facilitator sharing the journey from ${facConductor.country}.` : "Certified interACT Facilitator.",
+                  image_url: "" 
+                }];
+              }
+            }
+          } catch (fetchErr) {
+            console.error("Error fetching conductor details:", fetchErr);
+          }
+        }
+
+        // Final state update
         setEvent({
           ...eventData,
-          facilitators: [] // facilitators
+          facilitators: facilitators
         });
 
         // Fetch 5-star testimonials for this event
@@ -257,6 +299,12 @@ export default function EventDetailPage() {
                   {event.location}
                   {event.country && `, ${event.country}`}
                 </span>
+                {event.facilitators && event.facilitators.length > 0 && (
+                  <span className="flex items-center">
+                    <Users size={20} className="mr-2 text-primary" />
+                    Host: {event.facilitators[0].name}
+                  </span>
+                )}
               </div>
 
               {/* Quick Action for Feedback */}
@@ -361,30 +409,35 @@ export default function EventDetailPage() {
             )}
 
 
-            {/* Facilitators */}
-            {/* <section>
-              <h2 className="text-3xl font-bold text-text-main mb-6">Meet Your Facilitators</h2>
-              <div className="space-y-6">
-                {event.facilitators.map((facilitator, index) => (
-                  <div key={index} className="flex flex-col sm:flex-row gap-6 p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex-shrink-0">
-                      <Image
-                        src={facilitator.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(facilitator.name)}&background=2A9D8F&color=fff&size=200`}
-                        alt={facilitator.name}
-                        width={120}
-                        height={120}
-                        className="rounded-xl object-cover w-32 h-32"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-text-main mb-1">{facilitator.name}</h3>
-                      <p className="text-primary font-medium mb-3">{facilitator.role}</p>
-                      <p className="text-text-muted leading-relaxed">{facilitator.bio}</p>
-                    </div>
+            {/* Facilitator / Host */}
+            {/* {event.facilitators.length > 0 && (
+              <section className="bg-teal-50/30 rounded-[2.5rem] p-8 md:p-12 border border-teal-100">
+                <div className="flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left">
+                  <div className="flex-shrink-0 relative">
+                    <div className="absolute inset-0 bg-primary/20 rounded-3xl rotate-6 blur-xl flex-shrink-0"></div>
+                    <Image
+                      src={event.facilitators[0].image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(event.facilitators[0].name)}&background=2A9D8F&color=fff&size=400`}
+                      alt={event.facilitators[0].name}
+                      width={160}
+                      height={160}
+                      className="rounded-3xl object-cover w-40 h-40 relative z-10 border-4 border-white shadow-xl"
+                    />
                   </div>
-                ))}
-              </div>
-            </section> */}
+                  <div className="space-y-4 pt-2">
+                    <div>
+                      <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold tracking-widest uppercase rounded-full mb-3">
+                        Your Host / Facilitator
+                      </span>
+                      <h2 className="text-3xl font-bold text-text-main mb-1">{event.facilitators[0].name}</h2>
+                      <p className="text-primary font-semibold tracking-wide">{event.facilitators[0].role}</p>
+                    </div>
+                    <p className="text-text-muted leading-relaxed max-w-xl italic">
+                      "{event.facilitators[0].bio}"
+                    </p>
+                  </div>
+                </div>
+              </section>
+            )} */}
           </div>
 
           {/* Sidebar - Registration */}
