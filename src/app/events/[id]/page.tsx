@@ -37,6 +37,7 @@ type Event = {
   agenda: string[];
   facilitators: Facilitator[];
   capacity: number | null;
+  special_note: string | null;
 };
 
 export default function EventDetailPage() {
@@ -200,6 +201,7 @@ export default function EventDetailPage() {
             eventTitle: event?.title,
             eventDate: event ? formatDate(event.date) : '',
             eventLocation: event?.location,
+            specialNote: event?.special_note, 
           }),
         });
         

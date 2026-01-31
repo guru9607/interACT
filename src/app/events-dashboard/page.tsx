@@ -15,12 +15,14 @@ import {
   Clock,
   ArrowRight,
   Download,
-  Users
+  Users,
+  Edit,
+  Trash2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Simple secret for temporary access
-const DASHBOARD_SECRET = "interact2026"; // You can change this or move to .env
+// Use environment variable for the secret, fallback for local dev
+const DASHBOARD_SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET || "interact2026";
 
 export default function EventsDashboard() {
   return (
@@ -43,6 +45,7 @@ function DashboardContent() {
   const [authorized, setAuthorized] = useState(false);
   const [conductors, setConductors] = useState<any[]>([]);
   const [regCounts, setRegCounts] = useState<Record<number, number>>({});
+  const [editingEvent, setEditingEvent] = useState<any | null>(null);
 
   useEffect(() => {
     if (secret === DASHBOARD_SECRET) {
@@ -61,8 +64,8 @@ function DashboardContent() {
       if (teamError) console.error("DEBUG: teamError", teamError);
       if (facError) console.error("DEBUG: facError", facError);
 
-      const teamList = teamData?.map(t => ({ id: t.id, name: t.name, type: 'team' })) || [];
-      const facList = facData?.map(f => ({ id: f.id, name: f.full_name, type: 'facilitator' })) || [];
+      const teamList = teamData?.map((t: any) => ({ id: t.id, name: t.name, type: 'team' })) || [];
+      const facList = facData?.map((f: any) => ({ id: f.id, name: f.full_name, type: 'facilitator' })) || [];
       
       console.log(`DEBUG: Found ${teamList.length} Team members and ${facList.length} Facilitators`);
 
@@ -98,7 +101,7 @@ function DashboardContent() {
       if (countData) {
         console.log(`DEBUG: Found ${countData.length} total registrations across all events`);
         const counts: Record<number, number> = {};
-        countData.forEach(r => {
+        countData.forEach((r: any) => {
           const eid = Number(r.event_id);
           counts[eid] = (counts[eid] || 0) + 1;
         });
@@ -139,13 +142,16 @@ function DashboardContent() {
             </div>
             <div className="flex bg-gray-100 p-1 rounded-xl">
               <button
-                onClick={() => setActiveTab("create")}
+                onClick={() => {
+                  setEditingEvent(null);
+                  setActiveTab("create");
+                }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   activeTab === "create" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
                 }`}
               >
                 <Plus size={16} />
-                Create Event
+                {editingEvent ? "Editing Event" : "Create Event"}
               </button>
               <button
                 onClick={() => {
@@ -173,7 +179,14 @@ function DashboardContent() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <CreateEventForm conductors={conductors} onSuccess={() => setActiveTab("manage")} />
+              <CreateEventForm 
+                conductors={conductors} 
+                onSuccess={() => {
+                  setEditingEvent(null);
+                  setActiveTab("manage");
+                }} 
+                initialData={editingEvent}
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -182,7 +195,17 @@ function DashboardContent() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <ManageEventsList events={events} loading={loading} conductors={conductors} onRefresh={fetchUpcomingEvents} regCounts={regCounts} />
+              <ManageEventsList 
+                events={events} 
+                loading={loading} 
+                conductors={conductors} 
+                onRefresh={fetchUpcomingEvents} 
+                regCounts={regCounts}
+                onEdit={(event: any) => {
+                  setEditingEvent(event);
+                  setActiveTab("create");
+                }}
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -191,22 +214,60 @@ function DashboardContent() {
   );
 }
 
-function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, conductors: any[] }) {
+function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: () => void, conductors: any[], initialData?: any }) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    date: "",
-    start_time: "",
-    location: "",
-    region: "Asia",
-    type: "In-Person",
-    description: "",
-    agenda: "",
-    act_module: "combined", 
-    country: "",
-    conductor_id: "" as string,
-    conductor_type: "" as string,
+    title: initialData?.title || "",
+    date: initialData?.date || "",
+    start_time: initialData?.start_time || "",
+    location: initialData?.location || "",
+    region: initialData?.region || "Asia",
+    type: initialData?.type || "In-Person",
+    description: initialData?.description || "",
+    agenda: Array.isArray(initialData?.agenda) ? initialData.agenda.join("\n") : (initialData?.agenda || ""),
+    act_module: initialData?.act_module || "combined", 
+    country: initialData?.country || "",
+    conductor_id: initialData?.conductor_id || "",
+    conductor_type: initialData?.conductor_type || "",
+    special_note: initialData?.special_note || "",
   });
+
+  // Reset form when initialData changes (e.g. switching from one edit to another, or clearing edit)
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || "",
+        date: initialData.date || "",
+        start_time: initialData.start_time || "",
+        location: initialData.location || "",
+        region: initialData.region || "Asia",
+        type: initialData.type || "In-Person",
+        description: initialData.description || "",
+        agenda: Array.isArray(initialData.agenda) ? initialData.agenda.join("\n") : (initialData.agenda || ""),
+        act_module: initialData.act_module || "combined", 
+        country: initialData.country || "",
+        conductor_id: initialData.conductor_id || "",
+        conductor_type: initialData.conductor_type || "",
+        special_note: initialData.special_note || "",
+      });
+    } else {
+      setFormData({
+        title: "",
+        date: "",
+        start_time: "",
+        location: "",
+        region: "Asia",
+        type: "In-Person",
+        description: "",
+        agenda: "",
+        act_module: "combined", 
+        country: "",
+        conductor_id: "",
+        conductor_type: "",
+        special_note: "",
+      });
+    }
+  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -215,26 +276,55 @@ function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, con
     // Standardize agenda (split by lines into array)
     const processedAgenda = formData.agenda
       .split("\n")
-      .map(item => item.trim())
-      .filter(item => item !== "");
+      .map((item: string) => item.trim())
+      .filter((item: string) => item !== "");
 
-    const { error } = await supabase.from("events").insert([{ 
-      ...formData, 
-      agenda: processedAgenda, // Store as array
-      status: "upcoming" 
-    }]);
-    if (!error) {
-      alert("Event created successfully!");
-      onSuccess();
+    if (initialData?.id) {
+      // UPDATE
+      const { error } = await supabase
+        .from("events")
+        .update({ 
+          ...formData, 
+          agenda: processedAgenda 
+        })
+        .eq("id", initialData.id);
+
+      if (!error) {
+        alert("Event updated successfully!");
+        onSuccess();
+      } else {
+        alert("Error updating event: " + error.message);
+      }
     } else {
-      alert("Error: " + error.message);
+      // INSERT
+      const { error } = await supabase.from("events").insert([{ 
+        ...formData, 
+        agenda: processedAgenda, // Store as array
+        status: "upcoming" 
+      }]);
+      if (!error) {
+        alert("Event created successfully!");
+        onSuccess();
+      } else {
+        alert("Error creating event: " + error.message);
+      }
     }
     setLoading(false);
   };
 
   return (
     <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-teal-900/5">
-      <h2 className="text-xl font-bold text-text-main mb-6">Create New Event</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold text-text-main">{initialData ? "Edit Event" : "Create New Event"}</h2>
+        {initialData && (
+          <button 
+            onClick={onSuccess}
+            className="text-sm text-text-muted hover:text-primary font-medium"
+          >
+            Cancel Edit
+          </button>
+        )}
+      </div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
@@ -368,6 +458,22 @@ function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, con
 
         <div className="space-y-2">
           <label className="text-sm font-semibold text-text-main">
+            Special Instructions / Note for Students
+          </label>
+          <textarea
+            rows={2}
+            className="w-full px-4 py-3 bg-teal-50/30 border border-teal-100 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+            value={formData.special_note}
+            onChange={(e) => setFormData({ ...formData, special_note: e.target.value })}
+            placeholder="e.g. Please bring a water bottle and a notebook."
+          />
+          <p className="text-[10px] text-text-muted ml-1">
+            <strong>Why is this here?</strong> This note will be automatically included in the student's registration confirmation email, saving you from sending manual reminders later.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-text-main">
             Host / Conductor <span className="text-red-500">*</span>
           </label>
           <div className="space-y-3">
@@ -392,8 +498,8 @@ function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, con
             <option value="">Select a conductor...</option>
             
             <optgroup label="Registered Facilitators">
-              {conductors.filter(c => c.type === 'facilitator').length > 0 ? (
-                conductors.filter(c => c.type === 'facilitator').map((c) => (
+              {conductors.filter((c: any) => c.type === 'facilitator').length > 0 ? (
+                conductors.filter((c: any) => c.type === 'facilitator').map((c: any) => (
                   <option key={`fac-${c.id}`} value={`facilitator:${c.id}`}>
                     {c.name}
                   </option>
@@ -404,7 +510,7 @@ function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, con
             </optgroup>
  
             <optgroup label="Core Team">
-              {conductors.filter(c => c.type === 'team').map((c) => (
+              {conductors.filter((c: any) => c.type === 'team').map((c: any) => (
                 <option key={`team-${c.id}`} value={`team:${c.id}`}>
                   {c.name}
                 </option>
@@ -417,16 +523,30 @@ function CreateEventForm({ onSuccess, conductors }: { onSuccess: () => void, con
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
-          {loading ? <Loader2 className="animate-spin" /> : <><Plus size={20} /> Create Upcoming Event</>}
+          {loading ? 'Saving...' : (initialData ? 'Update Event' : 'Create Event')}
         </button>
       </form>
     </div>
   );
 }
 
-function ManageEventsList({ events, loading, conductors, onRefresh, regCounts }: { events: any[], loading: boolean, conductors: any[], onRefresh: () => Promise<void>, regCounts: Record<number, number> }) {
+function ManageEventsList({ 
+  events, 
+  loading, 
+  conductors, 
+  onRefresh, 
+  regCounts,
+  onEdit 
+}: { 
+  events: any[], 
+  loading: boolean, 
+  conductors: any[], 
+  onRefresh: () => Promise<void>, 
+  regCounts: Record<number, number>,
+  onEdit: (event: any) => void
+}) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Record<number, File[]>>({});
   const [fetchingRegs, setFetchingRegs] = useState<number | null>(null);
@@ -449,7 +569,7 @@ function ManageEventsList({ events, loading, conductors, onRefresh, regCounts }:
       const headers = ["Full Name", "Email", "Phone", "Country", "Registration Date"];
       const csvContent = [
         headers.join(","),
-        ...data.map(row => [
+        ...data.map((row: any) => [
           `"${(row.full_name || "").replace(/"/g, '""')}"`,
           `"${(row.email || "").replace(/"/g, '""')}"`,
           `"${(row.phone || "").replace(/"/g, '""')}"`,
@@ -473,6 +593,8 @@ function ManageEventsList({ events, loading, conductors, onRefresh, regCounts }:
       setFetchingRegs(null);
     }
   };
+
+
 
   const handleComplete = async (eventId: number) => {
     const files = selectedFiles[eventId];
@@ -549,6 +671,26 @@ function ManageEventsList({ events, loading, conductors, onRefresh, regCounts }:
     }
   };
 
+  const handleDelete = async (eventId: number, title: string) => {
+    const confirm1 = window.confirm(`Are you sure you want to DELETE "${title}"? This cannot be undone.`);
+    if (!confirm1) return;
+
+    const confirm2 = window.confirm(`LAST WARNING: This will permanently remove all data for "${title}". Are you absolutely sure?`);
+    if (!confirm2) return;
+
+    setUpdatingId(eventId);
+    try {
+      const { error } = await supabase.from("events").delete().eq("id", eventId);
+      if (error) throw error;
+      alert("Event deleted successfully.");
+      await onRefresh();
+    } catch (err: any) {
+      alert("Error deleting event: " + err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   if (loading) return <div className="text-center py-20"><Loader2 className="animate-spin mx-auto text-primary" size={32} /></div>;
 
   return (
@@ -560,38 +702,58 @@ function ManageEventsList({ events, loading, conductors, onRefresh, regCounts }:
           <p className="text-text-muted">No upcoming events found.</p>
         </div>
       ) : (
-        events.map((event) => (
+        events.map((event: any) => (
           <div key={event.id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between gap-3">
                   <h3 className="text-lg font-bold text-text-main">{event.title}</h3>
-                  {event.status === "completed" && (
-                    <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-bold rounded-full">ENROLLED/COMPLETED</span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => onEdit(event)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition-all text-xs font-semibold"
+                      title="Edit Event"
+                    >
+                      <Edit size={14} />
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(event.id, event.title)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all text-xs font-semibold"
+                      title="Delete Event"
+                    >
+                      <Trash2 size={14} />
+                      Delete
+                    </button>
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-4 text-sm text-text-muted">
-                  <span className="flex items-center gap-1.5"><Calendar size={14} /> {event.date}</span>
-                  <span className="flex items-center gap-1.5"><MapPin size={14} /> {event.location}</span>
-                  <button 
-                    onClick={() => downloadRegistrations(event.id, event.title)}
-                    disabled={fetchingRegs === event.id}
-                    className="flex items-center gap-1.5 text-primary hover:text-primary-hover font-medium transition-all"
-                  >
-                    {fetchingRegs === event.id ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-                    Export {regCounts[event.id] || 0} Participant{regCounts[event.id] === 1 ? "" : "s"}
-                  </button>
-                </div>
+                {event.status === "completed" && (
+                  <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-bold rounded-full">ENROLLED/COMPLETED</span>
+                )}
+                  <div className="flex flex-wrap gap-4 text-sm text-text-muted">
+                    <span className="flex items-center gap-1.5"><Calendar size={14} /> {event.date}</span>
+                    <span className="flex items-center gap-1.5"><MapPin size={14} /> {event.location}</span>
+                    <div className="flex gap-4">
+                      <button 
+                        onClick={() => downloadRegistrations(event.id, event.title)}
+                        disabled={fetchingRegs === event.id}
+                        className="flex items-center gap-1.5 text-primary hover:text-primary-hover font-medium transition-all"
+                      >
+                        {fetchingRegs === event.id ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                        Export {regCounts[event.id] || 0} Participant{regCounts[event.id] === 1 ? "" : "s"}
+                      </button>
+                    </div>
+                  </div>
               </div>
               <div className="flex flex-col gap-3 min-w-[250px]">
                 <div className="relative">
                   <input
                     type="file"
                     accept="image/*"
-                    multiple // Added multiple
+                    multiple 
                     onChange={(e) => {
                       const files = Array.from(e.target.files || []);
-                      setSelectedFiles(prev => ({ ...prev, [event.id]: files }));
+                      setSelectedFiles((prev: any) => ({ ...prev, [event.id]: files }));
                     }}
                     className="hidden"
                     id={`file-${event.id}`}

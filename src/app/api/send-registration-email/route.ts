@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
     try {
-        const { email, name, eventTitle, eventDate, eventLocation } = await req.json();
+        const { email, name, eventTitle, eventDate, eventLocation, specialNote, type = 'confirmation' } = await req.json();
 
         const apiKey = process.env.BREVO_API_KEY;
         const senderEmail = process.env.BREVO_SENDER_EMAIL;
@@ -15,6 +15,13 @@ export async function POST(req: Request) {
                 configPresent: { apiKey: !!apiKey, senderEmail: !!senderEmail }
             }, { status: 500 });
         }
+
+        const isReminder = type === 'reminder';
+        const subject = isReminder ? `Reminder: ${eventTitle}` : `Registration Confirmed: ${eventTitle}`;
+        const headline = isReminder ? "Event Reminder" : "You're Registered!";
+        const subheadline = isReminder
+            ? "We're looking forward to seeing you at this upcoming interACT event."
+            : "We're excited to have you join us for this interACT event.";
 
         const response = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
@@ -34,16 +41,16 @@ export async function POST(req: Request) {
                         name: name,
                     },
                 ],
-                subject: `Registration Confirmed: ${eventTitle}`,
+                subject: subject,
                 htmlContent: `
           <div style="font-family: 'Inter', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #333; line-height: 1.6;">
             <div style="text-align: center; margin-bottom: 30px;">
-              <h1 style="color: #2A9D8F; margin: 0; font-size: 28px; font-weight: 700;">You're Registered!</h1>
-              <p style="font-size: 16px; color: #666; margin-top: 10px;">We're excited to have you join us for this interACT event.</p>
+              <h1 style="color: #2A9D8F; margin: 0; font-size: 28px; font-weight: 700;">${headline}</h1>
+              <p style="font-size: 16px; color: #666; margin-top: 10px;">${subheadline}</p>
             </div>
             
             <p>Hi <strong>${name}</strong>,</p>
-            <p>Thank you for registering for <strong>${eventTitle}</strong>. Your spot is confirmed! Below are the details for your records:</p>
+            <p>${isReminder ? `This is a friendly reminder for the upcoming session: <strong>${eventTitle}</strong>.` : `Thank you for registering for <strong>${eventTitle}</strong>. Your spot is confirmed!`} Below are the details for your records:</p>
             
             <div style="background-color: #f8f9fa; border-left: 4px solid #2A9D8F; padding: 25px; border-radius: 8px; margin: 30px 0;">
               <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #2A9D8F; text-transform: uppercase; letter-spacing: 1px;">Event Details</h3>
@@ -58,6 +65,13 @@ export async function POST(req: Request) {
                 </tr>
               </table>
             </div>
+
+            ${specialNote ? `
+            <div style="background-color: #E6F3F2; padding: 20px; border-radius: 8px; margin: 30px 0; border: 1px dashed #2A9D8F;">
+              <p style="margin: 0; color: #2A9D8F; font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 8px;">Speaker's Note:</p>
+              <p style="margin: 0; color: #333; font-style: italic;">"${specialNote}"</p>
+            </div>
+            ` : ''}
 
             <p style="margin-bottom: 30px;">If you have any questions or need to change your registration, simply reply to this email or visit our website.</p>
             
