@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const { secret } = await req.json();
-    const serverSecret = process.env.EVENT_DASHBOARD_SECRET;
+    const serverSecret = process.env.NEXT_PUBLIC_DASHBOARD_SECRET;
 
     if (!serverSecret) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });

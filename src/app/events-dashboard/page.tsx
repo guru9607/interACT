@@ -22,7 +22,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 // Use environment variable for the secret, fallback for local dev
-const DASHBOARD_SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET || "interact2026";
+const DASHBOARD_SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET;
 
 export default function EventsDashboard() {
   return (
@@ -48,7 +48,10 @@ function DashboardContent() {
   const [editingEvent, setEditingEvent] = useState<any | null>(null);
 
   useEffect(() => {
-    if (secret === DASHBOARD_SECRET) {
+    const storedSecret = localStorage.getItem("staff_secret_key");
+    const validSecret = (secret === DASHBOARD_SECRET) || (storedSecret === DASHBOARD_SECRET);
+    
+    if (validSecret) {
       setAuthorized(true);
       fetchUpcomingEvents();
       fetchConductors();
@@ -125,6 +128,12 @@ function DashboardContent() {
           <p className="text-text-muted">
             This is a protected page. Please use the correct link provided to facilitators.
           </p>
+          <button 
+            onClick={() => window.location.href = '/portal'}
+            className="text-primary font-medium hover:underline"
+          >
+            Go to Staff Portal
+          </button>
         </div>
       </div>
     );
@@ -136,10 +145,20 @@ function DashboardContent() {
       <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-text-main">Events Dashboard</h1>
-              <p className="text-sm text-text-muted">Manage upcoming and completed events</p>
-            </div>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => window.location.href = `/portal?secret=${secret}`}
+                  className="flex items-center gap-2 text-teal-600 font-medium hover:bg-gray-50 px-3 py-2 rounded-lg transition-all text-sm"
+                >
+                  <ArrowRight className="rotate-180" size={16} />
+                  Back to Hub
+                </button>
+                <div>
+                  <h1 className="text-2xl font-bold text-text-main">Events Dashboard</h1>
+                  <p className="text-sm text-text-muted">Manage upcoming and completed events</p>
+                </div>
+              </div>
+
             <div className="flex bg-gray-100 p-1 rounded-xl">
               <button
                 onClick={() => {
