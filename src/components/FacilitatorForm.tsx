@@ -37,9 +37,10 @@ export default function FacilitatorForm() {
 
       if (submitError) throw submitError;
       setSubmitted(true);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as Error;
       console.error("Submission error:", err);
-      setError(err.message || "Something went wrong. Please try again.");
+      setError(error.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -200,7 +201,7 @@ export default function FacilitatorForm() {
               <option value="Congo, Democratic Republic of the">Congo, Democratic Republic of the</option>
               <option value="Congo, Republic of the">Congo, Republic of the</option>
               <option value="Costa Rica">Costa Rica</option>
-              <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+              <option value="Côte d'Ivoire">Côte d&rsquo;Ivoire</option>
               <option value="Croatia">Croatia</option>
               <option value="Cuba">Cuba</option>
               <option value="Cyprus">Cyprus</option>
@@ -355,7 +356,7 @@ export default function FacilitatorForm() {
               <option value="Zambia">Zambia</option>
               <option value="Zimbabwe">Zimbabwe</option>
             </select>
-            <div className="absolute right-4 top-[3.25rem] pointer-events-none opacity-50">
+            <div className="absolute right-4 top-13 pointer-events-none opacity-50">
                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
           </div>

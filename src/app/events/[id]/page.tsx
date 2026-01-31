@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star } from "lucide-react";
-import Image from "next/image";
+import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import FeedbackForm from "@/components/FeedbackForm";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 // Facilitator Type
 type Facilitator = {
@@ -46,10 +45,10 @@ export default function EventDetailPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
-  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<Record<string, unknown>[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCalendarMenu, setShowCalendarMenu] = useState(false);
   
   const eventId = parseInt(params.id as string);
 
@@ -158,9 +157,10 @@ export default function EventDetailPage() {
           });
           setTestimonials(fiveStarFeedback.slice(0, 4)); // Show max 4 testimonials
         }
-      } catch (err: any) {
+      } catch (err) {
+        const error = err as Error;
         console.error('Error fetching event:', err);
-        setError(err.message);
+        setError(error?.message || 'Failed to load event');
       } finally {
         setLoading(false);
       }
@@ -169,9 +169,141 @@ export default function EventDetailPage() {
     fetchEvent();
   }, [eventId]);
 
+  const generateEventCalendarFile = () => {
+    if (!event) return;
+
+    // Parse event date and time
+    const eventDate = new Date(event.date);
+    const [hours, minutes] = event.start_time.split(':').map(Number);
+    eventDate.setHours(hours, minutes, 0);
+
+    // Calculate end time (assume 2 hours if not provided)
+    const endDate = event.end_time 
+      ? (() => {
+          const endEventDate = new Date(event.date);
+          const [endHours, endMinutes] = event.end_time.split(':').map(Number);
+          endEventDate.setHours(endHours, endMinutes, 0);
+          return endEventDate;
+        })()
+      : new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
+
+    // Format dates for iCal (YYYYMMDDTHHMMSSZ)
+    const formatICalDate = (date: Date) => {
+      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+
+    const startTime = formatICalDate(eventDate);
+    const endTime = formatICalDate(endDate);
+
+    const icalContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//interACT Program//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:interact-event-${event.id}-${Date.now()}@brahmakumaris.org
+DTSTAMP:${formatICalDate(new Date())}
+DTSTART:${startTime}
+DTEND:${endTime}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description || 'Join us for this transformative interACT event'}
+LOCATION:${event.location}${event.country ? ', ' + event.country : ''}
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR`;
+
+    // Create blob and download
+    const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `interACT-${event.title.replace(/\s+/g, '-')}.ics`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const addToGoogleCalendar = () => {
+    if (!event) return;
+
+    const eventDate = new Date(event.date);
+    const [hours, minutes] = event.start_time.split(':').map(Number);
+    eventDate.setHours(hours, minutes, 0);
+
+    const endDate = event.end_time 
+      ? (() => {
+          const endEventDate = new Date(event.date);
+          const [endHours, endMinutes] = event.end_time.split(':').map(Number);
+          endEventDate.setHours(endHours, endMinutes, 0);
+          return endEventDate;
+        })()
+      : new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
+
+    // Format dates for Google Calendar (YYYYMMDDTHHMMSS format)
+    const formatGoogleDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+    };
+
+    const startTime = formatGoogleDate(eventDate);
+    const endTime = formatGoogleDate(endDate);
+    const eventLocation = `${event.location}${event.country ? ', ' + event.country : ''}`;
+    
+    const googleCalendarUrl = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${encodeURIComponent(event.title)}&dates=${startTime}/${endTime}&location=${encodeURIComponent(eventLocation)}&details=${encodeURIComponent(event.description || 'Join us for this transformative interACT event')}`;
+    
+    window.open(googleCalendarUrl, '_blank');
+    setShowCalendarMenu(false);
+  };
+
+  const addToOutlookCalendar = () => {
+    if (!event) return;
+
+    const eventDate = new Date(event.date);
+    const [hours, minutes] = event.start_time.split(':').map(Number);
+    eventDate.setHours(hours, minutes, 0);
+
+    const endDate = event.end_time 
+      ? (() => {
+          const endEventDate = new Date(event.date);
+          const [endHours, endMinutes] = event.end_time.split(':').map(Number);
+          endEventDate.setHours(endHours, endMinutes, 0);
+          return endEventDate;
+        })()
+      : new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
+
+    const formatOutlookDate = (date: Date) => {
+      return date.toISOString();
+    };
+
+    const startTime = formatOutlookDate(eventDate);
+    const endTime = formatOutlookDate(endDate);
+    const eventLocation = `${event.location}${event.country ? ', ' + event.country : ''}`;
+
+    const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(event.title)}&startdt=${encodeURIComponent(startTime)}&enddt=${encodeURIComponent(endTime)}&location=${encodeURIComponent(eventLocation)}&body=${encodeURIComponent(event.description || 'Join us for this transformative interACT event')}`;
+    
+    window.open(outlookUrl, '_blank');
+    setShowCalendarMenu(false);
+  };
+
+  // Helper to format date
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitting(true);
     setError(null);
 
     const formData = new FormData(e.currentTarget);
@@ -184,7 +316,7 @@ export default function EventDetailPage() {
     };
 
     try {
-      const { data, error: supabaseError } = await supabase
+      const { error: supabaseError } = await supabase
         .from('registrations')
         .insert([registrationData]);
 
@@ -215,23 +347,11 @@ export default function EventDetailPage() {
       }
 
       setSubmitted(true);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as Error;
       console.error('Error submitting registration:', err);
-      setError(err.message || 'Failed to submit registration. Please try again.');
-    } finally {
-      setSubmitting(false);
+      setError(error.message || 'Failed to submit registration. Please try again.');
     }
-  };
-
-  // Helper to format date
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
   };
 
   // Helper to format 24h time to 12h
@@ -271,7 +391,7 @@ export default function EventDetailPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
+      <section className="relative py-20 bg-linear-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
         <div 
           className="absolute inset-0 opacity-[0.03]" 
           style={{ 
@@ -352,7 +472,8 @@ export default function EventDetailPage() {
               <div className="space-y-6">
                 <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                   {event.image_url ? (
-                    <img src={event.image_url} alt={event.title} className="w-full h-full object-cover" />
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={event.image_url} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
                   ) : (
                     <div className="w-full h-full bg-teal-50 flex items-center justify-center text-teal-200">
                       <ImageIcon size={64} />
@@ -365,7 +486,8 @@ export default function EventDetailPage() {
                   <div className="grid grid-cols-4 gap-4">
                     {event.image_urls.slice(1).map((url, i) => (
                       <div key={i} className="aspect-square rounded-2xl overflow-hidden border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-                        <img src={url} alt={`${event.title} ${i+2}`} className="w-full h-full object-cover" />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={url} alt={`${event.title} ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
                       </div>
                     ))}
                   </div>
@@ -394,7 +516,7 @@ export default function EventDetailPage() {
               <div className="space-y-3">
                 {event.agenda.map((item, index) => (
                   <div key={index} className="flex items-start gap-4 p-4 bg-teal-50/50 rounded-lg border border-teal-100">
-                    <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">
+                    <div className="shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">
                       {index + 1}
                     </div>
                     <p className="text-text-main pt-1">{item}</p>
@@ -409,7 +531,7 @@ export default function EventDetailPage() {
                 <h2 className="text-3xl font-bold text-text-main mb-6">Participant Experiences</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   {testimonials.map((testimonial, index) => {
-                    const responses = testimonial.responses;
+                    const responses = (testimonial as Record<string, unknown>).responses as Record<string, string>;
                     
                     // Prioritize Question 1 (Realization) or Question 3/2 (Empowerment)
                     // Never show Question 4 (Suggestions)
@@ -422,9 +544,9 @@ export default function EventDetailPage() {
                             <Star key={star} size={18} className="fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
-                        <p className="text-text-muted italic mb-4 line-clamp-4">"{mainQuote}"</p>
+                        <p className="text-text-muted italic mb-4 line-clamp-4">&ldquo;{mainQuote}&rdquo;</p>
                         <p className="text-sm font-semibold text-text-main">
-                          {testimonial.first_name ? `— ${testimonial.first_name}` : "— Anonymous Participant"}
+                          {(testimonial as Record<string, unknown>).first_name ? `— ${(testimonial as Record<string, unknown>).first_name}` : "— Anonymous Participant"}
                         </p>
                       </div>
                     );
@@ -432,51 +554,21 @@ export default function EventDetailPage() {
                 </div>
               </section>
             )}
-
-
-            {/* Facilitator / Host */}
-            {/* {event.facilitators.length > 0 && (
-              <section className="bg-teal-50/30 rounded-[2.5rem] p-8 md:p-12 border border-teal-100">
-                <div className="flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left">
-                  <div className="flex-shrink-0 relative">
-                    <div className="absolute inset-0 bg-primary/20 rounded-3xl rotate-6 blur-xl flex-shrink-0"></div>
-                    <Image
-                      src={event.facilitators[0].image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(event.facilitators[0].name)}&background=2A9D8F&color=fff&size=400`}
-                      alt={event.facilitators[0].name}
-                      width={160}
-                      height={160}
-                      className="rounded-3xl object-cover w-40 h-40 relative z-10 border-4 border-white shadow-xl"
-                    />
-                  </div>
-                  <div className="space-y-4 pt-2">
-                    <div>
-                      <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold tracking-widest uppercase rounded-full mb-3">
-                        Your Host / Facilitator
-                      </span>
-                      <h2 className="text-3xl font-bold text-text-main mb-1">{event.facilitators[0].name}</h2>
-                      <p className="text-primary font-semibold tracking-wide">{event.facilitators[0].role}</p>
-                    </div>
-                    <p className="text-text-muted leading-relaxed max-w-xl italic">
-                      "{event.facilitators[0].bio}"
-                    </p>
-                  </div>
-                </div>
-              </section>
-            )} */}
           </div>
 
-          {/* Sidebar - Registration */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-2xl shadow-xl shadow-teal-900/5 border border-teal-100 p-8">
-              <h3 className="text-2xl font-bold text-text-main mb-2">
-                {event.status === "completed" ? "Event Completed" : "Register Now"}
+          {/* Sidebar - Registration or Feedback */}
+          <div>
+            <div className="bg-white rounded-3xl p-8 sticky top-32 shadow-lg border border-gray-100">
+              <h3 className="text-2xl font-bold text-text-main mb-4">
+                {event.status === "completed" ? "Event Completed" : "Join This Event"}
               </h3>
               <p className="text-text-muted mb-6 text-sm">
                 {event.status === "completed" 
-                  ? "This event has already taken place. We hope to see you at our next one!" 
-                  : "Secure your spot for this transformative event."}
+                  ? "This event has ended. Explore our upcoming events or share your experience."
+                  : "Fill out your details below to register for this transformative experience."
+                }
               </p>
-              
+
               {event.status === "completed" ? (
                 <Link href="/join" className="block w-full py-3.5 bg-gray-100 text-text-main text-center font-bold rounded-xl hover:bg-gray-200 transition-all">
                   Browse Upcoming Events
@@ -486,14 +578,67 @@ export default function EventDetailPage() {
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
                     <CheckCircle2 size={32} />
                   </div>
-                  <h4 className="text-lg font-bold text-text-main mb-2">You're Registered!</h4>
-                  <p className="text-text-muted text-sm mb-4">Check your email for confirmation and details.</p>
-                  <button 
-                    onClick={() => router.push('/join')}
-                    className="text-primary text-sm font-medium hover:underline"
-                  >
-                    Browse more events
-                  </button>
+                  <h4 className="text-lg font-bold text-text-main mb-2">You&rsquo;re Registered!</h4>
+                  <p className="text-text-muted text-sm mb-6">Check your email for confirmation and details.</p>
+                  
+                  <div className="space-y-3">
+                    {/* Add to Calendar Dropdown */}
+                    <div className="relative">
+                      <button
+                        onClick={() => setShowCalendarMenu(!showCalendarMenu)}
+                        className="w-full px-4 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+                      >
+                        <Calendar size={18} />
+                        <span>Add to Calendar</span>
+                        <ChevronDown size={16} className={`ml-1 transition-transform duration-200 ${showCalendarMenu ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {showCalendarMenu && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                          <button
+                            onClick={() => { addToGoogleCalendar(); setShowCalendarMenu(false); }}
+                            className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                          >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff" stroke="#E5E7EB" strokeWidth="1"/>
+                              <path d="M15.545 8.333H8.455c-.614 0-1.122.508-1.122 1.111v6.112c0 .603.508 1.11 1.122 1.11h7.09c.614 0 1.122-.507 1.122-1.11V9.444c0-.603-.508-1.111-1.122-1.111z" fill="#4285F4"/>
+                              <path d="M8.455 10.556h7.09" stroke="#fff" strokeWidth=".667"/>
+                              <path d="M10.5 13.278h3" stroke="#fff" strokeWidth=".667" strokeLinecap="round"/>
+                            </svg>
+                            <span className="font-medium text-gray-700">Google Calendar</span>
+                          </button>
+                          <button
+                            onClick={() => { addToOutlookCalendar(); setShowCalendarMenu(false); }}
+                            className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors border-t border-gray-50"
+                          >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff" stroke="#E5E7EB" strokeWidth="1"/>
+                              <path d="M7 8h10v8H7z" fill="#0078D4"/>
+                              <path d="M9 10h6M9 12h6M9 14h4" stroke="#fff" strokeWidth=".667" strokeLinecap="round"/>
+                            </svg>
+                            <span className="font-medium text-gray-700">Outlook Calendar</span>
+                          </button>
+                          <button
+                            onClick={() => { generateEventCalendarFile(); setShowCalendarMenu(false); }}
+                            className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors border-t border-gray-50"
+                          >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff" stroke="#E5E7EB" strokeWidth="1"/>
+                              <path d="M12 8v5M12 13l2-2M12 13l-2-2M9 16h6" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span className="font-medium text-gray-700">Download .ics File</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <button 
+                      onClick={() => router.push('/join')}
+                      className="w-full text-primary text-sm font-medium hover:underline py-2"
+                    >
+                      Browse more events
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -601,11 +746,11 @@ export default function EventDetailPage() {
       </div>
 
       {/* Feedback Form Modal */}
-      {showFeedbackForm && event.act_module && (
+      {showFeedbackForm && event && event.act_module && (
         <FeedbackForm
           eventId={event.id}
           eventTitle={event.title}
-          actModule={event.act_module}
+          actModule={event.act_module as "awareness" | "contemplation" | "transformative_silence" | "combined"}
           onClose={() => setShowFeedbackForm(false)}
         />
       )}

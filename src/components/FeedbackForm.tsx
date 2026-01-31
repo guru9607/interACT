@@ -4,7 +4,6 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { 
   X, 
-  Send, 
   Loader2, 
   CheckCircle2, 
   User, 
@@ -92,8 +91,9 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
       if (error) throw error;
       setSubmitted(true);
       setTimeout(onClose, 2500);
-    } catch (err: any) {
-      alert("Error: " + err.message);
+    } catch (err) {
+      const error = err as Error;
+      alert("Error: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
 
   if (submitted) {
     return (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -123,7 +123,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[100] p-4 sm:p-6 overflow-hidden">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6 overflow-hidden">
       <motion.div 
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -134,12 +134,12 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
           <motion.div 
             initial={{ width: "0%" }}
             animate={{ width: step === 1 ? "50%" : "100%" }}
-            className="h-full bg-gradient-to-r from-primary to-teal-400"
+            className="h-full bg-linear-to-r from-primary to-teal-400"
           />
         </div>
 
         {/* Header */}
-        <div className="p-8 pt-10 flex items-start justify-between border-b border-gray-50 bg-gradient-to-b from-teal-50/20 to-transparent">
+        <div className="p-8 pt-10 flex items-start justify-between border-b border-gray-50 bg-linear-to-b from-teal-50/20 to-transparent">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] uppercase tracking-widest font-bold rounded-full">
@@ -244,7 +244,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
                   </div>
                 </div>
 
-                <div className="p-6 bg-teal-50/30 rounded-[2rem] border border-teal-50">
+                <div className="p-6 bg-teal-50/30 rounded-4xl border border-teal-50">
                   <p className="text-xs text-teal-700 leading-relaxed font-medium">
                     ✨ Your details are safe with us. We use this information only to keep you updated about future workshops and your participation history.
                   </p>
@@ -261,7 +261,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
                 {questions.map((q, idx) => (
                   <div key={q.id} className="space-y-5">
                     <div className="flex gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-bold border border-primary/10">
+                      <span className="shrink-0 w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-bold border border-primary/10">
                         {idx + 1}
                       </span>
                       <label className="text-base font-bold text-text-main leading-snug pt-1">
@@ -277,7 +277,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
                           rows={4}
                           value={responses[q.id] || ""}
                           onChange={(e) => setResponses({ ...responses, [q.id]: e.target.value })}
-                          className="w-full pl-14 pr-5 py-5 bg-gray-50/50 border border-gray-100 rounded-[2rem] focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm leading-relaxed"
+                          className="w-full pl-14 pr-5 py-5 bg-gray-50/50 border border-gray-100 rounded-4xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm leading-relaxed"
                           placeholder="Type your reflection here..."
                         />
                       </div>
@@ -322,7 +322,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
           <button
             onClick={step === 1 ? () => setStep(2) : handleSubmit}
             disabled={loading || (step === 1 ? !isStep1Complete : !isStep2Complete)}
-            className="flex-[2] py-4 bg-primary text-white font-bold rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale cursor-pointer"
+            className="flex-2 py-4 bg-primary text-white font-bold rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale cursor-pointer"
           >
             {loading ? (
               <Loader2 className="animate-spin" size={20} />
