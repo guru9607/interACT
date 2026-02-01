@@ -24,15 +24,19 @@ import { FEEDBACK_QUESTIONS, MODULE_LABELS, type ACTModule } from "@/lib/constan
 interface FeedbackFormProps {
   eventId: number;
   eventTitle: string;
+  eventCountry?: string;
   actModule: ACTModule;
   sessionId?: string;
   shouldGenerateCertificate?: boolean;
   onClose: () => void;
 }
 
+import { countries } from "@/lib/countries";
+
 export default function FeedbackForm({ 
   eventId, 
   eventTitle, 
+  eventCountry,
   actModule, 
   sessionId, 
   shouldGenerateCertificate, 
@@ -42,9 +46,11 @@ export default function FeedbackForm({
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [responses, setResponses] = useState<Record<string, string>>({});
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [country, setCountry] = useState(
+    countries.find(c => c.name === eventCountry) || countries[0]
+  );
   const [phone, setPhone] = useState("");
 
   const questions = FEEDBACK_QUESTIONS[actModule] || FEEDBACK_QUESTIONS.combined;
@@ -54,14 +60,17 @@ export default function FeedbackForm({
     setLoading(true);
 
     try {
+      // Sanitize phone: ensure single space between code and number
+      const fullPhoneNumber = `${country.code} ${phone.trim()}`.replace(/\s+/g, ' ');
+      
       const { error } = await supabase.from("event_feedback").insert([
         {
           event_id: eventId,
           session_id: sessionId,
-          first_name: firstName,
-          last_name: lastName,
+          full_name: fullName,
           email: email,
-          phone: phone,
+          country: country.name,
+          phone: fullPhoneNumber,
           responses: responses,
         },
       ]);
@@ -69,18 +78,6 @@ export default function FeedbackForm({
       if (error) throw error;
       
       setSubmitted(true);
-
-      // Trigger certificate if enabled
-      if (shouldGenerateCertificate) {
-        await generateCertificate(
-          `${firstName} ${lastName}`.trim(),
-          eventTitle,
-          new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-          `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-        );
-      }
-
-      setTimeout(onClose, 3000);
     } catch (err) {
       const error = err as Error;
       alert("Error: " + error.message);
@@ -89,7 +86,7 @@ export default function FeedbackForm({
     }
   };
 
-  const isStep1Complete = firstName && lastName && email && phone;
+  const isStep1Complete = fullName && email && phone && country;
   const isStep2Complete = Object.keys(responses).length === questions.length;
 
   if (submitted) {
@@ -98,8 +95,16 @@ export default function FeedbackForm({
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-[2.5rem] p-12 max-w-md w-full text-center shadow-2xl"
+          className="bg-white rounded-[2.5rem] p-12 max-w-md w-full text-center shadow-2xl relative"
         >
+          {/* Close Icon for Success Screen */}
+          <button 
+            onClick={onClose}
+            className="absolute top-6 right-6 p-2 bg-gray-50 hover:bg-gray-100 text-text-muted rounded-full transition-all group hover:rotate-90 cursor-pointer"
+          >
+            <X size={20} />
+          </button>
+
           <div className="w-24 h-24 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-8">
             <CheckCircle2 size={48} className="text-teal-500" />
           </div>
@@ -108,22 +113,31 @@ export default function FeedbackForm({
             Your heart-felt feedback has been received. It helps us grow together.
           </p>
           
-          {shouldGenerateCertificate && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => generateCertificate(
-                `${firstName} ${lastName}`.trim(),
-                eventTitle,
-                new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-                `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-              )}
-              className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all cursor-pointer"
+          <div className="space-y-4">
+            {shouldGenerateCertificate && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => generateCertificate(
+                  fullName.trim(),
+                  eventTitle,
+                  new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                  `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+                )}
+                className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all cursor-pointer"
+              >
+                <Award size={24} />
+                Download Certificate
+              </motion.button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="w-full py-4 bg-gray-50 text-text-muted font-bold rounded-2xl hover:bg-gray-100 transition-all cursor-pointer"
             >
-              <Award size={24} />
-              Download Certificate
-            </motion.button>
-          )}
+              Close
+            </button>
+          </div>
         </motion.div>
       </div>
     );
@@ -187,33 +201,21 @@ export default function FeedbackForm({
                     <h3>Personal Details</h3>
                   </div>
                   
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
-                        First Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="e.g. Sarah"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="w-full px-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
-                        Last Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="e.g. Smith"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="w-full px-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                      Full Name <span className="text-red-500">*</span>
+                      {shouldGenerateCertificate && (
+                        <span className="ml-2 lowercase font-normal opacity-60">(as you want it on your certificate)</span>
+                      )}
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Sarah Elizabeth Johnson"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="w-full px-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
+                    />
                   </div>
 
                   <div className="space-y-1.5">
@@ -233,20 +235,39 @@ export default function FeedbackForm({
                     </div>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
-                      Phone Number <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                      <input
-                        required
-                        type="tel"
-                        placeholder="+1 (555) 000-0000"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full pl-12 pr-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
+                  <div className="grid sm:grid-cols-3 gap-4">
+                    <div className="sm:col-span-1 space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                        Country <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={country.name}
+                        onChange={(e) => setCountry(countries.find(c => c.name === e.target.value) || countries[0])}
+                        className="w-full px-4 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium appearance-none"
+                      >
+                        {countries.map(c => (
+                          <option key={c.name} value={c.name}>{c.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-2 space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                        Phone Number <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-bold text-sm pointer-events-none">
+                          {country.code}
+                        </div>
+                        <input
+                          required
+                          type="tel"
+                          placeholder="98765 43210"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value.replace(/[^0-9\s-]/g, ""))}
+                          className="w-full pl-16 pr-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

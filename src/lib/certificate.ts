@@ -20,7 +20,7 @@ export const generateCertificate = async (
     eventDate: string,
     certificateId: string,
     signatories?: { name: string; role: string; signatureUrl?: string }[]
-) => {
+): Promise<void> => {
     try {
         const response = await fetch('/certificates/certificate-template.svg');
         let svgContent = await response.text();
@@ -55,7 +55,7 @@ export const generateCertificate = async (
                 role: "Chairperson",
                 signatureUrl: "/signatures/sakshi.png"
             },
- 
+
         ];
 
         const activeSignatories = signatories || defaultSignatories;
@@ -82,16 +82,61 @@ export const generateCertificate = async (
             }
         }
 
-        // Create a blob and download
-        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `interACT_Certificate_${participantName.replace(/\s+/g, '_')}.svg`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        // Create a blob and download as PNG
+        const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        const svgUrl = URL.createObjectURL(svgBlob);
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+
+        return new Promise((resolve, reject) => {
+            img.onload = () => {
+                // Create a high-res canvas (2x for print quality)
+                const canvas = document.createElement('canvas');
+                const scale = 2; // High quality
+                canvas.width = 1920 * scale; // Standard horizontal certificate width
+                canvas.height = 1080 * scale;
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    reject(new Error('Failed to get canvas context'));
+                    return;
+                }
+
+                // Fill white background (SVG might be transparent)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw the SVG onto the canvas
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // Convert to PNG and download
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `interACT_Certificate_${participantName.replace(/\s+/g, '_')}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                        resolve();
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 1.0);
+
+                URL.revokeObjectURL(svgUrl);
+            };
+
+            img.onerror = () => {
+                URL.revokeObjectURL(svgUrl);
+                reject(new Error('Failed to load SVG for image conversion'));
+            };
+
+            img.src = svgUrl;
+        });
     } catch (error) {
         console.error('Error generating certificate:', error);
         throw new Error('Failed to generate certificate');

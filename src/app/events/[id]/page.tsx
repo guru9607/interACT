@@ -561,6 +561,7 @@ export default function EventDetailPage() {
         <FeedbackForm
           eventId={event.id}
           eventTitle={event.title}
+          eventCountry={event.country}
           actModule={activeSession.module}
           sessionId={activeSession.id}
           shouldGenerateCertificate={activeSession.generate_certificate}

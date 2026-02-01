@@ -887,7 +887,7 @@ function ManageEventsList({
       };
 
       // Generate CSV
-      const headers = ["First Name", "Last Name", "Email", "Phone", "Module", "Session Date", "Q1", "A1", "Q2", "A2", "Q3", "A3", "Q4", "A4"];
+      const headers = ["Full Name", "Email", "Phone", "Country", "Module", "Session Date", "Q1", "A1", "Q2", "A2", "Q3", "A3", "Q4", "A4"];
       const csvContent = [
         headers.join(","),
         ...data.map((row: any) => {
@@ -896,10 +896,10 @@ function ManageEventsList({
           const res = row.responses || {};
           
           return [
-            `"${(row.first_name || "").replace(/"/g, '""')}"`,
-            `"${(row.last_name || "").replace(/"/g, '""')}"`,
+            `"${(row.full_name || `${row.first_name || ""} ${row.last_name || ""}`).trim().replace(/"/g, '""')}"`,
             `"${(row.email || "").replace(/"/g, '""')}"`,
             `"${(row.phone || "").replace(/"/g, '""')}"`,
+            `"${(row.country || "").replace(/"/g, '""')}"`,
             `"${(MODULE_LABELS[mod as keyof typeof MODULE_LABELS] || mod).replace(/"/g, '""')}"`,
             `"${(session.date || event.date).replace(/"/g, '""')}"`,
             `"${getQuestion(mod, "q1").replace(/"/g, '""')}"`,
@@ -1206,7 +1206,7 @@ function ReportsView() {
       // Filter by module if requested (nested in sessions which we'd have to find)
       // Actually, feedback has session_id. We map sessions from the event.
       
-      const headers = ["Event Title", "First Name", "Last Name", "Email", "Phone", "Module", "Session Date", "Q1", "A1", "Q2", "A2", "Q3", "A3", "Q4", "A4"];
+      const headers = ["Event Title", "Full Name", "Email", "Phone", "Country", "Module", "Session Date", "Q1", "A1", "Q2", "A2", "Q3", "A3", "Q4", "A4"];
       const csvRows: string[][] = [];
 
       data.forEach((row: any) => {
@@ -1225,12 +1225,14 @@ function ReportsView() {
           return modQuestions.find(q => q.id === qid)?.question || qid;
         };
 
+        const name = (row.full_name || `${row.first_name || ""} ${row.last_name || ""}`).trim();
+
         csvRows.push([
           `"${(event.title || "Unknown").replace(/"/g, '""')}"`,
-          `"${(row.first_name || "").replace(/"/g, '""')}"`,
-          `"${(row.last_name || "").replace(/"/g, '""')}"`,
+          `"${name.replace(/"/g, '""')}"`,
           `"${(row.email || "").replace(/"/g, '""')}"`,
           `"${(row.phone || "").replace(/"/g, '""')}"`,
+          `"${(row.country || "").replace(/"/g, '""')}"`,
           `"${(MODULE_LABELS[mod as keyof typeof MODULE_LABELS] || mod).replace(/"/g, '""')}"`,
           `"${(session.date || "").replace(/"/g, '""')}"`,
           `"${getQuestion(mod, "q1").replace(/"/g, '""')}"`,
