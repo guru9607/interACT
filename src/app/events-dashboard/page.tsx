@@ -142,6 +142,8 @@ function DashboardContent() {
         if (countData) {
           setRegCounts(prev => {
             const next = { ...prev };
+            // Clear counts for the current batch to prevent double-counting on refresh
+            eventIds.forEach(id => { next[id] = 0; });
             countData.forEach((r: any) => {
               const eid = Number(r.event_id);
               next[eid] = (next[eid] || 0) + 1;
@@ -220,7 +222,7 @@ function DashboardContent() {
                 }`}
               >
                 <HistoryIcon size={16} />
-                Complete Events
+                Manage Events
               </button>
               <button
                 onClick={() => {
@@ -251,6 +253,7 @@ function DashboardContent() {
                 conductors={conductors} 
                 onSuccess={() => {
                   setEditingEvent(null);
+                  fetchUpcomingEvents(false); // Refresh list
                   setActiveTab("manage");
                 }} 
                 initialData={editingEvent}
@@ -1074,7 +1077,7 @@ function ManageEventsList({
                       className="flex items-center gap-1.5 text-primary hover:text-primary-hover font-medium transition-all"
                     >
                       {fetchingRegs === event.id ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-                      Export Participants
+                      Export {regCounts[event.id] || 0} Participant{regCounts[event.id] === 1 ? "" : "s"}
                     </button>
                     <button 
                       onClick={() => downloadFeedback(event)}
@@ -1114,7 +1117,7 @@ function ManageEventsList({
                   className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl transition-all disabled:opacity-50 text-sm font-medium"
                 >
                   {updatingId === event.id ? <Loader2 className="animate-spin" size={16} /> : (
-                    <>{(event.status === "completed" || selectedFiles[event.id]?.length > 0) ? <><Plus size={16} /> Upload Photos</> : <><CheckCircle2 size={16} /> Finalize with Photos</>}</>
+                    <><Plus size={16} /> Upload Photos</>
                   )}
                 </button>
               </div>
