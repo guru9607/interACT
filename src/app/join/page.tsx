@@ -40,11 +40,11 @@ export default function JoinPage() {
         now.setHours(0, 0, 0, 0);
         const today = now.toISOString().split('T')[0];
 
-        // Fetch all events that are NOT manually marked as "completed"
+        // Fetch all active events (Upcoming or Ongoing)
         const { data: allActive, error: activeError } = await supabase
           .from('events')
           .select('*')
-          .eq('status', 'upcoming')
+          .in('status', ['upcoming', 'ongoing'])
           .order('date', { ascending: true });
         
         if (activeError) throw activeError;
