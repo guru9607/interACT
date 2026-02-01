@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown, Award } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import FeedbackForm from "@/components/FeedbackForm";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { countries } from "@/lib/countries";
 
 // Facilitator Type
 type Facilitator = {
@@ -16,14 +17,21 @@ type Facilitator = {
   image_url: string;
 };
 
+type Session = {
+  id: string;
+  date: string;
+  module: "awareness" | "contemplation" | "transformative_silence" | "combined";
+  start_time?: string;
+  end_time?: string;
+  collect_feedback: boolean;
+  generate_certificate: boolean;
+};
+
 // Event Data Type
 type Event = {
   id: number;
   title: string;
   date: string;
-  start_time: string;
-  end_time: string | null;
-  timezone: string;
   location: string;
   country: string;
   region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
@@ -31,11 +39,11 @@ type Event = {
   status: "upcoming" | "completed";
   image_url: string | null;
   image_urls: string[] | null;
-  act_module: "awareness" | "contemplation" | "transformative_silence" | "combined" | null;
+  act_module: string | null;
   description: string;
   agenda: string[];
   facilitators: Facilitator[];
-  capacity: number | null;
+  sessions: Session[];
   special_note: string | null;
 };
 
@@ -45,10 +53,14 @@ export default function EventDetailPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [activeSession, setActiveSession] = useState<Session | null>(null);
+  const [userFeedbackIds, setUserFeedbackIds] = useState<string[]>([]);
   const [testimonials, setTestimonials] = useState<Record<string, unknown>[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCalendarMenu, setShowCalendarMenu] = useState(false);
+  const [regCountry, setRegCountry] = useState("");
+  const [regPhone, setRegPhone] = useState("");
   
   const eventId = parseInt(params.id as string);
 
@@ -56,7 +68,6 @@ export default function EventDetailPage() {
   useEffect(() => {
     async function fetchEvent() {
       try {
-        // Fetch event details
         const { data: eventData, error: eventError } = await supabase
           .from('events')
           .select('*')
@@ -70,33 +81,7 @@ export default function EventDetailPage() {
           return;
         }
 
-        /* 
-        // Fetch facilitators for this event
-        const { data: facilitatorLinks, error: linksError } = await supabase
-          .from('event_facilitators')
-          .select('team_member_id')
-          .eq('event_id', eventId);
-
-        if (linksError) throw linksError;
-
-        const facilitatorIds = facilitatorLinks?.map(link => link.team_member_id) || [];
-
         let facilitators: Facilitator[] = [];
-        if (facilitatorIds.length > 0) {
-          const { data: facilitatorsData, error: facilitatorsError } = await supabase
-            .from('teams')
-            .select('name, role, bio, image_url')
-            .in('id', facilitatorIds);
-
-          if (facilitatorsError) throw facilitatorsError;
-          facilitators = facilitatorsData || [];
-        }
-        */
-
-        // Initialize facilitators list
-        let facilitators: Facilitator[] = [];
-
-        // Fetch conductor details
         if (eventData.conductor_id && eventData.conductor_type) {
           try {
             if (eventData.conductor_type === 'team') {
@@ -135,32 +120,32 @@ export default function EventDetailPage() {
           }
         }
 
-        // Final state update
         setEvent({
           ...eventData,
-          facilitators: facilitators
+          facilitators: facilitators,
+          sessions: Array.isArray(eventData.sessions) ? eventData.sessions : []
         });
 
-        // Fetch 5-star testimonials for this event
-        const { data: feedbackData } = await supabase
+        // Testimonials for UI (Still global - this is good!)
+        const { data: globalFeedback } = await supabase
           .from('event_feedback')
-          .select('*')
-          .eq('event_id', eventId)
-          .order('submitted_at', { ascending: false });
+          .select('responses, first_name')
+          .eq('event_id', eventId);
         
-        if (feedbackData) {
-          // Filter for 5-star ratings only
-          const fiveStarFeedback = feedbackData.filter(feedback => {
+        if (globalFeedback) {
+          const fiveStarFeedback = globalFeedback.filter(feedback => {
             const responses = feedback.responses;
-            // Check if any scale question has a rating of 5
             return Object.values(responses).some(val => val === '5');
           });
-          setTestimonials(fiveStarFeedback.slice(0, 4)); // Show max 4 testimonials
+          setTestimonials(fiveStarFeedback.slice(0, 4));
         }
+        if (eventData.country) {
+          setRegCountry(eventData.country);
+        }
+
       } catch (err) {
-        const error = err as Error;
         console.error('Error fetching event:', err);
-        setError(error?.message || 'Failed to load event');
+        setError('Failed to load event');
       } finally {
         setLoading(false);
       }
@@ -170,587 +155,372 @@ export default function EventDetailPage() {
   }, [eventId]);
 
   const generateEventCalendarFile = () => {
-    if (!event) return;
+    if (!event || !event.sessions || event.sessions.length === 0) return;
+    const firstSession = event.sessions[0];
+    const eventDate = new Date(firstSession.date);
+    const [startH, startM] = (firstSession.start_time || "10:00").split(':').map(Number);
+    eventDate.setHours(startH, startM, 0); 
+    const [endH, endM] = (firstSession.end_time || "12:00").split(':').map(Number);
+    const endDate = new Date(firstSession.date);
+    endDate.setHours(endH, endM, 0);
+    const formatICalDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const sTime = formatICalDate(eventDate);
+    const eTime = formatICalDate(endDate);
 
-    // Parse event date and time
-    const eventDate = new Date(event.date);
-    const [hours, minutes] = event.start_time.split(':').map(Number);
-    eventDate.setHours(hours, minutes, 0);
+    const icalContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//interACT Program//EN\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nUID:interact-event-${event.id}-${Date.now()}@brahmakumaris.org\nDTSTAMP:${formatICalDate(new Date())}\nDTSTART:${sTime}\nDTEND:${eTime}\nSUMMARY:${event.title}\nDESCRIPTION:${event.description || 'Join us for this transformative interACT event'}\nLOCATION:${event.location}${event.country ? ', ' + event.country : ''}\nSTATUS:CONFIRMED\nSEQUENCE:0\nEND:VEVENT\nEND:VCALENDAR`;
 
-    // Calculate end time (assume 2 hours if not provided)
-    const endDate = event.end_time 
-      ? (() => {
-          const endEventDate = new Date(event.date);
-          const [endHours, endMinutes] = event.end_time.split(':').map(Number);
-          endEventDate.setHours(endHours, endMinutes, 0);
-          return endEventDate;
-        })()
-      : new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
-
-    // Format dates for iCal (YYYYMMDDTHHMMSSZ)
-    const formatICalDate = (date: Date) => {
-      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    };
-
-    const startTime = formatICalDate(eventDate);
-    const endTime = formatICalDate(endDate);
-
-    const icalContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//interACT Program//EN
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-UID:interact-event-${event.id}-${Date.now()}@brahmakumaris.org
-DTSTAMP:${formatICalDate(new Date())}
-DTSTART:${startTime}
-DTEND:${endTime}
-SUMMARY:${event.title}
-DESCRIPTION:${event.description || 'Join us for this transformative interACT event'}
-LOCATION:${event.location}${event.country ? ', ' + event.country : ''}
-STATUS:CONFIRMED
-SEQUENCE:0
-END:VEVENT
-END:VCALENDAR`;
-
-    // Create blob and download
     const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `interACT-${event.title.replace(/\s+/g, '-')}.ics`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `interACT-${event.title.replace(/\s+/g, '-')}.ics`;
     link.click();
-    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const addToGoogleCalendar = () => {
-    if (!event) return;
-
-    const eventDate = new Date(event.date);
-    const [hours, minutes] = event.start_time.split(':').map(Number);
-    eventDate.setHours(hours, minutes, 0);
-
-    const endDate = event.end_time 
-      ? (() => {
-          const endEventDate = new Date(event.date);
-          const [endHours, endMinutes] = event.end_time.split(':').map(Number);
-          endEventDate.setHours(endHours, endMinutes, 0);
-          return endEventDate;
-        })()
-      : new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
-
-    // Format dates for Google Calendar (YYYYMMDDTHHMMSS format)
-    const formatGoogleDate = (date: Date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      return `${year}${month}${day}T${hours}${minutes}${seconds}`;
-    };
-
-    const startTime = formatGoogleDate(eventDate);
-    const endTime = formatGoogleDate(endDate);
-    const eventLocation = `${event.location}${event.country ? ', ' + event.country : ''}`;
-    
-    const googleCalendarUrl = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${encodeURIComponent(event.title)}&dates=${startTime}/${endTime}&location=${encodeURIComponent(eventLocation)}&details=${encodeURIComponent(event.description || 'Join us for this transformative interACT event')}`;
-    
-    window.open(googleCalendarUrl, '_blank');
-    setShowCalendarMenu(false);
+    if (!event || !event.sessions || event.sessions.length === 0) return;
+    const firstSession = event.sessions[0];
+    const eventDate = new Date(firstSession.date);
+    const [startH, startM] = (firstSession.start_time || "10:00").split(':').map(Number);
+    eventDate.setHours(startH, startM, 0);
+    const [endH, endM] = (firstSession.end_time || "12:00").split(':').map(Number);
+    const endDate = new Date(firstSession.date);
+    endDate.setHours(endH, endM, 0);
+    const formatGoogleDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0];
+    const sTime = formatGoogleDate(eventDate);
+    const eTime = formatGoogleDate(endDate);
+    window.open(`https://calendar.google.com/calendar/u/0/r/eventedit?text=${encodeURIComponent(event.title)}&dates=${sTime}/${eTime}&location=${encodeURIComponent(event.location)}&details=${encodeURIComponent(event.description || '')}`, '_blank');
   };
 
   const addToOutlookCalendar = () => {
-    if (!event) return;
-
-    const eventDate = new Date(event.date);
-    const [hours, minutes] = event.start_time.split(':').map(Number);
-    eventDate.setHours(hours, minutes, 0);
-
-    const endDate = event.end_time 
-      ? (() => {
-          const endEventDate = new Date(event.date);
-          const [endHours, endMinutes] = event.end_time.split(':').map(Number);
-          endEventDate.setHours(endHours, endMinutes, 0);
-          return endEventDate;
-        })()
-      : new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
-
-    const formatOutlookDate = (date: Date) => {
-      return date.toISOString();
-    };
-
-    const startTime = formatOutlookDate(eventDate);
-    const endTime = formatOutlookDate(endDate);
-    const eventLocation = `${event.location}${event.country ? ', ' + event.country : ''}`;
-
-    const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(event.title)}&startdt=${encodeURIComponent(startTime)}&enddt=${encodeURIComponent(endTime)}&location=${encodeURIComponent(eventLocation)}&body=${encodeURIComponent(event.description || 'Join us for this transformative interACT event')}`;
-    
-    window.open(outlookUrl, '_blank');
-    setShowCalendarMenu(false);
+    if (!event || !event.sessions || event.sessions.length === 0) return;
+    const firstSession = event.sessions[0];
+    const eventDate = new Date(firstSession.date);
+    const [startH, startM] = (firstSession.start_time || "10:00").split(':').map(Number);
+    eventDate.setHours(startH, startM, 0);
+    const [endH, endM] = (firstSession.end_time || "12:00").split(':').map(Number);
+    const endDate = new Date(firstSession.date);
+    endDate.setHours(endH, endM, 0);
+    window.open(`https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(event.title)}&startdt=${eventDate.toISOString()}&enddt=${endDate.toISOString()}&location=${encodeURIComponent(event.location)}&body=${encodeURIComponent(event.description || '')}`, '_blank');
   };
 
-  // Helper to format date
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const formatTime = (time: string) => {
+    if (!time) return "10:00 AM";
+    const [hours, minutes] = time.split(':').map(Number);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+    return `${hours12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-
     const formData = new FormData(e.currentTarget);
+    const countryMatch = countries.find(c => c.name === regCountry);
+    const fullPhone = countryMatch ? `${countryMatch.code} ${regPhone}`.trim() : regPhone;
+
     const registrationData = {
       event_id: eventId,
       full_name: formData.get('name') as string,
       email: formData.get('email') as string,
-      phone: formData.get('phone') as string || null,
-      country: formData.get('country') as string,
+      phone: fullPhone || null,
+      country: regCountry,
     };
 
     try {
-      const { error: supabaseError } = await supabase
-        .from('registrations')
-        .insert([registrationData]);
-
+      const { error: supabaseError } = await supabase.from('registrations').insert([registrationData]);
       if (supabaseError) throw supabaseError;
-
-      // Trigger registration email
-      try {
-        const emailRes = await fetch('/api/send-registration-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: registrationData.email,
-            name: registrationData.full_name,
-            eventTitle: event?.title,
-            eventDate: event ? formatDate(event.date) : '',
-            eventLocation: event?.location,
-            specialNote: event?.special_note, 
-          }),
-        });
-        
-        if (!emailRes.ok) {
-          const errorData = await emailRes.json();
-          console.error('Email API failed:', errorData);
-          alert(`Note: Registration successful, but confirmation email failed: ${errorData.details || errorData.error}`);
-        }
-      } catch (emailErr) {
-        console.error('Failed to trigger confirmation email:', emailErr);
-      }
-
       setSubmitted(true);
-    } catch (err) {
-      const error = err as Error;
-      console.error('Error submitting registration:', err);
-      setError(error.message || 'Failed to submit registration. Please try again.');
+    } catch (err: any) {
+      setError(err.message || 'Failed to submit registration.');
     }
   };
 
-  // Helper to format 24h time to 12h
-  const formatTime = (time: string) => {
-    if (!time) return "";
-    const [hours, minutes] = time.split(':');
-    const h = parseInt(hours);
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    const h12 = h % 12 || 12;
-    return `${h12}:${minutes} ${ampm}`;
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-text-muted">Loading event...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!event) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-text-main mb-4">Event Not Found</h1>
-          <Link href="/join" className="text-primary hover:underline">
-            ← Back to Events
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div></div>;
+  if (!event) return <div className="min-h-screen flex items-center justify-center text-center"><h1 className="text-2xl font-bold mb-4">Event Not Found</h1><Link href="/join" className="text-primary hover:underline">← Back to Events</Link></div>;
 
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 bg-linear-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
-        <div 
-          className="absolute inset-0 opacity-[0.03]" 
-          style={{ 
-            backgroundImage: `radial-gradient(circle at 2px 2px, #2A9D8F 1px, transparent 0)`,
-            backgroundSize: '40px 40px' 
-          }}
-        ></div>
-        
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle at 2px 2px, #2A9D8F 1px, transparent 0)`, backgroundSize: '40px 40px' }}></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Hero Content */}
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <Link href="/join" className="inline-flex items-center text-primary hover:text-primary-hover mb-6 font-medium">
-                <ArrowLeft size={20} className="mr-2" />
-                Back to Events
+                <ArrowLeft size={20} className="mr-2" /> Back to Events
               </Link>
               
               <div className="flex items-center gap-3 mb-4">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  event.status === "completed" ? "bg-teal-100 text-teal-700" :
-                  event.type === "Online" ? "bg-blue-100 text-blue-700" :
-                  event.type === "In-Person" ? "bg-green-100 text-green-700" :
-                  "bg-purple-100 text-purple-700"
-                }`}>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${event.status === "completed" ? "bg-teal-100 text-teal-700" : "bg-blue-100 text-blue-700"}`}>
                   {event.status === "completed" ? "Completed" : event.type}
                 </span>
-                <span className="text-text-muted flex items-center">
-                  <Globe size={16} className="mr-1.5" />
-                  {event.region}
-                </span>
+                <span className="text-text-muted flex items-center"><Globe size={16} className="mr-1.5" />{event.region}</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-6 leading-tight">
                 {event.title}
+                <div className="flex flex-wrap gap-4 mt-6">
+                  <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-4 py-2 rounded-2xl border border-teal-100/50 shadow-sm">
+                    <Calendar size={18} className="text-primary" />
+                    <span className="text-sm font-semibold">
+                      {event.sessions.length > 1 
+                        ? `${formatDate(event.sessions[0].date)} — ${formatDate(event.sessions[event.sessions.length-1].date)}`
+                        : formatDate(event.sessions[0]?.date || event.date)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-4 py-2 rounded-2xl border border-teal-100/50 shadow-sm">
+                    <MapPin size={18} className="text-primary" />
+                    <span className="text-sm font-semibold">{event.location}, {event.country}</span>
+                  </div>
+                </div>
               </h1>
 
-              <div className="flex flex-wrap gap-6 text-lg text-text-muted mb-6">
-                <span className="flex items-center">
-                  <Calendar size={20} className="mr-2 text-primary" />
-                  {formatDate(event.date)}
-                </span>
-                <span className="flex items-center">
-                  <Clock size={20} className="mr-2 text-primary" />
-                  {formatTime(event.start_time)}
-                  {event.end_time ? ` - ${formatTime(event.end_time)}` : ''}
-                  {` (${event.timezone})`}
-                </span>
-                <span className="flex items-center">
-                  <MapPin size={20} className="mr-2 text-primary" />
-                  {event.location}
-                  {event.country && `, ${event.country}`}
-                </span>
-                {event.facilitators && event.facilitators.length > 0 && (
-                  <span className="flex items-center">
-                    <Users size={20} className="mr-2 text-primary" />
-                    Host: {event.facilitators[0].name}
-                  </span>
-                )}
-              </div>
-
-              {/* Quick Action for Feedback */}
-              {event.status === "completed" && event.act_module && (
-                <motion.button
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  onClick={() => setShowFeedbackForm(true)}
-                  className="mt-4 px-8 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center gap-3 w-fit cursor-pointer"
-                >
-                  <Send size={20} className="fill-white/20" />
-                  <span>Share Your Experience</span>
-                </motion.button>
+              {event.facilitators && event.facilitators.length > 0 && (
+                <div className="flex items-center gap-4 p-4 bg-white/40 rounded-3xl border border-white/60 w-fit mb-8">
+                  <div className="w-12 h-12 bg-teal-100 rounded-2xl flex items-center justify-center text-primary overflow-hidden">
+                    {event.facilitators[0].image_url ? <img src={event.facilitators[0].image_url} alt="" className="w-full h-full object-cover" /> : <Users size={24} />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Conducted by</p>
+                    <p className="text-lg font-bold text-text-main leading-tight">{event.facilitators[0].name}</p>
+                  </div>
+                </div>
               )}
             </div>
 
-            {/* Event Post-Photo or Placeholder */}
             {event.status === "completed" && (
               <div className="space-y-6">
-                <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                <div className="relative aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white group">
                   {event.image_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={event.image_url} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
+                    <img src={event.image_url} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   ) : (
-                    <div className="w-full h-full bg-teal-50 flex items-center justify-center text-teal-200">
-                      <ImageIcon size={64} />
-                    </div>
+                    <div className="w-full h-full bg-teal-50 flex items-center justify-center text-teal-200"><ImageIcon size={64} /></div>
                   )}
                 </div>
-                
-                {/* Secondary Gallery */}
-                {event.image_urls && event.image_urls.length > 1 && (
-                  <div className="grid grid-cols-4 gap-4">
-                    {event.image_urls.slice(1).map((url, i) => (
-                      <div key={i} className="aspect-square rounded-2xl overflow-hidden border-2 border-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={url} alt={`${event.title} ${i+2}`} className="w-full h-full object-cover" loading="lazy" />
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
             )}
           </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-3 gap-12">
-          
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-12">
-            
-            {/* About */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="grid lg:grid-cols-3 gap-16">
+          <div className="lg:col-span-2 space-y-16">
             <section>
-              <h2 className="text-3xl font-bold text-text-main mb-4">About This Event</h2>
-              <p className="text-lg text-text-muted leading-relaxed">{event.description}</p>
+              <h2 className="text-3xl font-extrabold text-text-main mb-6 flex items-center gap-3">
+                <div className="w-2 h-8 bg-primary rounded-full" />
+                Your Transformative Journey
+              </h2>
+              <p className="text-xl text-text-muted leading-relaxed font-medium">{event.description}</p>
             </section>
 
-            {/* Agenda */}
+            {/* Sessions Roadmap */}
             <section>
-              <h2 className="text-3xl font-bold text-text-main mb-6">Event Agenda</h2>
-              <div className="space-y-3">
-                {event.agenda.map((item, index) => (
-                  <div key={index} className="flex items-start gap-4 p-4 bg-teal-50/50 rounded-lg border border-teal-100">
-                    <div className="shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">
-                      {index + 1}
-                    </div>
-                    <p className="text-text-main pt-1">{item}</p>
+              <div className="flex justify-between items-end mb-8">
+                <div>
+                  <h2 className="text-3xl font-extrabold text-text-main mb-2">Event Roadmap</h2>
+                  <p className="text-text-muted font-medium">Follow the journey through each module.</p>
+                </div>
+                {event.sessions.length > 0 && (
+                  <div className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl text-sm font-bold border border-teal-100">
+                    {event.sessions.length} Session{event.sessions.length > 1 ? 's' : ''}
                   </div>
-                ))}
+                )}
+              </div>
+
+              <div className="relative space-y-4">
+                {/* Vertical Line */}
+                <div className="absolute left-[27px] top-8 bottom-8 w-1 bg-linear-to-b from-teal-200 via-teal-100 to-transparent rounded-full" />
+                
+                {event.sessions.map((session, idx) => {
+                  // New logic: Can feedback if session has already happened or is happening today
+                  // even if the event status is still "upcoming"
+                  const sessionDate = new Date(session.date);
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  sessionDate.setHours(0, 0, 0, 0);
+                  
+                  const isSessionInPastOrToday = sessionDate <= today;
+                  const canFeedback = session.collect_feedback && isSessionInPastOrToday;
+
+                  return (
+                    <motion.div 
+                      key={session.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1 }}
+                      className={`relative pl-20 pr-6 py-6 rounded-3xl border transition-all bg-gray-50/30 border-gray-100`}
+                    >
+                      {/* Step Circle */}
+                      <div className={`absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-4 border-white shadow-md flex items-center justify-center z-10 bg-white text-gray-400`}>
+                        <span className="text-xs font-bold">{idx + 1}</span>
+                      </div>
+
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div>
+                          <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">{formatDate(session.date)}</p>
+                          <p className="text-xl font-black text-text-main capitalize">
+                            {session.module.replace('_', ' ')}
+                          </p>
+                          <div className="flex flex-wrap gap-4 mt-1">
+                            <p className="text-sm font-bold text-primary flex items-center gap-1.5">
+                              <Calendar size={14} /> {formatDate(session.date)}
+                            </p>
+                            {(session.start_time || session.end_time) && (
+                              <p className="text-sm font-bold text-text-muted flex items-center gap-1.5">
+                                <Clock size={14} /> {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
+                              </p>
+                            )}
+                          </div>
+                          <p className="text-sm text-text-muted font-medium mt-2">
+                            {session.module === 'awareness' ? "Exploring the core of 'Who am I?'" :
+                             session.module === 'contemplation' ? "Discovering inner qualities and strengths." :
+                             session.module === 'transformative_silence' ? "Empowerment through the power of silence." :
+                             "The complete ACT experience."}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-3">
+                          {canFeedback ? (
+                            <button 
+                              onClick={() => { setActiveSession(session); setShowFeedbackForm(true); }}
+                              className="px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-all text-sm font-bold shadow-lg shadow-primary/20 flex items-center gap-2"
+                            >
+                              <Send size={16} className="fill-white/20" /> Share Feedback
+                            </button>
+                          ) : !session.collect_feedback ? (
+                            <div className="px-4 py-2 bg-white text-gray-400 rounded-xl border border-gray-100 text-sm font-medium">
+                              No feedback required
+                            </div>
+                          ) : (
+                            <div className="px-4 py-2 bg-white text-gray-400 rounded-xl border border-gray-100 text-sm font-medium">
+                              Available after session
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </section>
-
-            {/* Testimonials Section - Only for completed events with 5-star feedback */}
-            {event.status === "completed" && testimonials.length > 0 && (
-              <section>
-                <h2 className="text-3xl font-bold text-text-main mb-6">Participant Experiences</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {testimonials.map((testimonial, index) => {
-                    const responses = (testimonial as Record<string, unknown>).responses as Record<string, string>;
-                    
-                    // Prioritize Question 1 (Realization) or Question 3/2 (Empowerment)
-                    // Never show Question 4 (Suggestions)
-                    const mainQuote = responses.q1 || responses.q3 || responses.q2 || "A deeply transformative experience.";
-                    
-                    return (
-                      <div key={index} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all">
-                        <div className="flex gap-1 mb-4">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star key={star} size={18} className="fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
-                        <p className="text-text-muted italic mb-4 line-clamp-4">&ldquo;{mainQuote}&rdquo;</p>
-                        <p className="text-sm font-semibold text-text-main">
-                          {(testimonial as Record<string, unknown>).first_name ? `— ${(testimonial as Record<string, unknown>).first_name}` : "— Anonymous Participant"}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
           </div>
 
-          {/* Sidebar - Registration or Feedback */}
-          <div>
-            <div className="bg-white rounded-3xl p-8 sticky top-32 shadow-lg border border-gray-100">
-              <h3 className="text-2xl font-bold text-text-main mb-4">
-                {event.status === "completed" ? "Event Completed" : "Join This Event"}
+          <aside>
+            <div className="bg-white rounded-[2.5rem] p-8 sticky top-32 shadow-2xl shadow-teal-900/5 border border-gray-100 relative">
+              {/* Decorative background element clipped to panel bounds */}
+              <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden pointer-events-none">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 opacity-50" />
+              </div>
+
+              <h3 className="text-2xl font-bold text-text-main mb-4 relative">
+                {event.status === "completed" ? "Event Concluded" : "Join the Journey"}
               </h3>
-              <p className="text-text-muted mb-6 text-sm">
-                {event.status === "completed" 
-                  ? "This event has ended. Explore our upcoming events or share your experience."
-                  : "Fill out your details below to register for this transformative experience."
-                }
-              </p>
-
+              
               {event.status === "completed" ? (
-                <Link href="/join" className="block w-full py-3.5 bg-gray-100 text-text-main text-center font-bold rounded-xl hover:bg-gray-200 transition-all">
-                  Browse Upcoming Events
-                </Link>
+                <div className="space-y-6 relative">
+                  <p className="text-text-muted text-sm italic mb-4">
+                    This event has concluded. Thank you to everyone who participated!
+                  </p>
+                  <Link href="/join" className="block w-full py-4 bg-gray-900 text-white text-center font-bold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20">Explore More Events</Link>
+                </div>
               ) : submitted ? (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
-                    <CheckCircle2 size={32} />
+                <div className="text-center py-8 relative">
+                  <div className="w-20 h-20 bg-teal-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-teal-600 shadow-inner">
+                    <CheckCircle2 size={40} />
                   </div>
-                  <h4 className="text-lg font-bold text-text-main mb-2">You&rsquo;re Registered!</h4>
-                  <p className="text-text-muted text-sm mb-6">Check your email for confirmation and details.</p>
+                  <h4 className="text-2xl font-black text-text-main mb-2 tracking-tight">You're Registered!</h4>
+                  <p className="text-text-muted font-medium mb-8">Ready to start your journey? Check your email for details.</p>
                   
-                  <div className="space-y-3">
-                    {/* Add to Calendar Dropdown */}
+                  <div className="space-y-4">
                     <div className="relative">
-                      <button
-                        onClick={() => setShowCalendarMenu(!showCalendarMenu)}
-                        className="w-full px-4 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
-                      >
-                        <Calendar size={18} />
-                        <span>Add to Calendar</span>
-                        <ChevronDown size={16} className={`ml-1 transition-transform duration-200 ${showCalendarMenu ? 'rotate-180' : ''}`} />
+                      <button onClick={() => setShowCalendarMenu(!showCalendarMenu)} className="w-full px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/30">
+                        <Calendar size={20} /> Add to Calendar <ChevronDown size={18} className={`transition-transform ${showCalendarMenu ? 'rotate-180' : ''}`} />
                       </button>
-
-                      {showCalendarMenu && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                          <button
-                            onClick={() => { addToGoogleCalendar(); setShowCalendarMenu(false); }}
-                            className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors"
-                          >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff" stroke="#E5E7EB" strokeWidth="1"/>
-                              <path d="M15.545 8.333H8.455c-.614 0-1.122.508-1.122 1.111v6.112c0 .603.508 1.11 1.122 1.11h7.09c.614 0 1.122-.507 1.122-1.11V9.444c0-.603-.508-1.111-1.122-1.111z" fill="#4285F4"/>
-                              <path d="M8.455 10.556h7.09" stroke="#fff" strokeWidth=".667"/>
-                              <path d="M10.5 13.278h3" stroke="#fff" strokeWidth=".667" strokeLinecap="round"/>
-                            </svg>
-                            <span className="font-medium text-gray-700">Google Calendar</span>
-                          </button>
-                          <button
-                            onClick={() => { addToOutlookCalendar(); setShowCalendarMenu(false); }}
-                            className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors border-t border-gray-50"
-                          >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff" stroke="#E5E7EB" strokeWidth="1"/>
-                              <path d="M7 8h10v8H7z" fill="#0078D4"/>
-                              <path d="M9 10h6M9 12h6M9 14h4" stroke="#fff" strokeWidth=".667" strokeLinecap="round"/>
-                            </svg>
-                            <span className="font-medium text-gray-700">Outlook Calendar</span>
-                          </button>
-                          <button
-                            onClick={() => { generateEventCalendarFile(); setShowCalendarMenu(false); }}
-                            className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors border-t border-gray-50"
-                          >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff" stroke="#E5E7EB" strokeWidth="1"/>
-                              <path d="M12 8v5M12 13l2-2M12 13l-2-2M9 16h6" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span className="font-medium text-gray-700">Download .ics File</span>
-                          </button>
-                        </div>
-                      )}
+                      <AnimatePresence>
+                        {showCalendarMenu && (
+                          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="absolute top-full left-0 right-0 mt-4 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2">
+                            <button onClick={addToGoogleCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Google Calendar</button>
+                            <button onClick={addToOutlookCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Outlook Calendar</button>
+                            <button onClick={generateEventCalendarFile} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm text-primary">Download .ics</button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                    
-                    <button 
-                      onClick={() => router.push('/join')}
-                      className="w-full text-primary text-sm font-medium hover:underline py-2"
-                    >
-                      Browse more events
-                    </button>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-5 relative">
                   <div>
-                    <label htmlFor="name" className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Full Name</label>
-                    <input type="text" id="name" name="name" required className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" />
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Full Name</label>
+                    <input type="text" name="name" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="Your Name" />
                   </div>
-
                   <div>
-                    <label htmlFor="email" className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Email</label>
-                    <input type="email" id="email" name="email" required className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" />
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Email Address</label>
+                    <input type="email" name="email" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="hello@example.com" />
                   </div>
-
                   <div>
-                    <label htmlFor="phone" className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Phone (Optional)</label>
-                    <input type="tel" id="phone" name="phone" className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" />
-                  </div>
-
-                  <div>
-                    <label htmlFor="country" className="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Country</label>
-                    <select id="country" name="country" required className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
-                      <option value="">Select your country</option>
-                      <option value="Afghanistan">Afghanistan</option>
-                      <option value="Albania">Albania</option>
-                      <option value="Algeria">Algeria</option>
-                      <option value="Argentina">Argentina</option>
-                      <option value="Australia">Australia</option>
-                      <option value="Austria">Austria</option>
-                      <option value="Bangladesh">Bangladesh</option>
-                      <option value="Belgium">Belgium</option>
-                      <option value="Brazil">Brazil</option>
-                      <option value="Canada">Canada</option>
-                      <option value="Chile">Chile</option>
-                      <option value="China">China</option>
-                      <option value="Colombia">Colombia</option>
-                      <option value="Denmark">Denmark</option>
-                      <option value="Egypt">Egypt</option>
-                      <option value="Ethiopia">Ethiopia</option>
-                      <option value="Finland">Finland</option>
-                      <option value="France">France</option>
-                      <option value="Germany">Germany</option>
-                      <option value="Ghana">Ghana</option>
-                      <option value="Greece">Greece</option>
-                      <option value="India">India</option>
-                      <option value="Indonesia">Indonesia</option>
-                      <option value="Iran">Iran</option>
-                      <option value="Iraq">Iraq</option>
-                      <option value="Ireland">Ireland</option>
-                      <option value="Israel">Israel</option>
-                      <option value="Italy">Italy</option>
-                      <option value="Japan">Japan</option>
-                      <option value="Kenya">Kenya</option>
-                      <option value="Malaysia">Malaysia</option>
-                      <option value="Mexico">Mexico</option>
-                      <option value="Morocco">Morocco</option>
-                      <option value="Nepal">Nepal</option>
-                      <option value="Netherlands">Netherlands</option>
-                      <option value="New Zealand">New Zealand</option>
-                      <option value="Nigeria">Nigeria</option>
-                      <option value="Norway">Norway</option>
-                      <option value="Pakistan">Pakistan</option>
-                      <option value="Peru">Peru</option>
-                      <option value="Philippines">Philippines</option>
-                      <option value="Poland">Poland</option>
-                      <option value="Portugal">Portugal</option>
-                      <option value="Russia">Russia</option>
-                      <option value="Saudi Arabia">Saudi Arabia</option>
-                      <option value="Singapore">Singapore</option>
-                      <option value="South Africa">South Africa</option>
-                      <option value="South Korea">South Korea</option>
-                      <option value="Spain">Spain</option>
-                      <option value="Sri Lanka">Sri Lanka</option>
-                      <option value="Sweden">Sweden</option>
-                      <option value="Switzerland">Switzerland</option>
-                      <option value="Thailand">Thailand</option>
-                      <option value="Turkey">Turkey</option>
-                      <option value="Uganda">Uganda</option>
-                      <option value="Ukraine">Ukraine</option>
-                      <option value="United Arab Emirates">United Arab Emirates</option>
-                      <option value="United Kingdom">United Kingdom</option>
-                      <option value="United States">United States</option>
-                      <option value="Vietnam">Vietnam</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-
-                  {error && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-sm text-red-600">{error}</p>
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Country</label>
+                    <div className="relative group">
+                      <select 
+                        name="country" 
+                        required 
+                        value={regCountry}
+                        onChange={(e) => {
+                          setRegCountry(e.target.value);
+                          setRegPhone(""); // Clear phone when country changes to avoid confusion
+                        }}
+                        className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none appearance-none cursor-pointer"
+                      >
+                        <option value="">Select Country</option>
+                        {countries.map(c => (
+                          <option key={c.name} value={c.name}>{c.name}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none group-hover:text-primary transition-colors" size={18} />
                     </div>
-                  )}
+                  </div>
 
-                  <button 
-                    type="submit" 
-                    disabled={loading}
-                    className="w-full py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  >
-                    {loading ? 'Submitting...' : 'Complete Registration'}
-                  </button>
+                  <div>
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Phone Number</label>
+                    <div className="flex items-stretch overflow-hidden bg-gray-50 border border-transparent rounded-2xl focus-within:bg-white focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+                      <div className="px-5 py-3.5 bg-gray-100/50 border-r border-gray-200 text-text-muted font-bold text-sm min-w-[70px] flex items-center justify-center">
+                        {countries.find(c => c.name === regCountry)?.code || "+"}
+                      </div>
+                      <input 
+                        type="tel" 
+                        name="phone" 
+                        required
+                        value={regPhone}
+                        onChange={(e) => setRegPhone(e.target.value)}
+                        className="flex-1 px-5 py-3.5 bg-transparent font-medium outline-none" 
+                        placeholder="Phone number" 
+                      />
+                    </div>
+                  </div>
+                  <button type="submit" className="w-full py-4.5 bg-primary text-white font-black rounded-2xl hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-1 active:translate-y-0">Complete Registration</button>
                 </form>
               )}
             </div>
-          </div>
+          </aside>
         </div>
       </div>
 
-      {/* Feedback Form Modal */}
-      {showFeedbackForm && event && event.act_module && (
+      {showFeedbackForm && activeSession && (
         <FeedbackForm
           eventId={event.id}
           eventTitle={event.title}
-          actModule={event.act_module as "awareness" | "contemplation" | "transformative_silence" | "combined"}
+          actModule={activeSession.module}
+          sessionId={activeSession.id}
+          shouldGenerateCertificate={activeSession.generate_certificate}
           onClose={() => setShowFeedbackForm(false)}
         />
       )}

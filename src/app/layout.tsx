@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${outfit.variable} font-sans antialiased bg-cream text-text-main flex flex-col min-h-screen`}>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${outfit.variable} font-sans antialiased bg-cream text-text-main flex flex-col min-h-screen`}>
         <Navbar />
         <main className="flex-grow pt-16">
           {children}

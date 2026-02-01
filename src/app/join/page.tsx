@@ -28,34 +28,45 @@ export default function JoinPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [pastEvents, setPastEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMorePast, setHasMorePast] = useState(false);
+  const pastBatchSize = 9;
 
   useEffect(() => {
     async function fetchEvents() {
       try {
         setLoading(true);
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+        const currentTime = now.toTimeString().split(' ')[0]; // HH:mm:ss
 
-        // Fetch upcoming events
+        // Fetch upcoming events: (Date in future) OR (Date is today but start_time > current_time)
         const { data: upcomingData, error: upcomingError } = await supabase
           .from('events')
           .select('*')
+          .or(`date.gt.${today},and(date.eq.${today},start_time.gt.${currentTime})`)
           .eq('status', 'upcoming')
-          .gte('date', today)
           .order('date', { ascending: true });
         
         if (upcomingError) throw upcomingError;
         setEvents((upcomingData || []) as Event[]);
 
-        // Fetch limited past/completed events
+        // Fetch initial past/completed events: (Status is completed) OR (Date in past) OR (Date is today but start_time <= current_time)
+        // We use start_time to move it to impacts as soon as it begins
         const { data: completedData, error: completedError } = await supabase
           .from('events')
-          .select('*')
-          .eq('status', 'completed')
+          .select('*', { count: 'exact' })
+          .or(`status.eq.completed,date.lt.${today},and(date.eq.${today},start_time.lte.${currentTime})`)
           .order('date', { ascending: false })
-          .limit(6);
+          .range(0, pastBatchSize - 1);
         
         if (completedError) throw completedError;
         setPastEvents((completedData || []) as Event[]);
+        
+        if (completedData && completedData.length === pastBatchSize) {
+           // Basic check if there might be more
+           setHasMorePast(true);
+        }
 
       } catch (err) {
         console.error('Error fetching events:', err);
@@ -66,6 +77,38 @@ export default function JoinPage() {
 
     fetchEvents();
   }, []);
+
+  const loadMorePast = async () => {
+    if (loadingMore) return;
+    try {
+      setLoadingMore(true);
+      const now = new Date();
+      const today = now.toISOString().split('T')[0];
+      const currentTime = now.toTimeString().split(' ')[0];
+
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .or(`status.eq.completed,date.lt.${today},and(date.eq.${today},start_time.lte.${currentTime})`)
+        .order('date', { ascending: false })
+        .range(pastEvents.length, pastEvents.length + pastBatchSize - 1);
+
+      if (error) throw error;
+      
+      if (data) {
+        setPastEvents(prev => [...prev, ...data]);
+        if (data.length < pastBatchSize) {
+          setHasMorePast(false);
+        }
+      } else {
+        setHasMorePast(false);
+      }
+    } catch (err) {
+      console.error('Error loading more past events:', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const filteredEvents = events.filter((event) => event.region === activeRegion);
 
@@ -197,7 +240,7 @@ export default function JoinPage() {
                         )}
                         <div className="absolute top-4 left-4">
                            <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-bold text-teal-600 shadow-sm">
-                             COMPLETED
+                             IMPACT
                            </span>
                         </div>
                       </div>
@@ -214,6 +257,18 @@ export default function JoinPage() {
                   </Link>
                 ))}
               </div>
+
+              {hasMorePast && (
+                <div className="mt-16 text-center">
+                  <button 
+                    onClick={loadMorePast}
+                    disabled={loadingMore}
+                    className="px-8 py-3 bg-white border-2 border-primary text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all disabled:opacity-50 flex items-center gap-2 mx-auto"
+                  >
+                    {loadingMore ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div> : "View More Impacts"}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

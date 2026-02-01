@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { generateCertificate } from "@/lib/certificate";
 import { supabase } from "@/lib/supabase";
 import { 
   X, 
@@ -13,54 +14,30 @@ import {
   ArrowLeft,
   Heart,
   Sparkles,
-  MessageSquare
+  MessageSquare,
+  Award
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type ACTModule = "awareness" | "contemplation" | "transformative_silence" | "combined";
+import { FEEDBACK_QUESTIONS, MODULE_LABELS, type ACTModule } from "@/lib/constants";
 
 interface FeedbackFormProps {
   eventId: number;
   eventTitle: string;
   actModule: ACTModule;
+  sessionId?: string;
+  shouldGenerateCertificate?: boolean;
   onClose: () => void;
 }
 
-const FEEDBACK_QUESTIONS = {
-  awareness: [
-    { id: "q1", type: "textarea", question: "What did you personally feel or realize about yourself during today's session?" },
-    { id: "q2", type: "textarea", question: "Did any part of today's experience help you sense your inner peace, love, or goodness? If yes, what helped most?" },
-    { id: "q3", type: "scale", question: "On a scale of 1–5, how connected did you feel with your true self today?" },
-    { id: "q4", type: "textarea", question: "What could we do differently next time to help participants experience awareness more deeply?" },
-  ],
-  contemplation: [
-    { id: "q1", type: "textarea", question: "Which inner quality (like peace, love, willpower, etc.) did you feel most connected to today?" },
-    { id: "q2", type: "textarea", question: "Did the activities or reflections help you value yourself more deeply? How so?" },
-    { id: "q3", type: "scale", question: "On a scale of 1–5, how much clarity did you gain about your own strengths or values?" },
-    { id: "q4", type: "textarea", question: "What part of today's session felt most meaningful or could be improved for deeper self-reflection?" },
-  ],
-  transformative_silence: [
-    { id: "q1", type: "textarea", question: "During the silence or reflection period, what did you notice within yourself?" },
-    { id: "q2", type: "textarea", question: "Did you feel any sense of inner strength, clarity, or connection to something higher? Please describe briefly." },
-    { id: "q3", type: "scale", question: "On a scale of 1–5, how empowering or transformative did today's experience feel for you personally?" },
-    { id: "q4", type: "textarea", question: "How could we make the silence or reflection experience even deeper or more comfortable next time?" },
-  ],
-  combined: [
-    { id: "q1", type: "textarea", question: "What did you feel or realize about yourself through today's experience?" },
-    { id: "q2", type: "scale", question: "To what extent did you feel connected to your true self — beyond your roles or responsibilities?" },
-    { id: "q3", type: "textarea", question: "Did any part of the workshop help you feel more stable, confident, or empowered from within? If yes, what helped the most?" },
-    { id: "q4", type: "textarea", question: "How could we make this experience more meaningful or comfortable for participants next time?" },
-  ],
-};
-
-const MODULE_LABELS = {
-  awareness: "Awareness (Who am I?)",
-  contemplation: "Contemplation (What are my qualities?)",
-  transformative_silence: "Transformative Silence",
-  combined: "Full interACT Workshop",
-};
-
-export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }: FeedbackFormProps) {
+export default function FeedbackForm({ 
+  eventId, 
+  eventTitle, 
+  actModule, 
+  sessionId, 
+  shouldGenerateCertificate, 
+  onClose 
+}: FeedbackFormProps) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -80,6 +57,7 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
       const { error } = await supabase.from("event_feedback").insert([
         {
           event_id: eventId,
+          session_id: sessionId,
           first_name: firstName,
           last_name: lastName,
           email: email,
@@ -89,8 +67,20 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
       ]);
 
       if (error) throw error;
+      
       setSubmitted(true);
-      setTimeout(onClose, 2500);
+
+      // Trigger certificate if enabled
+      if (shouldGenerateCertificate) {
+        await generateCertificate(
+          `${firstName} ${lastName}`.trim(),
+          eventTitle,
+          new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+          `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+        );
+      }
+
+      setTimeout(onClose, 3000);
     } catch (err) {
       const error = err as Error;
       alert("Error: " + error.message);
@@ -114,9 +104,26 @@ export default function FeedbackForm({ eventId, eventTitle, actModule, onClose }
             <CheckCircle2 size={48} className="text-teal-500" />
           </div>
           <h2 className="text-3xl font-bold text-text-main mb-4 italic">Thank You!</h2>
-          <p className="text-lg text-text-muted leading-relaxed">
+          <p className="text-lg text-text-muted leading-relaxed mb-8">
             Your heart-felt feedback has been received. It helps us grow together.
           </p>
+          
+          {shouldGenerateCertificate && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => generateCertificate(
+                `${firstName} ${lastName}`.trim(),
+                eventTitle,
+                new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+              )}
+              className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all cursor-pointer"
+            >
+              <Award size={24} />
+              Download Certificate
+            </motion.button>
+          )}
         </motion.div>
       </div>
     );

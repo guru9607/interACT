@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1358">
+  <!-- Clean white/cream background -->
+  <rect width="100%" height="100%" fill="#fffef9"/>
+
+  <!-- Subtle watermark -->
+  <text x="960" y="750"
+        text-anchor="middle"
+        font-family="Georgia, serif"
+        font-size="280"
+        fill="#1a2f4a"
+        opacity="0.02"
+        letter-spacing="20">
+    interACT
+  </text>
+
+  <!-- Simple elegant border -->
+  <rect x="80" y="80" width="1760" height="1198"
+        fill="none" stroke="#1a2f4a" stroke-width="2"/>
+  <rect x="95" y="95" width="1730" height="1168"
+        fill="none" stroke="#1a2f4a" stroke-width="0.5" opacity="0.4"/>
+
+  <!-- Logo - centered, prominent (embedded as base64) -->
+  <image x="860" y="110" width="200" height="120" href="/logo.png" id="logoImage"/>
+
+  <!-- Decorative line under logo -->
+  <line x1="760" y1="280" x2="1160" y2="280" stroke="#1a2f4a" stroke-width="1"/>
+
+  <!-- Certificate Title -->
+  <text x="960" y="380"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="52"
+        font-weight="400"
+        fill="#1a2f4a"
+        letter-spacing="8">
+    CERTIFICATE
+  </text>
+
+  <text x="960" y="430"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="24"
+        fill="#1a2f4a"
+        letter-spacing="12">
+    OF PARTICIPATION
+  </text>
+
+  <!-- Presented to -->
+  <text x="960" y="530"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="20"
+        fill="#5a6a7a"
+        font-style="italic">
+    This is to certify that
+  </text>
+
+  <!-- Participant Name -->
+  <text x="960" y="620"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="58"
+        fill="#1a2f4a"
+        id="participantName">
+    [Participant Name]
+  </text>
+
+  <!-- Elegant underline for name -->
+  <line x1="400" y1="650" x2="1520" y2="650" stroke="#1a2f4a" stroke-width="0.75"/>
+
+  <!-- Has completed text -->
+  <text x="960" y="720"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="20"
+        fill="#5a6a7a">
+    has successfully completed the program
+  </text>
+
+  <!-- Event/Program Title -->
+  <text x="960" y="800"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="36"
+        font-weight="600"
+        fill="#1a2f4a"
+        id="eventTitle">
+    [Program Title]
+  </text>
+
+  <!-- Tagline -->
+  <text x="960" y="860"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="16"
+        fill="#6a7a8a"
+        font-style="italic">
+    Rediscover Your Core Goodness
+  </text>
+
+  <!-- Date -->
+  <text x="960" y="950"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="18"
+        fill="#5a6a7a">
+    Presented on
+  </text>
+
+  <text x="960" y="990"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="26"
+        fill="#1a2f4a"
+        id="eventDate">
+    [Date]
+  </text>
+
+  <!-- Signature Section - Program Director (always shown, left when co-signatory exists) -->
+  <g id="signatureDirector" transform="translate(960, 1100)">
+    <line x1="-180" y1="0" x2="180" y2="0" stroke="#1a2f4a" stroke-width="0.75"/>
+    <text x="0" y="30"
+          text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="16"
+          fill="#1a2f4a">
+      Program Director
+    </text>
+    <text x="0" y="52"
+          text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="13"
+          fill="#6a7a8a">
+      interACT Initiative
+    </text>
+  </g>
+
+  <!-- Co-Signatory Section (optional, right side) - hidden by default -->
+  <g id="signatureCoSignatory" transform="translate(1300, 1100)" style="display:none">
+    <line x1="-180" y1="0" x2="180" y2="0" stroke="#1a2f4a" stroke-width="0.75"/>
+    <text x="0" y="30"
+          text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="16"
+          fill="#1a2f4a"
+          id="coSignatoryName">
+      [Co-Signatory Name]
+    </text>
+    <text x="0" y="52"
+          text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="13"
+          fill="#6a7a8a"
+          id="coSignatoryTitle">
+      [Co-Signatory Title]
+    </text>
+  </g>
+
+  <!-- Certificate ID - bottom -->
+  <text x="960" y="1230"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="12"
+        fill="#9aa5b0"
+        letter-spacing="1"
+        id="certificateId">
+    Certificate No. [CERT-ID]
+  </text>
+</svg>
