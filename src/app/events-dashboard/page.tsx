@@ -52,6 +52,7 @@ function DashboardContent() {
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
   const [authorized, setAuthorized] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [conductors, setConductors] = useState<any[]>([]);
   const [regCounts, setRegCounts] = useState<Record<number, number>>({});
   const [editingEvent, setEditingEvent] = useState<any | null>(null);
@@ -70,6 +71,7 @@ function DashboardContent() {
       fetchUpcomingEvents();
       fetchConductors();
     }
+    setCheckingAuth(false);
   }, [secret]);
 
   // Handle filter changes
@@ -155,6 +157,14 @@ function DashboardContent() {
     }
     setLoading(false);
     setLoadingMore(false);
+  }
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="animate-spin text-primary" size={40} />
+      </div>
+    );
   }
 
   if (!authorized) {
@@ -1010,16 +1020,50 @@ function ManageEventsList({
     const confirm1 = window.confirm(`Are you sure you want to DELETE "${title}"? This cannot be undone.`);
     if (!confirm1) return;
 
-    const confirm2 = window.confirm(`LAST WARNING: This will permanently remove all data for "${title}". Are you absolutely sure?`);
+    const confirm2 = window.confirm(`LAST WARNING: This will permanently remove all data for "${title}" (including registrations and feedback). Are you absolutely sure?`);
     if (!confirm2) return;
 
     setUpdatingId(eventId);
     try {
-      const { error } = await supabase.from("events").delete().eq("id", eventId);
+      // 1. Delete dependent feedback
+      const { error: fbError } = await supabase
+        .from("event_feedback")
+        .delete()
+        .eq("event_id", eventId);
+      
+      if (fbError) {
+        console.error("Error cleaning up feedback:", fbError);
+        // We continue anyway, hoping it's not a hard constraint blocker if this failed for some other reason
+      }
+
+      // 2. Delete dependent registrations
+      const { error: regError } = await supabase
+        .from("registrations")
+        .delete()
+        .eq("event_id", eventId);
+      
+      if (regError) {
+         console.error("Error cleaning up registrations:", regError);
+      }
+
+      // 3. Delete the event itself
+      const { data, error } = await supabase
+        .from("events")
+        .delete()
+        .eq("id", eventId)
+        .select();
+
       if (error) throw error;
+
+      // Verify if row was actually deleted (checking data length is safer than count)
+      if (!data || data.length === 0) {
+        throw new Error("Event could not be deleted. You might not have permission, the event no longer exists, or database constraints are blocking it.");
+      }
+
       alert("Event deleted successfully.");
       await onRefresh();
     } catch (err: any) {
+      console.error("Delete failed:", err);
       alert("Error deleting event: " + err.message);
     } finally {
       setUpdatingId(null);

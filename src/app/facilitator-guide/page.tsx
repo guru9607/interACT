@@ -35,11 +35,11 @@ function GuideContent() {
   const searchParams = useSearchParams();
   const secret = searchParams.get("secret");
   const [authorized, setAuthorized] = useState(false);
-  const [activeSection, setActiveSection] = useState("events");
+  const [activeSection, setActiveSection] = useState("hub");
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["events", "feedback", "impact"];
+      const sections = ["hub", "events", "feedback", "reporting"];
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -118,9 +118,10 @@ function GuideContent() {
             </div>
           </div>
           <div className="hidden md:flex items-center gap-1">
+            <NavButton active={activeSection === "hub"} onClick={() => scrollTo("hub")}>Hub</NavButton>
             <NavButton active={activeSection === "events"} onClick={() => scrollTo("events")}>Events</NavButton>
             <NavButton active={activeSection === "feedback"} onClick={() => scrollTo("feedback")}>Feedback</NavButton>
-            <NavButton active={activeSection === "impact"} onClick={() => scrollTo("impact")}>Impact</NavButton>
+            <NavButton active={activeSection === "reporting"} onClick={() => scrollTo("reporting")}>Reporting</NavButton>
           </div>
         </div>
       </div>
@@ -132,18 +133,19 @@ function GuideContent() {
           <div className="hidden lg:block sticky top-24 space-y-8">
             <div className="space-y-2">
               <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">Contents</h3>
-              <TocLink active={activeSection === "events"} onClick={() => scrollTo("events")}>Managing Events</TocLink>
-              <TocLink active={activeSection === "feedback"} onClick={() => scrollTo("feedback")}>Feedback System</TocLink>
-              <TocLink active={activeSection === "impact"} onClick={() => scrollTo("impact")}>Showcasing Impact</TocLink>
+              <TocLink active={activeSection === "hub"} onClick={() => scrollTo("hub")}>The interACT Hub</TocLink>
+              <TocLink active={activeSection === "events"} onClick={() => scrollTo("events")}>Event Scheduling</TocLink>
+              <TocLink active={activeSection === "feedback"} onClick={() => scrollTo("feedback")}>Feedback Flow</TocLink>
+              <TocLink active={activeSection === "reporting"} onClick={() => scrollTo("reporting")}>Reports & Exports</TocLink>
             </div>
             
             <div className="p-4 bg-teal-50 rounded-2xl border border-teal-100">
               <h4 className="font-bold text-teal-800 text-sm mb-2 flex items-center gap-2">
                 <ShieldCheck size={16} />
-                Pro Tip
+                Portal Access
               </h4>
              <p className="text-xs text-teal-700 leading-relaxed">
-               Always mark events as "Completed" immediately after the session to enable feedback collection.
+               Access all facilitator tools through the interACT Hub at <code className="bg-teal-100/50 px-1 rounded">/portal</code>.
              </p>
             </div>
           </div>
@@ -152,233 +154,272 @@ function GuideContent() {
           <main className="space-y-16">
             
             {/* Intro Header */}
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl font-bold text-text-main tracking-tight">Creating Transformative <br/><span className="text-teal-600">Experiences</span></h1>
-              <p className="text-xl text-text-muted max-w-2xl leading-relaxed">
-                Welcome to the official interACT facilitator documentation. This visual guide ensures consistent, high-quality event management across all regions.
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-xs font-bold border border-teal-100">
+                <ShieldCheck size={14} />
+                OFFICIAL INSTITUTIONAL HANDBOOK
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold text-text-main tracking-tight leading-[1.1]">The Facilitator's <br/><span className="text-teal-600 underline decoration-teal-100 underline-offset-8">Operating Manual</span></h1>
+              <p className="text-xl text-text-muted max-w-3xl leading-relaxed">
+                This comprehensive guide provides the framework for professional event execution within the interACT ecosystem. Follow these standards to ensure data integrity and a premium participant experience.
               </p>
             </div>
 
             <hr className="border-gray-200" />
 
-            {/* Section 1: Managing Events */}
-            <section id="events" className="scroll-mt-24 space-y-8">
+            {/* Section 0: The interACT Hub */}
+            <section id="hub" className="scroll-mt-24 space-y-10">
+              <SectionHeader 
+                icon={<ShieldCheck className="text-teal-600" size={24} />} 
+                title="The interACT Hub" 
+                subtitle="Your secure central workstation for mission management."
+              />
+
+              <div className="bg-white rounded-[2rem] border border-gray-200 p-8 shadow-sm space-y-8">
+                <div className="grid md:grid-cols-3 gap-8">
+                   <div className="space-y-3">
+                      <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-bold">1</div>
+                      <h4 className="font-bold text-text-main">Encrypted Access</h4>
+                      <p className="text-sm text-text-muted">Access is restricted via a <code>Staff Secret Key</code>. This key is persistent in your browser, so you only enter it once per device.</p>
+                   </div>
+                   <div className="space-y-3">
+                      <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-bold">2</div>
+                      <h4 className="font-bold text-text-main">One-Tap Navigation</h4>
+                      <p className="text-sm text-text-muted">The Hub links to Event Management, the Facilitator Registry, this Official Guide, and the Public Join pages.</p>
+                   </div>
+                   <div className="space-y-3">
+                      <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-bold">3</div>
+                      <h4 className="font-bold text-text-main">Unified Dashboard</h4>
+                      <p className="text-sm text-text-muted">All regional data syncs in real-time, providing a global view of the interACT movement's impact.</p>
+                   </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 1: Event Scheduling */}
+            <section id="events" className="scroll-mt-24 space-y-10">
               <SectionHeader 
                 icon={<Calendar className="text-blue-600" size={24} />} 
-                title="Event Management" 
-                subtitle="The core workflow for creating and tracking your sessions."
+                title="Protocol for Event Scheduling" 
+                subtitle="Creating structured journeys with precision and professional clarity."
               />
 
-              {/* Visual Workflow: Creating Event */}
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <div className="prose prose-blue text-text-muted">
-                    <p>When creating an event, accuracy is key. The details you enter directly populate the public event page and student notification emails.</p>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl border border-blue-100 p-6 shadow-sm space-y-4">
-                    <h4 className="font-bold text-text-main flex items-center gap-2">
-                      <Layout size={18} className="text-blue-500" />
-                      Critical Fields
-                    </h4>
-                    <ul className="space-y-3">
-                      <CheckItem>
-                        <strong>Host Selection:</strong> Choose a Facilitator or Core Team member. This person is featured as the "Conductor".
-                      </CheckItem>
-                      <CheckItem>
-                        <strong>Location vs. Country:</strong> 
-                        <span className="block text-xs mt-1 text-slate-500 bg-slate-50 p-2 rounded border border-slate-100">
-                           Location: "Vishwa Pariwartan Bhawan"<br/>
-                           Country: "India"
-                        </span>
-                      </CheckItem>
-                      <CheckItem>
-                        <strong>ACT Module:</strong> Dictates the specific feedback questions (Awareness vs. Contemplation vs. Silence).
-                      </CheckItem>
-                    </ul>
-                  </div>
+              <div className="space-y-8">
+                <div className="prose prose-blue text-text-muted max-w-none">
+                  <p>When creating an event, you are building the digital storefront for participants. Every field selection impacts the automated journey—from the email they receive to the certificate they earn.</p>
                 </div>
 
-                {/* Mock UI: Event Form */}
-                <div className="bg-gray-100 rounded-xl p-4 border border-gray-200 select-none">
-                  <div className="bg-white rounded-lg shadow-sm p-4 space-y-4 border border-gray-100">
-                    <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                      <span className="text-xs font-bold text-gray-800">Create New Event</span>
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                        <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                        <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-2 opacity-70">
-                      <div className="h-2 w-16 bg-gray-200 rounded"></div>
-                      <div className="h-8 w-full bg-gray-50 border border-gray-200 rounded"></div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 opacity-70">
-                       <div className="space-y-1">
-                          <div className="h-2 w-10 bg-gray-200 rounded"></div>
-                          <div className="h-8 w-full bg-gray-50 border border-gray-200 rounded"></div>
-                       </div>
-                       <div className="space-y-1">
-                          <div className="h-2 w-10 bg-gray-200 rounded"></div>
-                          <div className="h-8 w-full bg-gray-50 border border-gray-200 rounded"></div>
-                       </div>
-                    </div>
-                    <div className="relative p-2 bg-blue-50 border border-blue-100 rounded border-dashed border-2">
-                      <div className="absolute -top-2 -right-2 bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-sm">IMPORTANT</div>
-                      <div className="space-y-1">
-                        <div className="h-2 w-20 bg-blue-200 rounded"></div>
-                        <div className="h-8 w-full bg-white border border-blue-200 rounded flex items-center px-3 text-xs text-blue-800">
-                          Select Host...
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-8 w-full bg-black rounded opacity-20"></div>
-                  </div>
-                  <p className="text-center text-[10px] text-gray-500 mt-2 font-mono">Figure 1: Event Creation Interface</p>
-                </div>
-              </div>
-            </section>
-
-            {/* Section 2: Feedback System */}
-            <section id="feedback" className="scroll-mt-24 space-y-8">
-              <SectionHeader 
-                icon={<MessageSquare className="text-purple-600" size={24} />} 
-                title="The Feedback System" 
-                subtitle="Capturing the voice of our participants."
-              />
-
-              <div className="bg-purple-50 rounded-3xl p-8 border border-purple-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-5">
-                   <MessageSquare size={120} />
-                </div>
-                
-                <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-                   <div className="space-y-6">
-                      <h3 className="text-xl font-bold text-purple-900">How Feedback Works</h3>
-                      <p className="text-purple-800/80 leading-relaxed">
-                        Once you mark an event as <strong>Completed</strong>, a <strong>"Share Your Experience"</strong> button automatically appears on the public event page. 
-                        Participants simply visit the event link to start their reflection.
+                <div className="grid md:grid-cols-2 gap-6">
+                   <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-blue-500">
+                      <h4 className="font-bold text-text-main mb-3 flex items-center gap-2">
+                        <FileText size={18} className="text-blue-500" />
+                        Professional Descriptions
+                      </h4>
+                      <p className="text-sm text-text-muted leading-relaxed">
+                        The <strong>Event Description</strong> should be welcoming yet professional. Focus on the transformation. 
+                        <span className="block mt-2 bg-blue-50 p-2 rounded text-blue-800 italic">"Join us for a contemplative journey into inner strength, exploring the Awareness module through seated reflection and dialogue."</span>
                       </p>
-                      
-                      <div className="space-y-4 mt-4">
-                         <div className="group flex items-center gap-4 bg-white p-4 rounded-2xl border border-purple-100 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
-                            <div className="w-10 h-10 flex items-center justify-center bg-purple-100 text-purple-700 font-bold rounded-xl text-sm group-hover:bg-purple-600 group-hover:text-white transition-colors">1</div>
-                            <div>
-                              <h4 className="font-bold text-gray-900">Personal Profile</h4>
-                              <p className="text-sm text-gray-500">Contact details for future updates</p>
-                            </div>
-                         </div>
-                         <div className="group flex items-center gap-4 bg-white p-4 rounded-2xl border border-purple-100 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
-                            <div className="w-10 h-10 flex items-center justify-center bg-purple-100 text-purple-700 font-bold rounded-xl text-sm group-hover:bg-purple-600 group-hover:text-white transition-colors">2</div>
-                            <div>
-                              <h4 className="font-bold text-gray-900">Reflection & Impact</h4>
-                              <p className="text-sm text-gray-500">Module-specific questions & ratings</p>
-                            </div>
-                         </div>
-                      </div>
                    </div>
 
-                   {/* Improved Visual: 2-Card Flow */}
-                   <div className="relative h-64 flex items-center justify-center">
-                      <div className="absolute inset-x-0 top-1/2 h-1 bg-purple-200 -translate-y-1/2 z-0 hidden sm:block"></div>
-                      
-                      <div className="grid grid-cols-2 gap-4 w-full max-w-md relative z-10">
-                        {/* Card 1 Mock */}
-                        <div className="bg-white p-4 rounded-2xl shadow-xl border border-purple-50 transform -rotate-3 hover:rotate-0 transition-transform duration-500">
-                          <div className="flex items-center gap-2 mb-3 border-b border-gray-50 pb-2">
-                             <div className="w-2 h-2 rounded-full bg-purple-400"></div>
-                             <span className="text-[10px] font-bold text-purple-400 uppercase">Step 1</span>
-                          </div>
-                          <div className="space-y-2">
-                             <div className="h-6 w-8 h-8 rounded-full bg-gray-100 mx-auto mb-2"></div>
-                             <div className="h-2 w-16 bg-gray-100 rounded mx-auto"></div>
-                             <div className="h-8 w-full bg-gray-50 border border-gray-100 rounded-lg mt-2"></div>
-                             <div className="h-8 w-full bg-gray-50 border border-gray-100 rounded-lg"></div>
-                          </div>
-                        </div>
+                   <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-teal-500">
+                      <h4 className="font-bold text-text-main mb-3 flex items-center gap-2">
+                        <Globe size={18} className="text-teal-500" />
+                        Location vs. Country
+                      </h4>
+                      <p className="text-sm text-text-muted leading-relaxed">
+                        <strong>Location:</strong> The physical venue (e.g., "Main Hall, BK Centre").<br/>
+                        <strong>Country:</strong> Selecting this is CRITICAL. It sets the timezone and pre-fills the participant's international dial code.
+                      </p>
+                   </div>
 
-                        {/* Card 2 Mock */}
-                        <div className="bg-white p-4 rounded-2xl shadow-xl border border-purple-50 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                           <div className="flex items-center gap-2 mb-3 border-b border-gray-50 pb-2">
-                             <div className="w-2 h-2 rounded-full bg-teal-400"></div>
-                             <span className="text-[10px] font-bold text-teal-400 uppercase">Step 2</span>
-                          </div>
-                          <div className="space-y-2">
-                             <div className="h-12 w-full bg-gray-50 border border-gray-100 rounded-lg"></div>
-                             <div className="flex gap-1 justify-center mt-2">
-                                {[1,2,3,4,5].map(n => <div key={n} className="w-4 h-4 rounded bg-gray-100"></div>)}
-                             </div>
-                             <div className="h-6 w-20 bg-teal-500 rounded-lg mx-auto mt-2"></div>
-                          </div>
+                   <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-purple-500">
+                      <h4 className="font-bold text-text-main mb-3 flex items-center gap-2">
+                        <Settings size={18} className="text-purple-500" />
+                        Session Roadmaps
+                      </h4>
+                      <p className="text-sm text-text-muted leading-relaxed">
+                        For multi-day events, add sessions individually. You can toggle <strong>Collect Feedback</strong> and <strong>Issue Certificate</strong> for each session. Usually, certificates are issued on the final day.
+                      </p>
+                   </div>
+
+                   <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-orange-500">
+                      <h4 className="font-bold text-text-main mb-3 flex items-center gap-2">
+                        <Layout size={18} className="text-orange-500" />
+                        ACT Module Selection
+                      </h4>
+                      <p className="text-sm text-text-muted leading-relaxed">
+                        Choose between <strong>Awareness</strong>, <strong>Contemplation</strong>, or <strong>Silence</strong>. This selection automatically changes the questions in the feedback form.
+                      </p>
+                   </div>
+                </div>
+
+                <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                   <div className="flex flex-col lg:flex-row gap-8 items-center">
+                      <div className="flex-1 space-y-4">
+                        <h4 className="font-bold text-slate-800">The Participant View</h4>
+                        <p className="text-sm text-slate-600">Once scheduled, sessions appear in a "Roadmap" layout. Participants can see past sessions as 'Finished' and future ones as 'Coming Up'.</p>
+                        <div className="flex gap-3">
+                           <div className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[10px] font-bold">AUTO-UPDATING</div>
+                           <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold">REAL-TIME SYNC</div>
                         </div>
                       </div>
-
-                      {/* Connecting Arrow (Badge) */}
-                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg border border-purple-100 z-20 flex items-center justify-center">
-                         <ArrowLeft className="rotate-180 text-purple-400" size={14} />
+                      <div className="w-full max-w-sm bg-white rounded-xl shadow-xl p-4 border border-slate-100">
+                         <div className="space-y-3">
+                            <div className="flex gap-4 items-start border-l-2 border-teal-100 pl-4 relative">
+                              <div className="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-teal-500"></div>
+                              <div className="flex-1">
+                                <div className="h-1.5 w-12 bg-gray-100 rounded mb-1"></div>
+                                <div className="h-2 w-24 bg-gray-200 rounded"></div>
+                              </div>
+                            </div>
+                            <div className="flex gap-4 items-start border-l-2 border-gray-100 pl-4 relative opacity-50">
+                              <div className="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-gray-200"></div>
+                              <div className="flex-1">
+                                <div className="h-1.5 w-12 bg-gray-50 rounded mb-1"></div>
+                                <div className="h-2 w-24 bg-gray-50 rounded"></div>
+                              </div>
+                            </div>
+                         </div>
                       </div>
                    </div>
                 </div>
               </div>
             </section>
 
-             {/* Section 3: Impact */}
-            <section id="impact" className="scroll-mt-24 space-y-8">
+
+            {/* Section 3: Feedback & Certification Cycle */}
+            <section id="feedback" className="scroll-mt-24 space-y-10">
+              <SectionHeader 
+                icon={<Award className="text-purple-600" size={24} />} 
+                title="Feedback & Certification Cycle" 
+                subtitle="Closing the loop with reflective data and digital credentials."
+              />
+
+              <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+                
+                <div className="relative z-10 grid lg:grid-cols-[1fr_350px] gap-12 items-center">
+                   <div className="space-y-8">
+                      <div className="space-y-4">
+                         <h3 className="text-2xl font-bold">The Golden Rule: Full Name Verification</h3>
+                         <p className="text-gray-400 text-sm leading-relaxed">
+                            Participants must enter their <strong>Full Name exactly as they want it printed</strong>. Our system uses a high-res (2x Retina) PNG engine to generate certificates instantly upon submission.
+                         </p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-6">
+                         <div className="space-y-2">
+                            <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-purple-400"><Globe size={16} /></div>
+                            <h4 className="font-bold text-sm">Smart Auto-Prefix</h4>
+                            <p className="text-xs text-gray-500">Phone codes are pre-filled based on the event's country selection.</p>
+                         </div>
+                         <div className="space-y-2">
+                            <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-amber-400"><Award size={16} /></div>
+                            <h4 className="font-bold text-sm">Manual Download</h4>
+                            <p className="text-xs text-gray-500">Participants must tap 'Download Certificate' to trigger the PNG storage flow.</p>
+                         </div>
+                      </div>
+                   </div>
+
+                   <div className="relative">
+                      {/* Certificate Visual */}
+                      <div className="aspect-[1.4/1] bg-white rounded-xl border-[6px] border-slate-700 p-6 shadow-2xl scale-110">
+                         <div className="absolute inset-0 border border-slate-100 m-1"></div>
+                         <div className="text-center space-y-3 opacity-20">
+                            <div className="h-1 w-20 bg-slate-400 mx-auto rounded"></div>
+                            <div className="h-3 w-32 bg-slate-500 mx-auto rounded"></div>
+                            <div className="h-1 w-24 bg-slate-400 mx-auto rounded pt-4"></div>
+                         </div>
+                         <div className="flex justify-around absolute bottom-6 inset-x-0 opacity-10">
+                            {[1,2,3].map(i => <div key={i} className="h-0.5 w-8 bg-slate-500 rounded"></div>)}
+                         </div>
+                      </div>
+                      <div className="absolute -top-4 -right-4 bg-teal-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black shadow-xl animate-pulse">2X QUALITY</div>
+                   </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 4: Reporting & Impact */}
+            <section id="reporting" className="scroll-mt-24 space-y-10">
               <SectionHeader 
                 icon={<Globe className="text-teal-600" size={24} />} 
-                title="Showcasing Global Impact" 
-                subtitle="Turning local sessions into a global movement."
+                title="Reporting & Impact" 
+                subtitle="Leveraging data to communicate the movement's success."
               />
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 {/* Card 1 */}
-                 <div className="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 bg-teal-50 rounded-lg flex items-center justify-center text-teal-600 mb-4">
-                       <CheckCircle2 size={20} />
+              <div className="space-y-8">
+                 <div className="grid md:grid-cols-2 gap-8">
+                    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                       <h4 className="font-bold text-text-main flex items-center gap-2">
+                          <Settings size={18} className="text-teal-500" />
+                          Dashboard Filtering
+                       </h4>
+                       <p className="text-sm text-text-muted leading-relaxed">
+                          The Master Dashboard allows you to <strong>Filter by Facilitator</strong>. This is essential for regional coordinators to track individual conductor performance and session volume.
+                       </p>
+                       <ul className="space-y-2">
+                          <CheckItem>Quick-filter by Host or Conductor Name.</CheckItem>
+                          <CheckItem>View exclusive metrics for specific regional modules.</CheckItem>
+                       </ul>
                     </div>
-                    <h4 className="font-bold text-text-main mb-2">Automated Curation</h4>
-                    <p className="text-sm text-text-muted leading-relaxed">
-                       Our system automatically selects the <strong>top 4 most impactful testimonials</strong> for public display, prioritizing themes of "Self-Realization".
-                    </p>
+
+                    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                       <h4 className="font-bold text-text-main flex items-center gap-2">
+                          <FileText size={18} className="text-blue-500" />
+                          CSV Export Protocol
+                       </h4>
+                       <p className="text-sm text-text-muted leading-relaxed">
+                          Exports are standardized for global reporting. The generated CSV files contain the following verified data points:
+                       </p>
+                       <div className="flex flex-wrap gap-2">
+                          {["Full Name", "Email", "Phone (+Code)", "Country", "ACT Module", "Session Date", "Q1-Q4 Responses"].map(tag => (
+                            <span key={tag} className="px-2 py-1 bg-gray-50 text-gray-500 rounded text-[10px] font-bold border border-gray-100">{tag}</span>
+                          ))}
+                       </div>
+                    </div>
                  </div>
 
-                  {/* Card 2 */}
-                 <div className="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-4">
-                       <MousePointer2 size={20} />
+                 {/* Impact Logic */}
+                 <div className="bg-teal-50 rounded-[2rem] p-8 border border-teal-100 flex flex-col md:flex-row gap-8 items-center">
+                    <div className="flex-1 space-y-4">
+                       <h3 className="text-xl font-bold text-teal-900">Data Transparency & Testimonials</h3>
+                       <p className="text-teal-800/70 text-sm leading-relaxed">
+                          Our "Auto-Showcase" logic automatically features 5-star feedback on public event pages. This builds immediate trust with new participants. Constructive feedback is flagged for internal review in the "Reports" tab.
+                       </p>
                     </div>
-                    <h4 className="font-bold text-text-main mb-2">Global Gallery</h4>
-                    <p className="text-sm text-text-muted leading-relaxed">
-                       Completed events appear in the "Past Impacts" gallery. This is why accurate <strong>Country</strong> data is vital for a professional look.
-                    </p>
-                 </div>
-
-                  {/* Card 3 */}
-                 <div className="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-md transition-all">
-                    <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center text-orange-600 mb-4">
-                       <AlertTriangle size={20} />
+                    <div className="flex gap-2">
+                       {[1,2,3,4,5].map(i => <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, delay: i * 0.2 }} key={i} className="text-teal-500">★</motion.div>)}
                     </div>
-                    <h4 className="font-bold text-text-main mb-2">Privacy First</h4>
-                    <p className="text-sm text-text-muted leading-relaxed">
-                       Constructive feedback and improvement suggestions are <strong>never shown publicly</strong>. They are stored securely for internal review.
-                    </p>
                  </div>
               </div>
 
-               <div className="bg-gray-900 rounded-3xl p-8 text-center text-white space-y-6">
-                  <h3 className="text-2xl font-bold">Ready to facilitate?</h3>
-                  <p className="text-gray-400 max-w-xl mx-auto">
-                    Head over to the Dashboard to create your next event or manage existing ones.
-                  </p>
-                  <button 
-                    onClick={() => router.push(`/events-dashboard?secret=${secret}`)}
-                    className="px-8 py-3 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-teal-500/25"
-                  >
-                    Go to Events Dashboard
-                  </button>
+               <div className="bg-slate-900 rounded-[3rem] p-12 text-center text-white space-y-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-teal-600/10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+                  <div className="max-w-2xl mx-auto space-y-4 relative z-10">
+                    <h3 className="text-3xl font-bold">Ready to Conduct?</h3>
+                    <p className="text-gray-400">
+                      You now have the full operational framework to conduct an interACT session. Access the Hub to begin scheduling your next transformative journey.
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
+                    <button 
+                      onClick={() => router.push(`/portal?secret=${secret || ""}`)}
+                      className="px-10 py-4 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-2xl transition-all shadow-xl shadow-teal-500/20"
+                    >
+                      Open interACT Hub
+                    </button>
+                    <button 
+                      onClick={() => window.print()}
+                      className="px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl transition-all border border-white/10"
+                    >
+                      Print Handbook
+                    </button>
+                  </div>
                </div>
             </section>
+
+             
 
           </main>
         </div>
