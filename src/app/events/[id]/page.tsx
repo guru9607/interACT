@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import FeedbackForm from "@/components/FeedbackForm";
 import { motion, AnimatePresence } from "framer-motion";
 import { countries } from "@/lib/countries";
+import { MODULE_LABELS, MODULE_DESCRIPTIONS, type ACTModule } from "@/lib/constants";
 
 // Facilitator Type
 type Facilitator = {
@@ -20,7 +21,7 @@ type Facilitator = {
 type Session = {
   id: string;
   date: string;
-  module: "awareness" | "contemplation" | "transformative_silence" | "combined";
+  module: ACTModule;
   start_time?: string;
   end_time?: string;
   collect_feedback: boolean;
@@ -258,9 +259,25 @@ export default function EventDetailPage() {
               </Link>
               
               <div className="flex items-center gap-3 mb-4">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${event.status === "completed" ? "bg-teal-100 text-teal-700" : "bg-blue-100 text-blue-700"}`}>
-                  {event.status === "completed" ? "Completed" : event.type}
-                </span>
+                {(() => {
+                  const now = new Date();
+                  now.setHours(0, 0, 0, 0);
+                  const sessions = event.sessions || [];
+                  const sessionDates = sessions.map(s => new Date(s.date).getTime());
+                  const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
+                  const firstDate = sessions.length > 0 ? new Date(Math.min(...sessionDates)) : new Date(event.date);
+                  
+                  lastDate.setHours(0, 0, 0, 0);
+                  firstDate.setHours(0, 0, 0, 0);
+
+                  if (event.status === "completed" || lastDate < now) {
+                    return <span className="px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-700">Completed</span>;
+                  }
+                  if (firstDate <= now && lastDate >= now) {
+                    return <span className="px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-700">Ongoing</span>;
+                  }
+                  return <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">{event.type}</span>;
+                })()}
                 <span className="text-text-muted flex items-center"><Globe size={16} className="mr-1.5" />{event.region}</span>
               </div>
 
@@ -367,13 +384,10 @@ export default function EventDetailPage() {
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div>
                           <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">{formatDate(session.date)}</p>
-                          <p className="text-xl font-black text-text-main capitalize">
-                            {session.module.replace('_', ' ')}
+                          <p className="text-xl font-black text-text-main">
+                            {MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
                           </p>
-                          <div className="flex flex-wrap gap-4 mt-1">
-                            <p className="text-sm font-bold text-primary flex items-center gap-1.5">
-                              <Calendar size={14} /> {formatDate(session.date)}
-                            </p>
+                          <div className="flex flex-wrap gap-4 mt-2">
                             {(session.start_time || session.end_time) && (
                               <p className="text-sm font-bold text-text-muted flex items-center gap-1.5">
                                 <Clock size={14} /> {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
@@ -381,10 +395,7 @@ export default function EventDetailPage() {
                             )}
                           </div>
                           <p className="text-sm text-text-muted font-medium mt-2">
-                            {session.module === 'awareness' ? "Exploring the core of 'Who am I?'" :
-                             session.module === 'contemplation' ? "Discovering inner qualities and strengths." :
-                             session.module === 'transformative_silence' ? "Empowerment through the power of silence." :
-                             "The complete ACT experience."}
+                            {MODULE_DESCRIPTIONS[session.module as keyof typeof MODULE_DESCRIPTIONS] || "The complete interACT journey."}
                           </p>
                         </div>
 
@@ -422,93 +433,125 @@ export default function EventDetailPage() {
               </div>
 
               <h3 className="text-2xl font-bold text-text-main mb-4 relative">
-                {event.status === "completed" ? "Event Concluded" : "Join the Journey"}
+                {(() => {
+                  const now = new Date();
+                  now.setHours(0, 0, 0, 0);
+                  const sessions = event.sessions || [];
+                  const sessionDates = sessions.map(s => new Date(s.date).getTime());
+                  const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
+                  lastDate.setHours(0, 0, 0, 0);
+
+                  if (event.status === "completed" || lastDate < now) return "Event Concluded";
+                  const firstDate = sessions.length > 0 ? new Date(Math.min(...sessionDates)) : new Date(event.date);
+                  firstDate.setHours(0, 0, 0, 0);
+                  if (firstDate <= now) return "Event Ongoing";
+                  return "Join the Journey";
+                })()}
               </h3>
               
-              {event.status === "completed" ? (
-                <div className="space-y-6 relative">
-                  <p className="text-text-muted text-sm italic mb-4">
-                    This event has concluded. Thank you to everyone who participated!
-                  </p>
-                  <Link href="/join" className="block w-full py-4 bg-gray-900 text-white text-center font-bold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20">Explore More Events</Link>
-                </div>
-              ) : submitted ? (
-                <div className="text-center py-8 relative">
-                  <div className="w-20 h-20 bg-teal-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-teal-600 shadow-inner">
-                    <CheckCircle2 size={40} />
-                  </div>
-                  <h4 className="text-2xl font-black text-text-main mb-2 tracking-tight">You're Registered!</h4>
-                  <p className="text-text-muted font-medium mb-8">Ready to start your journey? Check your email for details.</p>
-                  
-                  <div className="space-y-4">
-                    <div className="relative">
-                      <button onClick={() => setShowCalendarMenu(!showCalendarMenu)} className="w-full px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/30">
-                        <Calendar size={20} /> Add to Calendar <ChevronDown size={18} className={`transition-transform ${showCalendarMenu ? 'rotate-180' : ''}`} />
-                      </button>
-                      <AnimatePresence>
-                        {showCalendarMenu && (
-                          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="absolute top-full left-0 right-0 mt-4 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2">
-                            <button onClick={addToGoogleCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Google Calendar</button>
-                            <button onClick={addToOutlookCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Outlook Calendar</button>
-                            <button onClick={generateEventCalendarFile} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm text-primary">Download .ics</button>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 relative">
-                  <div>
-                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Full Name</label>
-                    <input type="text" name="name" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="Your Name" />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Email Address</label>
-                    <input type="email" name="email" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="hello@example.com" />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Country</label>
-                    <div className="relative group">
-                      <select 
-                        name="country" 
-                        required 
-                        value={regCountry}
-                        onChange={(e) => {
-                          setRegCountry(e.target.value);
-                          setRegPhone(""); // Clear phone when country changes to avoid confusion
-                        }}
-                        className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none appearance-none cursor-pointer"
-                      >
-                        <option value="">Select Country</option>
-                        {countries.map(c => (
-                          <option key={c.name} value={c.name}>{c.name}</option>
-                        ))}
-                      </select>
-                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none group-hover:text-primary transition-colors" size={18} />
-                    </div>
-                  </div>
+              {(() => {
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                const sessions = event.sessions || [];
+                const sessionDates = sessions.map(s => new Date(s.date).getTime());
+                const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
+                lastDate.setHours(0, 0, 0, 0);
+                
+                const isConcluded = event.status === "completed" || lastDate < now;
 
-                  <div>
-                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Phone Number</label>
-                    <div className="flex items-stretch overflow-hidden bg-gray-50 border border-transparent rounded-2xl focus-within:bg-white focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                      <div className="px-5 py-3.5 bg-gray-100/50 border-r border-gray-200 text-text-muted font-bold text-sm min-w-[70px] flex items-center justify-center">
-                        {countries.find(c => c.name === regCountry)?.code || "+"}
-                      </div>
-                      <input 
-                        type="tel" 
-                        name="phone" 
-                        required
-                        value={regPhone}
-                        onChange={(e) => setRegPhone(e.target.value)}
-                        className="flex-1 px-5 py-3.5 bg-transparent font-medium outline-none" 
-                        placeholder="Phone number" 
-                      />
+                if (isConcluded) {
+                  return (
+                    <div className="space-y-6 relative">
+                      <p className="text-text-muted text-sm italic mb-4">
+                        This event has concluded. Thank you to everyone who participated!
+                      </p>
+                      <Link href="/join" className="block w-full py-4 bg-gray-900 text-white text-center font-bold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20">Explore More Events</Link>
                     </div>
-                  </div>
-                  <button type="submit" className="w-full py-4.5 bg-primary text-white font-black rounded-2xl hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-1 active:translate-y-0">Complete Registration</button>
-                </form>
-              )}
+                  );
+                }
+
+                if (submitted) {
+                  return (
+                    <div className="text-center py-8 relative">
+                      <div className="w-20 h-20 bg-teal-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-teal-600 shadow-inner">
+                        <CheckCircle2 size={40} />
+                      </div>
+                      <h4 className="text-2xl font-black text-text-main mb-2 tracking-tight">You're Registered!</h4>
+                      <p className="text-text-muted font-medium mb-8">Ready to start your journey? Check your email for details.</p>
+                      
+                      <div className="space-y-4">
+                        <div className="relative">
+                          <button onClick={() => setShowCalendarMenu(!showCalendarMenu)} className="w-full px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/30">
+                            <Calendar size={20} /> Add to Calendar <ChevronDown size={18} className={`transition-transform ${showCalendarMenu ? 'rotate-180' : ''}`} />
+                          </button>
+                          <AnimatePresence>
+                            {showCalendarMenu && (
+                              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="absolute top-full left-0 right-0 mt-4 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2">
+                                <button onClick={addToGoogleCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Google Calendar</button>
+                                <button onClick={addToOutlookCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Outlook Calendar</button>
+                                <button onClick={generateEventCalendarFile} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm text-primary">Download .ics</button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <form onSubmit={handleSubmit} className="space-y-5 relative">
+                    <div>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Full Name</label>
+                      <input type="text" name="name" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="Your Name" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Email Address</label>
+                      <input type="email" name="email" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="hello@example.com" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Country</label>
+                      <div className="relative group">
+                        <select 
+                          name="country" 
+                          required 
+                          value={regCountry}
+                          onChange={(e) => {
+                            setRegCountry(e.target.value);
+                            setRegPhone(""); // Clear phone when country changes to avoid confusion
+                          }}
+                          className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none appearance-none cursor-pointer"
+                        >
+                          <option value="">Select Country</option>
+                          {countries.map(c => (
+                            <option key={c.name} value={c.name}>{c.name}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none group-hover:text-primary transition-colors" size={18} />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Phone Number</label>
+                      <div className="flex items-stretch overflow-hidden bg-gray-50 border border-transparent rounded-2xl focus-within:bg-white focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+                        <div className="px-5 py-3.5 bg-gray-100/50 border-r border-gray-200 text-text-muted font-bold text-sm min-w-[70px] flex items-center justify-center">
+                          {countries.find(c => c.name === regCountry)?.code || "+"}
+                        </div>
+                        <input 
+                          type="tel" 
+                          name="phone" 
+                          required
+                          value={regPhone}
+                          onChange={(e) => setRegPhone(e.target.value)}
+                          className="flex-1 px-5 py-3.5 bg-transparent font-medium outline-none" 
+                          placeholder="Phone number" 
+                        />
+                      </div>
+                    </div>
+                    <button type="submit" className="w-full py-4.5 bg-primary text-white font-black rounded-2xl hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-1 active:translate-y-0">Complete Registration</button>
+                  </form>
+                );
+              })()}
             </div>
           </aside>
         </div>

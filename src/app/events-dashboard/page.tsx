@@ -28,7 +28,7 @@ import {
   MessageSquare
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FEEDBACK_QUESTIONS, MODULE_LABELS } from "@/lib/constants";
+import { FEEDBACK_QUESTIONS, MODULE_LABELS, type ACTModule } from "@/lib/constants";
 
 // Use environment variable for the secret, fallback for local dev
 const DASHBOARD_SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET;
@@ -324,6 +324,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
           generate_certificate: false 
         }]
   });
+  const [sessionFeedbackCounts, setSessionFeedbackCounts] = useState<Record<string, number>>({});
 
   // Reset form when initialData changes (e.g. switching from one edit to another, or clearing edit)
   useEffect(() => {
@@ -351,7 +352,28 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
               generate_certificate: false 
             }]
       });
+
+      // Fetch feedback counts for sessions to prevent module switching
+      async function checkFeedback() {
+        if (!initialData?.id) return;
+        const { data } = await supabase
+          .from('event_feedback')
+          .select('session_id')
+          .eq('event_id', initialData.id);
+        
+        if (data) {
+          const counts: Record<string, number> = {};
+          data.forEach((f: any) => {
+            if (f.session_id) {
+              counts[f.session_id] = (counts[f.session_id] || 0) + 1;
+            }
+          });
+          setSessionFeedbackCounts(counts);
+        }
+      }
+      checkFeedback();
     } else {
+      setSessionFeedbackCounts({});
       setFormData({
         title: "",
         location: "",
@@ -618,15 +640,19 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
                   <div className="space-y-1.5 md:col-span-1">
                     <label className="text-[10px] uppercase font-bold text-text-muted tracking-wider">Module</label>
                     <select
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg outline-none focus:border-primary text-sm"
+                      className={`w-full px-3 py-2 bg-white border border-gray-200 rounded-lg outline-none focus:border-primary text-sm ${sessionFeedbackCounts[session.id] ? 'opacity-70 bg-gray-50' : ''}`}
+                      disabled={!!sessionFeedbackCounts[session.id]}
                       value={session.module}
                       onChange={(e) => updateSession(session.id, 'module', e.target.value)}
                     >
                       <option value="awareness">Awareness</option>
                       <option value="contemplation">Contemplation</option>
                       <option value="transformative_silence">Transformative Silence</option>
-                      <option value="combined">Combined</option>
+                      <option value="combined">Complete ACT</option>
                     </select>
+                    {sessionFeedbackCounts[session.id] && (
+                      <p className="text-[9px] text-teal-600 font-bold mt-1">Locked: {sessionFeedbackCounts[session.id]} Feedback(s) received</p>
+                    )}
                   </div>
 
                   <div className="space-y-1.5 md:col-span-1">
@@ -945,10 +971,12 @@ function ManageEventsList({
         }
       }
 
-      const updateDataObj: any = { status: "completed" };
+      const updateDataObj: any = {};
       if (imageUrls.length > 0) {
         updateDataObj.image_url = imageUrls[0];
         updateDataObj.image_urls = imageUrls;
+      } else {
+        return alert("Please select at least one photo to upload.");
       }
 
       // Update Event with the list of URLs (if any)
@@ -963,7 +991,7 @@ function ManageEventsList({
         throw new Error("Update failed. Check your Supabase RLS policies for the 'events' table.");
       }
 
-      alert(hasFiles ? `Event marked as completed with ${imageUrls.length} photos!` : "Event marked as completed! Users can now share feedback.");
+      alert(`Event photos uploaded successfully (${imageUrls.length} photos)!`);
       setSelectedFiles(prev => {
         const next = { ...prev };
         delete next[eventId];
@@ -1054,18 +1082,36 @@ function ManageEventsList({
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {(event.status === "completed" || event.date < today || (event.date === today && event.start_time <= currentTime)) ? (
-                    <>
-                      <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-bold rounded-full">ENROLLED/COMPLETED</span>
-                      {!event.image_url && (
-                        <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-full flex items-center gap-1">
-                          <ImageIcon size={10} /> MISSING PHOTOS
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full">UPCOMING</span>
-                  )}
+                  {(() => {
+                    const now = new Date();
+                    now.setHours(0, 0, 0, 0);
+                    
+                    const sessions = event.sessions || [];
+                    const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
+                    const firstDate = sessions.length > 0 ? new Date(Math.min(...sessionDates)) : new Date(event.date);
+                    const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
+                    firstDate.setHours(0, 0, 0, 0);
+                    lastDate.setHours(0, 0, 0, 0);
+
+                    if (lastDate < now) {
+                      return (
+                        <>
+                          <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-bold rounded-full">COMPLETED</span>
+                          {!event.image_url && (
+                            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-full flex items-center gap-1">
+                              <ImageIcon size={10} /> PHOTOS MISSING
+                            </span>
+                          )}
+                        </>
+                      );
+                    }
+
+                    if (firstDate <= now && lastDate >= now) {
+                      return <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-extrabold rounded-full animate-pulse border border-amber-200">ONGOING</span>;
+                    }
+
+                    return <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full">UPCOMING</span>;
+                  })()}
                 </div>
                 <div className="flex flex-wrap gap-4 text-sm text-text-muted">
                   <span className="flex items-center gap-1.5"><Calendar size={14} /> {event.date}</span>

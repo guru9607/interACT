@@ -37,36 +37,50 @@ export default function JoinPage() {
       try {
         setLoading(true);
         const now = new Date();
+        now.setHours(0, 0, 0, 0);
         const today = now.toISOString().split('T')[0];
-        const currentTime = now.toTimeString().split(' ')[0]; // HH:mm:ss
 
-        // Fetch upcoming events: (Date in future) OR (Date is today but start_time > current_time)
-        const { data: upcomingData, error: upcomingError } = await supabase
+        // Fetch all events that are NOT manually marked as "completed"
+        const { data: allActive, error: activeError } = await supabase
           .from('events')
           .select('*')
-          .or(`date.gt.${today},and(date.eq.${today},start_time.gt.${currentTime})`)
           .eq('status', 'upcoming')
           .order('date', { ascending: true });
         
-        if (upcomingError) throw upcomingError;
-        setEvents((upcomingData || []) as Event[]);
+        if (activeError) throw activeError;
 
-        // Fetch initial past/completed events: (Status is completed) OR (Date in past) OR (Date is today but start_time <= current_time)
-        // We use start_time to move it to impacts as soon as it begins
+        const upcoming: Event[] = [];
+        const pastFromActive: Event[] = [];
+
+        (allActive || []).forEach(event => {
+          const sessions = (event as any).sessions || [];
+          const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
+          const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
+          lastDate.setHours(0, 0, 0, 0);
+
+          if (lastDate >= now) {
+            upcoming.push(event as Event);
+          } else {
+            pastFromActive.push(event as Event);
+          }
+        });
+
+        setEvents(upcoming);
+
+        // Fetch manual past/completed events
         const { data: completedData, error: completedError } = await supabase
           .from('events')
-          .select('*', { count: 'exact' })
-          .or(`status.eq.completed,date.lt.${today},and(date.eq.${today},start_time.lte.${currentTime})`)
+          .select('*')
+          .eq('status', 'completed')
           .order('date', { ascending: false })
           .range(0, pastBatchSize - 1);
         
         if (completedError) throw completedError;
-        setPastEvents((completedData || []) as Event[]);
-        
-        if (completedData && completedData.length === pastBatchSize) {
-           // Basic check if there might be more
-           setHasMorePast(true);
-        }
+
+        // Combine auto-completed active events with explicitly completed events
+        const combinedPast = [...pastFromActive, ...(completedData || [])];
+        setPastEvents(combinedPast.slice(0, pastBatchSize));
+        setHasMorePast(combinedPast.length >= pastBatchSize);
 
       } catch (err) {
         console.error('Error fetching events:', err);
@@ -82,27 +96,15 @@ export default function JoinPage() {
     if (loadingMore) return;
     try {
       setLoadingMore(true);
-      const now = new Date();
-      const today = now.toISOString().split('T')[0];
-      const currentTime = now.toTimeString().split(' ')[0];
-
       const { data, error } = await supabase
         .from('events')
         .select('*')
-        .or(`status.eq.completed,date.lt.${today},and(date.eq.${today},start_time.lte.${currentTime})`)
+        .eq('status', 'completed')
         .order('date', { ascending: false })
         .range(pastEvents.length, pastEvents.length + pastBatchSize - 1);
 
       if (error) throw error;
-      
-      if (data) {
-        setPastEvents(prev => [...prev, ...data]);
-        if (data.length < pastBatchSize) {
-          setHasMorePast(false);
-        }
-      } else {
-        setHasMorePast(false);
-      }
+      if (data) setPastEvents(prev => [...prev, ...data]);
     } catch (err) {
       console.error('Error loading more past events:', err);
     } finally {
@@ -182,7 +184,27 @@ export default function JoinPage() {
                           }`}>
                             {event.type}
                           </span>
-                          <span className="text-xs text-text-muted flex items-center">
+                          {(() => {
+                            const now = new Date();
+                            now.setHours(0, 0, 0, 0);
+                            const sessions = (event as any).sessions || [];
+                            const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
+                            if (sessionDates.length > 0) {
+                              const firstDate = new Date(Math.min(...sessionDates));
+                              const lastDate = new Date(Math.max(...sessionDates));
+                              firstDate.setHours(0, 0, 0, 0);
+                              lastDate.setHours(0, 0, 0, 0);
+                              
+                              if (firstDate <= now && lastDate >= now) {
+                                return <span className="px-2 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-700 animate-pulse">ONGOING</span>;
+                              }
+                              if (firstDate > now) {
+                                return <span className="px-2 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-600">UPCOMING</span>;
+                              }
+                            }
+                            return null;
+                          })()}
+                          <span className="text-xs text-text-muted flex items-center ml-auto sm:ml-0">
                             <MapPin size={12} className="mr-1" />
                             {event.location}, {event.country}
                           </span>
@@ -245,12 +267,15 @@ export default function JoinPage() {
                         </div>
                       </div>
                       <div className="p-6">
-                        <h3 className="text-lg font-bold text-text-main mb-2 line-clamp-1 group-hover:text-primary transition-colors">
-                          {event.title}
-                        </h3>
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-lg font-bold text-text-main line-clamp-1 group-hover:text-primary transition-colors">
+                            {event.title}
+                          </h3>
+                        </div>
                         <div className="flex items-center gap-3 text-xs text-text-muted">
                           <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                           <span className="flex items-center gap-1"><MapPin size={12} /> {event.country || "India"}</span>
+                          <span className="px-2 py-0.5 rounded-full bg-teal-50 text-teal-600 font-bold ml-auto">IMPACT</span>
                         </div>
                       </div>
                     </div>

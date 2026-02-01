@@ -28,8 +28,15 @@ export const FEEDBACK_QUESTIONS = {
 };
 
 export const MODULE_LABELS = {
-    awareness: "Awareness (Who am I?)",
-    contemplation: "Contemplation (What are my qualities?)",
+    awareness: "Awareness",
+    contemplation: "Contemplation",
     transformative_silence: "Transformative Silence",
-    combined: "Full interACT Workshop",
+    combined: "Complete ACT",
+};
+
+export const MODULE_DESCRIPTIONS = {
+    awareness: "Connecting with innate goodness",
+    contemplation: "Discovering inner qualities and strengths.",
+    transformative_silence: "Empowerment through the power of silence.",
+    combined: "The complete interACT journey.",
 };
