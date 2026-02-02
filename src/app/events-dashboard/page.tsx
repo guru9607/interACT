@@ -48,7 +48,7 @@ export default function EventsDashboard() {
 function DashboardContent() {
   const searchParams = useSearchParams();
   const secret = searchParams.get("secret");
-  const [activeTab, setActiveTab] = useState<"create" | "manage" | "reports">("create");
+  const [activeTab, setActiveTab] = useState<"create" | "manage" | "reports" | "archived">("create");
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
   const [authorized, setAuthorized] = useState(false);
@@ -74,12 +74,12 @@ function DashboardContent() {
     setCheckingAuth(false);
   }, [secret]);
 
-  // Handle filter changes
+  // Handle filter changes and tab switches
   useEffect(() => {
-    if (authorized) {
+    if (authorized && (activeTab === "manage" || activeTab === "archived")) {
       fetchUpcomingEvents(false);
     }
-  }, [facilitatorFilter]);
+  }, [facilitatorFilter, activeTab]);
 
   async function fetchConductors() {
     try {
@@ -115,6 +115,13 @@ function DashboardContent() {
     let query = supabase
       .from("events")
       .select("*", { count: 'exact' });
+
+    if (activeTab === "archived") {
+       query = query.eq('status', 'archived');
+    } else {
+       // Regular fetching excludes archived events
+       query = query.neq('status', 'archived');
+    }
 
     if (facilitatorFilter) {
       query = query.eq('conductor_id', facilitatorFilter);
@@ -209,41 +216,63 @@ function DashboardContent() {
                 </div>
               </div>
 
-            <div className="flex bg-gray-100 p-1 rounded-xl">
+            <div className="flex items-center gap-4">
+              <div className="flex bg-gray-100 p-1 rounded-xl">
+                <button
+                  onClick={() => {
+                    setEditingEvent(null);
+                    setActiveTab("create");
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "create" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                  }`}
+                >
+                  <Plus size={16} />
+                  {editingEvent ? "Editing" : "Create"}
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab("manage");
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "manage" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                  }`}
+                >
+                  <HistoryIcon size={16} />
+                  Manage
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab("reports");
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "reports" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                  }`}
+                >
+                  <Award size={16} />
+                  Reports
+                </button>
+              </div>
+
+              {/* Separator */}
+              <div className="h-8 w-px bg-gray-200 hidden md:block"></div>
+
+              {/* Subtle Archive Button */}
               <button
                 onClick={() => {
-                  setEditingEvent(null);
-                  setActiveTab("create");
+                  setActiveTab("archived");
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeTab === "create" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === "archived" 
+                    ? "bg-red-50 text-red-600 shadow-sm" 
+                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
                 }`}
+                title="View Archived Events"
               >
-                <Plus size={16} />
-                {editingEvent ? "Editing Event" : "Create Event"}
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab("manage");
-                  fetchUpcomingEvents();
-                }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeTab === "manage" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
-                }`}
-              >
-                <HistoryIcon size={16} />
-                Manage Events
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab("reports");
-                }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeTab === "reports" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
-                }`}
-              >
-                <Award size={16} />
-                Reports
+                <Trash2 size={18} />
+                <span className={`${activeTab === "archived" ? "inline" : "hidden"} md:inline`}>
+                  Trash
+                </span>
               </button>
             </div>
           </div>
@@ -291,6 +320,28 @@ function DashboardContent() {
                   setEditingEvent(event);
                   setActiveTab("create");
                 }}
+              />
+            </motion.div>
+          ) : activeTab === "archived" ? (
+             <motion.div
+              key="archived"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <ManageEventsList 
+                events={events} 
+                loading={loading} 
+                conductors={conductors} 
+                onRefresh={() => fetchUpcomingEvents(false)} 
+                onLoadMore={() => fetchUpcomingEvents(true)}
+                hasMore={hasMoreManagement}
+                loadingMore={loadingMore}
+                facilitatorFilter={facilitatorFilter}
+                onFilterChange={setFacilitatorFilter}
+                regCounts={regCounts}
+                isArchived={true}
+                onEdit={() => {}} // Can't edit archived events directly
               />
             </motion.div>
           ) : (
@@ -803,6 +854,7 @@ function ManageEventsList({
   facilitatorFilter,
   onFilterChange,
   regCounts, 
+  isArchived = false,
   onEdit 
 }: { 
   events: any[], 
@@ -815,6 +867,7 @@ function ManageEventsList({
   facilitatorFilter: string,
   onFilterChange: (id: string) => void,
   regCounts: any, 
+  isArchived?: boolean,       // New prop to toggle view mode
   onEdit: (event: any) => void 
 }) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
@@ -1016,7 +1069,46 @@ function ManageEventsList({
     }
   };
 
-  const handleDelete = async (eventId: number, title: string) => {
+  const handleSoftDelete = async (eventId: number, title: string) => {
+    const confirm = window.confirm(`Move "${title}" to Trash? (You can restore it later)`);
+    if (!confirm) return;
+    
+    setUpdatingId(eventId);
+    try {
+        const { error } = await supabase
+            .from("events")
+            .update({ status: 'archived' })
+            .eq("id", eventId);
+        
+        if (error) throw error;
+        // alert("Moved to Trash."); // Optional: too many alerts can be annoying
+        await onRefresh();
+    } catch (err: any) {
+        alert("Error moving to trash: " + err.message);
+    } finally {
+        setUpdatingId(null);
+    }
+  };
+
+  const handleRestore = async (eventId: number) => {
+    setUpdatingId(eventId);
+    try {
+        const { error } = await supabase
+            .from("events")
+            .update({ status: 'upcoming' }) // Default back to upcoming, or could check date
+            .eq("id", eventId);
+        
+        if (error) throw error;
+        alert("Event restored successfully!");
+        await onRefresh();
+    } catch (err: any) {
+        alert("Error restoring event: " + err.message);
+    } finally {
+        setUpdatingId(null);
+    }
+  };
+
+  const handlePermanentDelete = async (eventId: number, title: string) => {
     const confirm1 = window.confirm(`Are you sure you want to DELETE "${title}"? This cannot be undone.`);
     if (!confirm1) return;
 
@@ -1070,12 +1162,19 @@ function ManageEventsList({
     }
   };
 
+  // Client-side filtering to be safe, although parent does mostly correct fetching
+  const displayEvents = events.filter(e => 
+    isArchived ? e.status === 'archived' : e.status !== 'archived'
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-xl font-bold text-text-main">Events Management</h2>
-          <p className="text-sm text-text-muted">Manage scheduling and complete past events</p>
+          <h2 className="text-xl font-bold text-text-main">{isArchived ? "Trash Can" : "Events Management"}</h2>
+          <p className="text-sm text-text-muted">
+            {isArchived ? "Restore items or delete them forever" : "Manage scheduling and complete past events"}
+          </p>
         </div>
         <div className="w-full md:w-64">
           <select
@@ -1084,7 +1183,7 @@ function ManageEventsList({
             onChange={(e) => onFilterChange(e.target.value)}
           >
             <option value="">All Facilitators</option>
-            {conductors.map(c => (
+            {conductors.map((c: any) => (
               <option key={`${c.type}-${c.id}`} value={c.id}>
                 {c.name} ({c.type})
               </option>
@@ -1095,34 +1194,57 @@ function ManageEventsList({
 
       {loading && events.length === 0 ? (
         <div className="text-center py-20"><Loader2 className="animate-spin mx-auto text-primary" size={32} /></div>
-      ) : events.length === 0 ? (
+      ) : displayEvents.length === 0 ? (
         <div className="bg-white p-12 rounded-3xl text-center border border-dashed border-gray-200">
-          <p className="text-text-muted">No events found{facilitatorFilter ? " for this facilitator" : ""}.</p>
+          <p className="text-text-muted">{isArchived ? "Trash is empty." : "No events found"}{facilitatorFilter ? " for this facilitator" : ""}.</p>
         </div>
       ) : (
-        events.map((event: any) => (
-          <div key={event.id} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+        displayEvents.map((event: any) => (
+          <div key={event.id} className={`bg-white p-6 rounded-3xl border ${isArchived ? 'border-red-100 bg-red-50/10' : 'border-gray-100'} shadow-sm hover:shadow-md transition-all`}>
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="text-lg font-bold text-text-main">{event.title}</h3>
                   <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => onEdit(event)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition-all text-xs font-semibold"
-                      title="Edit Event"
-                    >
-                      <Edit size={14} />
-                      Edit
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(event.id, event.title)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all text-xs font-semibold"
-                      title="Delete Event"
-                    >
-                      <Trash2 size={14} />
-                      Delete
-                    </button>
+                    {!isArchived ? (
+                        <>
+                            <button 
+                            onClick={() => onEdit(event)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg transition-all text-xs font-semibold"
+                            title="Edit Event"
+                            >
+                            <Edit size={14} />
+                            Edit
+                            </button>
+                            <button 
+                            onClick={() => handleSoftDelete(event.id, event.title)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 rounded-lg transition-all text-xs font-semibold"
+                            title="Move to Trash"
+                            >
+                            <Trash2 size={14} />
+                            Archive
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                             <button 
+                            onClick={() => handleRestore(event.id)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white rounded-lg transition-all text-xs font-semibold"
+                            title="Restore Event"
+                            >
+                            <HistoryIcon size={14} />
+                            Restore
+                            </button>
+                             <button 
+                            onClick={() => handlePermanentDelete(event.id, event.title)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all text-xs font-semibold"
+                            title="Delete Permanently"
+                            >
+                            <Trash2 size={14} />
+                            Delete Forever
+                            </button>
+                        </>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
