@@ -19,17 +19,22 @@ export const generateCertificate = async (
     eventTitle: string,
     eventDate: string,
     certificateId: string,
+    templateType: 'participation' | 'appreciation' = 'participation',
     signatories?: { name: string; role: string; signatureUrl?: string }[]
 ): Promise<void> => {
     try {
-        const response = await fetch('/certificates/certificate-template.svg');
+        const templatePath = `/certificates/${templateType}.svg`;
+        const response = await fetch(templatePath);
+        if (!response.ok) throw new Error(`Failed to fetch template: ${templatePath}`);
+
         let svgContent = await response.text();
 
         // 1. Handle Logo (Embed as Base64)
         const logoBase64 = await imageUrlToBase64('/logo.png');
-        svgContent = svgContent.replace('href="/logo.png"', `href="${logoBase64}"`);
-        // Also handle the potential placeholder I'll add
         svgContent = svgContent.replace('[LOGO_BASE64]', logoBase64);
+
+        // Secondary replace for older templates if any
+        svgContent = svgContent.replace('href="/logo.png"', `href="${logoBase64}"`);
 
         // 2. Replace Basic Placeholders
         svgContent = svgContent.replace('[Participant Name]', participantName);
@@ -38,7 +43,6 @@ export const generateCertificate = async (
         svgContent = svgContent.replace('[CERT-ID]', certificateId);
 
         // 3. Handle Signatures
-        // Default signatories if none provided
         const defaultSignatories = [
             {
                 name: "Muralindran Mariappan",
@@ -47,20 +51,14 @@ export const generateCertificate = async (
             },
             {
                 name: "Ayako Ichimaru",
-                role: "Co-Founder ",
+                role: "Co-Founder",
                 signatureUrl: "/signatures/ayako.png"
             },
-            {
-                name: "Sakshi Kamlapure",
-                role: "Chairperson",
-                signatureUrl: "/signatures/sakshi.png"
-            },
-
         ];
 
         const activeSignatories = signatories || defaultSignatories;
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
             const sig = activeSignatories[i];
             const num = i + 1;
 
@@ -69,13 +67,17 @@ export const generateCertificate = async (
                 svgContent = svgContent.replace(`[Sig ${num} Role]`, sig.role);
 
                 if (sig.signatureUrl) {
-                    const sigBase64 = await imageUrlToBase64(sig.signatureUrl);
-                    svgContent = svgContent.replace(`[SIG_${num}_IMAGE]`, sigBase64);
+                    try {
+                        const sigBase64 = await imageUrlToBase64(sig.signatureUrl);
+                        svgContent = svgContent.replace(`[SIG_${num}_IMAGE]`, sigBase64);
+                    } catch (e) {
+                        console.warn(`Could not load signature ${num}`, e);
+                        svgContent = svgContent.replace(`[SIG_${num}_IMAGE]`, '');
+                    }
                 } else {
                     svgContent = svgContent.replace(`[SIG_${num}_IMAGE]`, '');
                 }
             } else {
-                // Clear placeholders if no signatory for this slot
                 svgContent = svgContent.replace(`[Sig ${num} Name]`, '');
                 svgContent = svgContent.replace(`[Sig ${num} Role]`, '');
                 svgContent = svgContent.replace(`[SIG_${num}_IMAGE]`, '');
@@ -91,11 +93,10 @@ export const generateCertificate = async (
 
         return new Promise((resolve, reject) => {
             img.onload = () => {
-                // Create a high-res canvas (2x for print quality)
                 const canvas = document.createElement('canvas');
-                const scale = 2; // High quality
-                canvas.width = 1920 * scale; // Standard horizontal certificate width
-                canvas.height = 1080 * scale;
+                const scale = 2.5; // Even higher quality (approx 4800x3400)
+                canvas.width = 1920 * scale;
+                canvas.height = 1358 * scale;
 
                 const ctx = canvas.getContext('2d');
                 if (!ctx) {
@@ -103,20 +104,16 @@ export const generateCertificate = async (
                     return;
                 }
 
-                // Fill white background (SVG might be transparent)
                 ctx.fillStyle = 'white';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Draw the SVG onto the canvas
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                // Convert to PNG and download
                 canvas.toBlob((blob) => {
                     if (blob) {
                         const url = URL.createObjectURL(blob);
                         const link = document.createElement('a');
                         link.href = url;
-                        link.download = `interACT_Certificate_${participantName.replace(/\s+/g, '_')}.png`;
+                        link.download = `interACT_${templateType}_${participantName.replace(/\s+/g, '_')}.png`;
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
@@ -139,6 +136,6 @@ export const generateCertificate = async (
         });
     } catch (error) {
         console.error('Error generating certificate:', error);
-        throw new Error('Failed to generate certificate');
+        throw error;
     }
 };

@@ -55,13 +55,13 @@ export default function EventDetailPage() {
   const [loading, setLoading] = useState(true);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [activeSession, setActiveSession] = useState<Session | null>(null);
-  const [userFeedbackIds, setUserFeedbackIds] = useState<string[]>([]);
   const [testimonials, setTestimonials] = useState<Record<string, unknown>[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCalendarMenu, setShowCalendarMenu] = useState(false);
   const [regCountry, setRegCountry] = useState("");
   const [regPhone, setRegPhone] = useState("");
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   
   const eventId = parseInt(params.id as string);
 
@@ -127,18 +127,21 @@ export default function EventDetailPage() {
           sessions: Array.isArray(eventData.sessions) ? eventData.sessions : []
         });
 
-        // Testimonials for UI (Still global - this is good!)
+        // Testimonials (Global for this event)
         const { data: globalFeedback } = await supabase
           .from('event_feedback')
-          .select('responses, first_name')
+          .select('responses, full_name, first_name')
           .eq('event_id', eventId);
         
         if (globalFeedback) {
-          const fiveStarFeedback = globalFeedback.filter(feedback => {
-            const responses = feedback.responses;
-            return Object.values(responses).some(val => val === '5');
+          const feedbackToShow = globalFeedback.filter(feedback => {
+            const responses = (feedback.responses as Record<string, any>) || {};
+            // Robust check for 4 or 5 star ratings (handle both string and number)
+            return Object.values(responses).some(val => 
+              val == 5 || val == 4 || val === '5' || val === '4'
+            );
           });
-          setTestimonials(fiveStarFeedback.slice(0, 4));
+          setTestimonials(feedbackToShow.slice(0, 4));
         }
         if (eventData.country) {
           setRegCountry(eventData.country);
@@ -249,7 +252,7 @@ export default function EventDetailPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 bg-linear-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
+      <section className="relative py-8 bg-linear-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle at 2px 2px, #2A9D8F 1px, transparent 0)`, backgroundSize: '40px 40px' }}></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -281,61 +284,89 @@ export default function EventDetailPage() {
                 <span className="text-text-muted flex items-center"><Globe size={16} className="mr-1.5" />{event.region}</span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-6 leading-tight">
+              <h1 className="text-2xl md:text-3xl font-bold text-text-main mb-4 leading-tight">
                 {event.title}
-                <div className="flex flex-wrap gap-4 mt-6">
-                  <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-4 py-2 rounded-2xl border border-teal-100/50 shadow-sm">
-                    <Calendar size={18} className="text-primary" />
-                    <span className="text-sm font-semibold">
-                      {event.sessions.length > 1 
-                        ? `${formatDate(event.sessions[0].date)} — ${formatDate(event.sessions[event.sessions.length-1].date)}`
-                        : formatDate(event.sessions[0]?.date || event.date)}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-4 py-2 rounded-2xl border border-teal-100/50 shadow-sm">
-                    <MapPin size={18} className="text-primary" />
-                    <span className="text-sm font-semibold">{event.location}, {event.country}</span>
-                  </div>
-                </div>
               </h1>
+              
+              <div className="flex flex-wrap gap-3 mt-4 mb-6">
+                <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-teal-100/50 shadow-sm">
+                  <Calendar size={16} className="text-primary" />
+                  <span className="text-xs font-semibold">
+                    {event.sessions && event.sessions.length > 1 
+                      ? `${formatDate(event.sessions[0].date)} — ${formatDate(event.sessions[event.sessions.length-1].date)}`
+                      : formatDate(event.sessions[0]?.date || event.date)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-teal-100/50 shadow-sm">
+                  <MapPin size={16} className="text-primary" />
+                  <span className="text-xs font-semibold">{event.location}, {event.country}</span>
+                </div>
+              </div>
 
               {event.facilitators && event.facilitators.length > 0 && (
-                <div className="flex items-center gap-4 p-4 bg-white/40 rounded-3xl border border-white/60 w-fit mb-8">
-                  <div className="w-12 h-12 bg-teal-100 rounded-2xl flex items-center justify-center text-primary overflow-hidden">
-                    {event.facilitators[0].image_url ? <img src={event.facilitators[0].image_url} alt="" className="w-full h-full object-cover" /> : <Users size={24} />}
+                <div className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl border border-white/60 w-fit mb-6">
+                  <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-primary overflow-hidden">
+                    {event.facilitators[0].image_url ? <img src={event.facilitators[0].image_url} alt="" className="w-full h-full object-cover" /> : <Users size={20} />}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider">Conducted by</p>
-                    <p className="text-lg font-bold text-text-main leading-tight">{event.facilitators[0].name}</p>
+                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Conducted by</p>
+                    <p className="text-base font-bold text-text-main leading-tight">{event.facilitators[0].name}</p>
                   </div>
                 </div>
               )}
             </div>
-
-            {event.status === "completed" && (
-              <div className="space-y-6">
-                <div className="relative aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white group">
-                  {event.image_url ? (
-                    <img src={event.image_url} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  ) : (
-                    <div className="w-full h-full bg-teal-50 flex items-center justify-center text-teal-200"><ImageIcon size={64} /></div>
-                  )}
-                </div>
+            
+            <div className="space-y-4">
+              <div className="relative aspect-video rounded-[1.5rem] overflow-hidden shadow-2xl border-4 border-white group bg-white flex items-center justify-center">
+                {(() => {
+                  const images = Array.isArray(event.image_urls) ? event.image_urls : (event.image_url ? [event.image_url] : []);
+                  if (images.length === 0) return <div className="text-teal-100"><ImageIcon size={48} /></div>;
+                  
+                  return (
+                    <>
+                      <AnimatePresence mode="wait">
+                        <motion.img 
+                          key={activeImageIndex}
+                          src={images[activeImageIndex % images.length]} 
+                          alt={event.title} 
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute inset-0 w-full h-full object-cover" 
+                        />
+                      </AnimatePresence>
+                      
+                      {images.length > 1 && (
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-20">
+                          {images.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setActiveImageIndex(i)}
+                              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                                i === activeImageIndex ? "bg-white w-4" : "bg-white/40 hover:bg-white/60"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-3 gap-16">
-          <div className="lg:col-span-2 space-y-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2 space-y-10">
             <section>
-              <h2 className="text-3xl font-extrabold text-text-main mb-6 flex items-center gap-3">
-                <div className="w-2 h-8 bg-primary rounded-full" />
+              <h2 className="text-xl font-extrabold text-text-main mb-4 flex items-center gap-3">
+                <div className="w-1.5 h-6 bg-primary rounded-full" />
                 Your Transformative Journey
               </h2>
-              <p className="text-xl text-text-muted leading-relaxed font-medium">{event.description}</p>
+              <p className="text-base text-text-muted leading-relaxed font-medium">{event.description}</p>
             </section>
 
             {/* Sessions Roadmap */}
@@ -357,8 +388,6 @@ export default function EventDetailPage() {
                 <div className="absolute left-[27px] top-8 bottom-8 w-1 bg-linear-to-b from-teal-200 via-teal-100 to-transparent rounded-full" />
                 
                 {event.sessions.map((session, idx) => {
-                  // New logic: Can feedback if session has already happened or is happening today
-                  // even if the event status is still "upcoming"
                   const sessionDate = new Date(session.date);
                   const today = new Date();
                   today.setHours(0, 0, 0, 0);
@@ -370,50 +399,47 @@ export default function EventDetailPage() {
                   return (
                     <motion.div 
                       key={session.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: idx * 0.1 }}
-                      className={`relative pl-20 pr-6 py-6 rounded-3xl border transition-all bg-gray-50/30 border-gray-100`}
+                      transition={{ delay: idx * 0.05 }}
+                      className="relative pl-16 pr-6 py-5 rounded-2xl border transition-all bg-gray-50/30 border-gray-100 hover:bg-white hover:shadow-md"
                     >
                       {/* Step Circle */}
-                      <div className={`absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-4 border-white shadow-md flex items-center justify-center z-10 bg-white text-gray-400`}>
-                        <span className="text-xs font-bold">{idx + 1}</span>
+                      <div className={`absolute left-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border-2 border-white shadow-sm flex items-center justify-center z-10 bg-white text-gray-400`}>
+                        <span className="text-[10px] font-bold">{idx + 1}</span>
                       </div>
 
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                          <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">{formatDate(session.date)}</p>
-                          <p className="text-xl font-black text-text-main">
+                          <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-0.5">{formatDate(session.date)}</p>
+                          <p className="text-lg font-black text-text-main leading-tight">
                             {MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
                           </p>
-                          <div className="flex flex-wrap gap-4 mt-2">
+                          <div className="flex flex-wrap gap-4 mt-1">
                             {(session.start_time || session.end_time) && (
-                              <p className="text-sm font-bold text-text-muted flex items-center gap-1.5">
-                                <Clock size={14} /> {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
+                              <p className="text-xs font-bold text-text-muted flex items-center gap-1.5">
+                                <Clock size={12} /> {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
                               </p>
                             )}
                           </div>
-                          <p className="text-sm text-text-muted font-medium mt-2">
-                            {MODULE_DESCRIPTIONS[session.module as keyof typeof MODULE_DESCRIPTIONS] || "The complete interACT journey."}
-                          </p>
                         </div>
 
                         <div className="flex flex-wrap gap-3">
                           {canFeedback ? (
                             <button 
                               onClick={() => { setActiveSession(session); setShowFeedbackForm(true); }}
-                              className="px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-all text-sm font-bold shadow-lg shadow-primary/20 flex items-center gap-2"
+                              className="px-5 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition-all text-xs font-bold shadow-lg shadow-primary/20 flex items-center gap-2"
                             >
-                              <Send size={16} className="fill-white/20" /> Share Feedback
+                              <Send size={14} className="fill-white/20" /> Feedback
                             </button>
                           ) : !session.collect_feedback ? (
-                            <div className="px-4 py-2 bg-white text-gray-400 rounded-xl border border-gray-100 text-sm font-medium">
-                              No feedback required
+                            <div className="px-3 py-1.5 bg-white text-gray-400 rounded-lg border border-gray-100 text-[10px] font-medium">
+                              No feedback
                             </div>
                           ) : (
-                            <div className="px-4 py-2 bg-white text-gray-400 rounded-xl border border-gray-100 text-sm font-medium">
-                              Available after session
+                            <div className="px-3 py-1.5 bg-white text-gray-400 rounded-lg border border-gray-100 text-[10px] font-medium">
+                              Available soon
                             </div>
                           )}
                         </div>
@@ -423,6 +449,62 @@ export default function EventDetailPage() {
                 })}
               </div>
             </section>
+
+            {/* Testimonials Section */}
+            {testimonials && testimonials.length > 0 && (
+              <section className="bg-linear-to-r from-teal-50 to-blue-50 rounded-[2.5rem] p-8 border border-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-teal-200/20 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
+                
+                <div className="flex items-center justify-between mb-8 relative">
+                  <div>
+                    <h2 className="text-xl font-black text-text-main italic mb-1">Impact Echoes</h2>
+                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest opacity-60">Real stories from real participants</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-teal-100">
+                    <Star className="text-amber-400 fill-amber-400" size={12} />
+                    <span className="text-xs font-black text-text-main tracking-tight">Community Love</span>
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6 relative">
+                  {testimonials.map((t, i) => {
+                    const responses = (t.responses as Record<string, string>) || {};
+                    const feedbackText = Object.values(responses).find(v => v && v.length > 10 && isNaN(Number(v)));
+                    return (
+                      <motion.div 
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="bg-white/90 backdrop-blur-md p-6 rounded-[2rem] border border-white shadow-sm flex flex-col justify-between hover:shadow-xl hover:shadow-teal-900/5 transition-all group"
+                      >
+                        <div>
+                          <div className="flex gap-1 mb-4">
+                            {[...Array(5)].map((_, j) => (
+                              <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
+                            ))}
+                          </div>
+                          <p className="text-base text-text-main italic font-medium leading-relaxed mb-6 group-hover:text-primary transition-colors">
+                            "{feedbackText || "A deeply moving and transformative session that brought immense peace and clarity to my day."}"
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-4 border-t border-gray-50 pt-4">
+                          <div className="w-9 h-9 rounded-xl bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-black text-xs shadow-lg shadow-teal-500/20">
+                            {(t.full_name as string || t.first_name as string)?.[0]?.toUpperCase() || 'P'}
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-black text-text-main tracking-tight">
+                              {t.full_name as string || t.first_name as string || 'Anonymous Participant'}
+                            </span>
+                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest opacity-60">Verified Feedback</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </div>
 
           <aside>

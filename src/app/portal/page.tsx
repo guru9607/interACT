@@ -10,7 +10,8 @@ import {
   Settings, 
   ArrowRight,
   Lock,
-  LayoutDashboard
+  LayoutDashboard,
+  Award
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -108,6 +109,14 @@ function PortalContent() {
       link: `/facilitators?secret=${secret}`,
       color: "bg-teal-50 text-teal-600 border-teal-100",
       hoverColor: "hover:border-teal-300 hover:shadow-teal-900/5"
+    },
+    {
+      title: "Certificate Generator",
+      description: "Generate E-Participation and Appreciation certificates for attendees.",
+      icon: <Award size={24} />,
+      link: `/portal/certificates?secret=${secret}`,
+      color: "bg-amber-50 text-amber-600 border-amber-100",
+      hoverColor: "hover:border-amber-300 hover:shadow-amber-900/5"
     },
     {
       title: "Facilitator Guide",

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1358">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#fcf6ba;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b8860b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tealGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f766e;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="guillochePattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <path d="M 0 100 Q 50 0 100 100 T 200 100" fill="none" stroke="#0d9488" stroke-width="0.3" opacity="0.1"/>
+      <path d="M 0 110 Q 50 10 100 110 T 200 110" fill="none" stroke="#0d9488" stroke-width="0.2" opacity="0.08"/>
+      <path d="M 100 0 Q 0 50 100 100 T 100 200" fill="none" stroke="#0d9488" stroke-width="0.1" opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#fffef9"/>
+  <rect width="100%" height="100%" fill="url(#guillochePattern)"/>
+
+  <!-- Border -->
+  <rect x="40" y="40" width="1840" height="1278" fill="none" stroke="url(#goldGradient)" stroke-width="8"/>
+  <rect x="60" y="60" width="1800" height="1238" fill="none" stroke="#1a2f4a" stroke-width="1" opacity="0.3"/>
+  <rect x="80" y="80" width="1760" height="1198" fill="none" stroke="url(#tealGradient)" stroke-width="2"/>
+
+  <!-- Corner Decor -->
+  <g transform="translate(40,40)" fill="url(#goldGradient)">
+    <path d="M 0 0 L 100 0 L 100 10 L 10 10 L 10 100 L 0 100 Z"/>
+    <circle cx="20" cy="20" r="8"/>
+  </g>
+  <g transform="translate(1880,40) rotate(90)" fill="url(#goldGradient)">
+    <path d="M 0 0 L 100 0 L 100 10 L 10 10 L 10 100 L 0 100 Z"/>
+    <circle cx="20" cy="20" r="8"/>
+  </g>
+  <g transform="translate(1880,1318) rotate(180)" fill="url(#goldGradient)">
+    <path d="M 0 0 L 100 0 L 100 10 L 10 10 L 10 100 L 0 100 Z"/>
+    <circle cx="20" cy="20" r="8"/>
+  </g>
+  <g transform="translate(40,1318) rotate(270)" fill="url(#goldGradient)">
+    <path d="M 0 0 L 100 0 L 100 10 L 10 10 L 10 100 L 0 100 Z"/>
+    <circle cx="20" cy="20" r="8"/>
+  </g>
+
+  <!-- Content -->
+  <image x="775" y="140" width="370" height="180" href="[LOGO_BASE64]" id="logoImage"/>
+
+  <text x="960" y="440" text-anchor="middle" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#1a2f4a" letter-spacing="16">CERTIFICATE</text>
+  <text x="960" y="500" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#0d9488" letter-spacing="12" font-weight="bold">OF EXCELLENCE &amp; PARTICIPATION</text>
+
+  <g opacity="0.05" transform="translate(960, 750)">
+    <circle r="250" fill="none" stroke="#0d9488" stroke-width="1"/>
+    <circle r="240" fill="none" stroke="#0d9488" stroke-width="0.5" stroke-dasharray="5,5"/>
+  </g>
+
+  <text x="960" y="620" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#5a6a7a" font-style="italic">This prestigious recognition is proudly presented to</text>
+  
+  <text x="960" y="740" text-anchor="middle" font-family="Georgia, serif" font-size="96" font-weight="bold" fill="#1a2f4a" id="participantName">[Participant Name]</text>
+  <line x1="400" y1="770" x2="1520" y2="770" stroke="url(#goldGradient)" stroke-width="2"/>
+
+  <text x="960" y="860" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#5a6a7a">for active participation and completion of the transformative program</text>
+  <text x="960" y="950" text-anchor="middle" font-family="Georgia, serif" font-size="52" font-weight="bold" fill="#0d9488" id="eventTitle">[Program Title]</text>
+
+  <text x="960" y="1050" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5a6a7a">Awarded on this day</text>
+  <text x="960" y="1100" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="bold" fill="#1a2f4a" id="eventDate">[Date]</text>
+
+  <!-- Signatures -->
+  <g transform="translate(640, 1220)">
+    <image x="-100" y="-80" width="200" height="80" href="[SIG_1_IMAGE]" />
+    <line x1="-180" y1="0" x2="180" y2="0" stroke="#1a2f4a" stroke-width="1"/>
+    <text x="0" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#1a2f4a" font-weight="bold">[Sig 1 Name]</text>
+    <text x="0" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#6a7a8a">[Sig 1 Role]</text>
+  </g>
+
+  <g transform="translate(1280, 1220)">
+    <image x="-100" y="-80" width="200" height="80" href="[SIG_2_IMAGE]" />
+    <line x1="-180" y1="0" x2="180" y2="0" stroke="#1a2f4a" stroke-width="1"/>
+    <text x="0" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#1a2f4a" font-weight="bold">[Sig 2 Name]</text>
+    <text x="0" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#6a7a8a">[Sig 2 Role]</text>
+  </g>
+
+  <text x="960" y="1330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#9aa5b0" opacity="0.6">Validation ID: [CERT-ID]</text>
+</svg>
