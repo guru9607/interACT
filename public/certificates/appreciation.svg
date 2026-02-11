@@ -2,9 +2,9 @@
   <defs>
     <linearGradient id="premiumGold" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#bf953f;stop-opacity:1" />
-      <stop offset="25%" style="stop-color:#fcf6ba;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#d4af37;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#b38728;stop-opacity:1" />
-      <stop offset="75%" style="stop-color:#fcf6ba;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#d4af37;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#aa771c;stop-opacity:1" />
     </linearGradient>
     <radialGradient id="sunburst" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
@@ -33,16 +33,16 @@
     <circle cx="0" cy="0" r="5" fill="url(#premiumGold)"/>
   </g>
 
-  <text x="960" y="600" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#5a6a7a" font-style="italic">This honorary distinction is bestowed upon</text>
+  <text x="960" y="600" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#3d4a59" font-style="italic">This honorary distinction is bestowed upon</text>
   
   <text x="960" y="730" text-anchor="middle" font-family="Georgia, serif" font-size="96" font-weight="bold" fill="#1a2f4a" id="participantName">[Participant Name]</text>
 
-  <text x="960" y="820" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#5a6a7a">In profound recognition of exceptional contribution and service to</text>
+  <text x="960" y="820" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#3d4a59">In profound recognition of exceptional contribution and service to</text>
   <text x="960" y="910" text-anchor="middle" font-family="Georgia, serif" font-size="58" font-weight="bold" fill="#1a2f4a" id="eventTitle">[Program Title]</text>
 
-  <text x="960" y="970" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#bf953f" font-style="italic">"Empowering the vision of a mindful global community"</text>
+  <text x="960" y="970" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#96722d" font-style="italic">"Empowering the vision of a mindful global community"</text>
 
-  <text x="960" y="1060" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5a6a7a">Given on this illustrious day</text>
+  <text x="960" y="1060" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#3d4a59">Given on this illustrious day</text>
   <text x="960" y="1110" text-anchor="middle" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#1a2f4a" id="eventDate">[Date]</text>
 
   <!-- Signatures -->
@@ -50,14 +50,14 @@
     <image x="-100" y="-80" width="200" height="80" href="[SIG_1_IMAGE]" />
     <line x1="-180" y1="0" x2="180" y2="0" stroke="url(#premiumGold)" stroke-width="2"/>
     <text x="0" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#1a2f4a" font-weight="bold">[Sig 1 Name]</text>
-    <text x="0" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#6a7a8a">[Sig 1 Role]</text>
+    <text x="0" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#4f5e6e">[Sig 1 Role]</text>
   </g>
 
   <g transform="translate(1280, 1220)">
     <image x="-100" y="-80" width="200" height="80" href="[SIG_2_IMAGE]" />
     <line x1="-180" y1="0" x2="180" y2="0" stroke="url(#premiumGold)" stroke-width="2"/>
     <text x="0" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#1a2f4a" font-weight="bold">[Sig 2 Name]</text>
-    <text x="0" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#6a7a8a">[Sig 2 Role]</text>
+    <text x="0" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#4f5e6e">[Sig 2 Role]</text>
   </g>
 
   <text x="960" y="1335" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="url(#premiumGold)" font-weight="bold">ACCREDITATION NO: [CERT-ID]</text>
