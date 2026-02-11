@@ -188,6 +188,37 @@ function CertificatesContent() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-text-main flex items-center gap-2">
+                    <ShieldCheck size={16} className="text-teal-600" />
+                    Certificate Type
+                  </label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      onClick={() => setFormData({ ...formData, type: 'participation' })}
+                      className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                        formData.type === 'participation'
+                        ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/20"
+                        : "bg-gray-50 text-text-muted border-gray-100 hover:bg-white hover:border-teal-200"
+                      }`}
+                    >
+                      <CheckCircle2 size={16} className={formData.type === 'participation' ? "opacity-100" : "opacity-0"} />
+                      Participation
+                    </button>
+                    <button
+                      onClick={() => setFormData({ ...formData, type: 'appreciation' })}
+                      className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                        formData.type === 'appreciation'
+                        ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/20"
+                        : "bg-gray-50 text-text-muted border-gray-100 hover:bg-white hover:border-teal-200"
+                      }`}
+                    >
+                      <Award size={16} className={formData.type === 'appreciation' ? "opacity-100" : "opacity-0"} />
+                      Appreciation
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-text-main flex items-center gap-2">
                     <CalendarIcon size={16} className="text-teal-600" />
                     Presentation Date
                   </label>
