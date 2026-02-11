@@ -137,16 +137,17 @@ function CertificatesContent() {
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-text-main flex items-center gap-2">
                     <User size={16} className="text-teal-600" />
-                    Recipient Full Name
+                    {formData.type === 'participation' ? "Recipient Full Name" : "Keynote Speaker Name"}
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Enter student's full name"
+                    placeholder={formData.type === 'participation' ? "Enter student's full name" : "Enter speaker's full name"}
                     className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none text-lg font-medium"
                   />
                 </div>
+
 
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-text-main flex items-center gap-2">
@@ -273,13 +274,15 @@ function CertificatesContent() {
                       OF {formData.type.toUpperCase()}
                     </div>
                     
-                    <div className="text-[0.6vw] italic mb-4 text-gray-400">This recognition is proudly presented to</div>
+                    <div className="text-[0.6vw] italic mb-4 text-gray-400">
+                      {formData.type === 'participation' ? "This recognition is proudly presented to" : "This honorary distinction is bestowed upon the Keynote Speaker"}
+                    </div>
                     <div className="text-[2.5vw] font-serif font-bold mb-1 h-[4vw] text-gray-800">
-                      {formData.name || "Recipient Name"}
+                      {formData.name || (formData.type === 'participation' ? "Recipient Name" : "Speaker Name")}
                     </div>
                     <div className={`w-1/2 h-0.5 mx-auto mb-6 bg-teal-600/30`} />
                     <div className="text-[0.6vw] mb-4 text-gray-400">
-                      {formData.type === 'participation' ? "for completion of the program" : "In recognition of outstanding contribution to"}
+                      {formData.type === 'participation' ? "for completion of the program" : "In profound recognition of contribution as Keynote Speaker at"}
                     </div>
                     <div className={`text-[1.5vw] font-serif font-bold mb-8 text-teal-700`}>
                       {formData.eventName || "Program Title"}
