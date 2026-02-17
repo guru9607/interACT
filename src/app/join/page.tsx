@@ -134,7 +134,7 @@ export default function JoinPage() {
             Global Events
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-main mb-6 tracking-tight">
-            Join the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">Movement</span>
+            Be the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">Change</span>
           </h1>
           <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed">
             Connect with like-minded youth, discover your inner strength, and make a difference. 
@@ -241,7 +241,7 @@ export default function JoinPage() {
           {!loading && pastEvents.length > 0 && (
             <div className="pt-20">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-text-main mb-4">Past Impacts</h2>
+                <h2 className="text-3xl font-bold text-text-main mb-4">Glimpse of Events</h2>
                 <p className="text-text-muted">Glimpses into our previous gatherings and milestones</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
