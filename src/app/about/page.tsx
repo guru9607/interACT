@@ -46,7 +46,7 @@ export default function AboutPage() {
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Good Health & Well-being</h4>
               <div className="mb-4">
-                <p className="text-emerald-700 font-medium text-sm mb-2">"Awareness is the seed of Health and Well-being"</p>
+                <p className="text-emerald-700 font-medium text-sm mb-2">"Awareness of the core goodness is a seed that produces a healthy mindset which actively helps to achieve good health and holistic wellbeing."</p>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   <strong>Target 3.4:</strong> By 2030, reduce by one third premature mortality from non-communicable diseases through prevention and treatment and promote mental health and well-being.
                 </p>
@@ -64,7 +64,7 @@ export default function AboutPage() {
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Peace, Justice & Strong Institutions</h4>
               <div className="mb-4">
-                <p className="text-sky-700 font-medium text-sm mb-2">"Contemplation allows peace from within"</p>
+                <p className="text-sky-700 font-medium text-sm mb-2">"Contemplation allows the deep experience of the innate qualities of Peace, Love, Happiness, etc which changes the negative cycle of thoughts to a positive cycle of thoughts allowing a positive and a peaceful mindset to make unbiased, righteous and compassionate decisions."</p>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   <strong>Target 16.1:</strong> Significantly reduce all forms of violence and related death rates everywhere. We cultivate "Peace from Within" as the foundation for societal peace.
                 </p>
@@ -82,7 +82,7 @@ export default function AboutPage() {
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Partnerships for the Goals</h4>
               <div className="mb-4">
-                <p className="text-indigo-700 font-medium text-sm mb-2">"Transformative silence is the key for partnerships"</p>
+                <p className="text-indigo-700 font-medium text-sm mb-2">"Transformative Silence allows acceptance, appreciation and attention in listening which is the key for collaboration, cooperation and partnership."</p>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   <strong>Target 17.17:</strong> Encourage and promote effective public, public-private and civil society partnerships. We unite across borders to prioritize youth mental health.
                 </p>
