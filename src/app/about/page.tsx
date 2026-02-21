@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Globe, Brain, Heart, Leaf, Target, BookOpen, ExternalLink, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, Globe, Brain, Heart, Leaf, BookOpen, ExternalLink, ShieldCheck, Users } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -21,7 +20,7 @@ export default function AboutPage() {
             you need an <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">unchanging core.</span>
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-10">
-            interACT bridges the gap between inner resilience and global action. We provide youth with the evidence-based cognitive tools needed to achieve the Sustainable Development Goals.
+            interACT bridges the gap between inner resilience and global action. We provide youth with the evidence-based cognitive tools needed to achieve the United Nations Sustainable Development Goals.
           </p>
         </div>
       </section>
@@ -33,7 +32,7 @@ export default function AboutPage() {
             <h2 className="text-sm font-bold text-blue-600 tracking-wider uppercase mb-3">Strategic Impact</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900">Targeting the Goals</h3>
             <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Our curriculum is designed to support three specific Sustainable Development Goals, fostering the human capacity needed for sustainable action.
+              Our curriculum is designed to support three specific United Nations Sustainable Development Goals, fostering the human capacity needed for sustainable action.
             </p>
           </div>
 
@@ -46,7 +45,7 @@ export default function AboutPage() {
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Good Health & Well-being</h4>
               <div className="mb-4">
-                <p className="text-emerald-700 font-medium text-sm mb-2">"Awareness of the core goodness is a seed that produces a healthy mindset which actively helps to achieve good health and holistic wellbeing."</p>
+                <p className="text-emerald-700 font-medium text-sm mb-2">&ldquo;Awareness of the core goodness is a seed that produces a healthy mindset which actively helps to achieve good health and holistic wellbeing.&rdquo;</p>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   <strong>Target 3.4:</strong> By 2030, reduce by one third premature mortality from non-communicable diseases through prevention and treatment and promote mental health and well-being.
                 </p>
@@ -64,9 +63,9 @@ export default function AboutPage() {
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Peace, Justice & Strong Institutions</h4>
               <div className="mb-4">
-                <p className="text-sky-700 font-medium text-sm mb-2">"Contemplation allows the deep experience of the innate qualities of Peace, Love, Happiness, etc which changes the negative cycle of thoughts to a positive cycle of thoughts allowing a positive and a peaceful mindset to make unbiased, righteous and compassionate decisions."</p>
+                <p className="text-sky-700 font-medium text-sm mb-2">&ldquo;Contemplation allows the deep experience of the innate qualities of Peace, Love, Happiness, etc which changes the negative cycle of thoughts to a positive cycle of thoughts allowing a positive and a peaceful mindset to make unbiased, righteous and compassionate decisions.&rdquo;</p>
                 <p className="text-slate-600 text-sm leading-relaxed">
-                  <strong>Target 16.1:</strong> Significantly reduce all forms of violence and related death rates everywhere. We cultivate "Peace from Within" as the foundation for societal peace.
+                  <strong>Target 16.1:</strong> Significantly reduce all forms of violence and related death rates everywhere. We cultivate &ldquo;Peace from Within&rdquo; as the foundation for societal peace.
                 </p>
               </div>
               <div className="text-xs text-sky-800 font-medium bg-sky-100/50 p-2 rounded-lg">
@@ -82,7 +81,7 @@ export default function AboutPage() {
               </div>
               <h4 className="text-xl font-bold text-slate-900 mb-3">Partnerships for the Goals</h4>
               <div className="mb-4">
-                <p className="text-indigo-700 font-medium text-sm mb-2">"Transformative Silence allows acceptance, appreciation and attention in listening which is the key for collaboration, cooperation and partnership."</p>
+                <p className="text-indigo-700 font-medium text-sm mb-2">&ldquo;Transformative Silence allows acceptance, appreciation and attention in listening which is the key for collaboration, cooperation and partnership.&rdquo;</p>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   <strong>Target 17.17:</strong> Encourage and promote effective public, public-private and civil society partnerships. We unite across borders to prioritize youth mental health.
                 </p>
@@ -113,7 +112,7 @@ export default function AboutPage() {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-bold text-slate-900">1 in 7 Adolescents</h4>
-                    <p className="text-slate-600 text-sm">Experience a mental disorder globally (WHO, 2021). Without mental health (SDG 3), sustainable development is impossible.</p>
+                    <p className="text-slate-600 text-sm">Experience a mental disorder globally (WHO, 2021). Without mental health (UN SDG 3), sustainable development is impossible.</p>
                   </div>
                 </div>
 
@@ -123,7 +122,7 @@ export default function AboutPage() {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-bold text-slate-900">59% Eco-Anxiety</h4>
-                    <p className="text-slate-600 text-sm">Of youth are "extremely worried" about climate change (Lancet, 2021). This paralysis hinders climate action; inner resilience is the key to unlocking it.</p>
+                    <p className="text-slate-600 text-sm">Of youth are &ldquo;extremely worried&rdquo; about climate change (Lancet, 2021). This paralysis hinders climate action; inner resilience is the key to unlocking it.</p>
                   </div>
                 </div>
               </div>
@@ -132,7 +131,7 @@ export default function AboutPage() {
             <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
                <h3 className="text-xl font-bold text-slate-900 mb-6">Methodology & Delivery</h3>
                <p className="text-slate-600 mb-6 text-sm leading-relaxed">
-                 interACT is delivered through a <strong>15-lesson cognitive curriculum</strong> (~7 hours). Participants utilize practical tools like <em>Thought Pattern Trackers</em> and <em>Somatic Awareness</em> to build self-regulation skills, directly contributing to SDG 3.4.
+                 interACT is delivered through a <strong>15-lesson cognitive curriculum</strong> (~7 hours). Participants utilize practical tools like <em>Thought Pattern Trackers</em> and <em>Somatic Awareness</em> to build self-regulation skills, directly contributing to UN SDG 3.4.
                </p>
                
                 <div className="grid grid-cols-2 gap-4">
@@ -186,13 +185,13 @@ export default function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-xs">
             <a href="https://sdgs.un.org/goals/goal3" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors flex items-center gap-2">
-              <ExternalLink size={10} /> WHO (2021). Adolescent Mental Health Fact Sheet. (SDG 3)
+              <ExternalLink size={10} /> WHO (2021). Adolescent Mental Health Fact Sheet. (UN SDG 3)
             </a>
             <a href="https://mgiep.unesco.org/rethinking-learning" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors flex items-center gap-2">
-              <ExternalLink size={10} /> UNESCO MGIEP (2020). Rethinking Learning: SEL for Peace. (SDG 16)
+              <ExternalLink size={10} /> UNESCO MGIEP (2020). Rethinking Learning: SEL for Peace. (UN SDG 16)
             </a>
             <a href="https://www.unicef.org/media/108161/file/SOWC-2021-Policy-Brief-Child-Adolescent-Mental-Health.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors flex items-center gap-2">
-              <ExternalLink size={10} /> UNICEF (2021). Policy Brief: Child and Adolescent Mental Health. (SDG 17)
+              <ExternalLink size={10} /> UNICEF (2021). Policy Brief: Child and Adolescent Mental Health. (UN SDG 17)
             </a>
             <a href="https://r.jordan.im/download/mindfulness/khoury2015.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors flex items-center gap-2">
               <ExternalLink size={10} /> Khoury et al. (2015). Mindfulness-based stress reduction meta-analysis.

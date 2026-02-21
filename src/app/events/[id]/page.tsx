@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown, Award } from "lucide-react";
+import { useParams } from "next/navigation";
+import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import FeedbackForm from "@/components/FeedbackForm";
 import { motion, AnimatePresence } from "framer-motion";
 import { countries } from "@/lib/countries";
-import { MODULE_LABELS, MODULE_DESCRIPTIONS, type ACTModule } from "@/lib/constants";
+import { MODULE_LABELS, type ACTModule } from "@/lib/constants";
 
 // Facilitator Type
 type Facilitator = {
@@ -50,14 +50,13 @@ type Event = {
 
 export default function EventDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [activeSession, setActiveSession] = useState<Session | null>(null);
   const [testimonials, setTestimonials] = useState<Record<string, unknown>[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [showCalendarMenu, setShowCalendarMenu] = useState(false);
   const [regCountry, setRegCountry] = useState("");
   const [regPhone, setRegPhone] = useState("");
@@ -135,7 +134,7 @@ export default function EventDetailPage() {
         
         if (globalFeedback) {
           const feedbackToShow = globalFeedback.filter(feedback => {
-            const responses = (feedback.responses as Record<string, any>) || {};
+            const responses = (feedback.responses as Record<string, unknown>) || {};
             // Robust check for 4 or 5 star ratings (handle both string and number)
             return Object.values(responses).some(val => 
               val == 5 || val == 4 || val === '5' || val === '4'
@@ -241,8 +240,8 @@ export default function EventDetailPage() {
       const { error: supabaseError } = await supabase.from('registrations').insert([registrationData]);
       if (supabaseError) throw supabaseError;
       setSubmitted(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to submit registration.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to submit registration.');
     }
   };
 
@@ -250,7 +249,7 @@ export default function EventDetailPage() {
   if (!event) return <div className="min-h-screen flex items-center justify-center text-center"><h1 className="text-2xl font-bold mb-4">Event Not Found</h1><Link href="/join" className="text-primary hover:underline">← Back to Events</Link></div>;
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen ">
       {/* Hero Section */}
       <section className="relative py-8 bg-linear-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle at 2px 2px, #2A9D8F 1px, transparent 0)`, backgroundSize: '40px 40px' }}></div>
@@ -323,31 +322,52 @@ export default function EventDetailPage() {
                   if (images.length === 0) return <div className="text-teal-100"><ImageIcon size={48} /></div>;
                   
                   return (
-                    <>
-                      <AnimatePresence mode="wait">
-                        <motion.img 
-                          key={activeImageIndex}
-                          src={images[activeImageIndex % images.length]} 
-                          alt={event.title} 
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="absolute inset-0 w-full h-full object-cover" 
-                        />
-                      </AnimatePresence>
+                   <>
+                     <AnimatePresence mode="wait">
+                       <motion.img 
+                         key={activeImageIndex}
+                         src={images[activeImageIndex % images.length]} 
+                         alt={event.title} 
+                         initial={{ opacity: 0 }}
+                         animate={{ opacity: 1 }}
+                         exit={{ opacity: 0 }}
+                         drag={images.length > 1 ? "x" : false}
+                         dragConstraints={{ left: 0, right: 0 }}
+                         dragElastic={0.3}
+                         onDragEnd={(_, info) => {
+                           if (info.offset.x < -50) setActiveImageIndex((prev) => (prev + 1) % images.length);
+                           else if (info.offset.x > 50) setActiveImageIndex((prev) => (prev - 1 + images.length) % images.length);
+                         }}
+                         className="absolute inset-0 w-full h-full object-cover cursor-grab active:cursor-grabbing" 
+                       />
+                     </AnimatePresence>
                       
                       {images.length > 1 && (
-                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-20">
-                          {images.map((_, i) => (
-                            <button
-                              key={i}
-                              onClick={() => setActiveImageIndex(i)}
-                              className={`w-1.5 h-1.5 rounded-full transition-all ${
-                                i === activeImageIndex ? "bg-white w-4" : "bg-white/40 hover:bg-white/60"
-                              }`}
-                            />
-                          ))}
-                        </div>
+                        <>
+                          <button
+                            onClick={() => setActiveImageIndex((prev) => (prev - 1 + images.length) % images.length)}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                          >
+                            <ChevronLeft size={18} />
+                          </button>
+                          <button
+                            onClick={() => setActiveImageIndex((prev) => (prev + 1) % images.length)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                          >
+                            <ChevronRight size={18} />
+                          </button>
+                          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-20">
+                            {images.map((_, i) => (
+                              <button
+                                key={i}
+                                onClick={() => setActiveImageIndex(i)}
+                                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                                  i === activeImageIndex ? "bg-white w-4" : "bg-white/40 hover:bg-white/60"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </>
                       )}
                     </>
                   );
@@ -485,7 +505,7 @@ export default function EventDetailPage() {
                             ))}
                           </div>
                           <p className="text-base text-text-main italic font-medium leading-relaxed mb-6 group-hover:text-primary transition-colors">
-                            "{feedbackText || "A deeply moving and transformative session that brought immense peace and clarity to my day."}"
+                            &ldquo;{feedbackText || "A deeply moving and transformative session that brought immense peace and clarity to my day."}&rdquo;
                           </p>
                         </div>
                         <div className="flex items-center gap-4 border-t border-gray-50 pt-4">
@@ -558,7 +578,7 @@ export default function EventDetailPage() {
                       <div className="w-20 h-20 bg-teal-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-teal-600 shadow-inner">
                         <CheckCircle2 size={40} />
                       </div>
-                      <h4 className="text-2xl font-black text-text-main mb-2 tracking-tight">You're Registered!</h4>
+                      <h4 className="text-2xl font-black text-text-main mb-2 tracking-tight">You&apos;re Registered!</h4>
                       <p className="text-text-muted font-medium mb-8">Ready to start your journey? Check your email for details.</p>
                       
                       <div className="space-y-4">
