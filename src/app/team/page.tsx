@@ -216,25 +216,22 @@ export default function TeamPage() {
                     <div className="h-px flex-1 bg-gradient-to-l from-teal-100 to-transparent"></div>
                     <h2 className="text-2xl md:text-3xl font-bold text-text-main whitespace-nowrap">Global Ambassadors</h2>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {ambassadors.map((person) => (
                     <div 
                       key={person.id} 
                       onClick={() => openModal(person)}
-                      className="group flex flex-col items-center text-center p-4 bg-white rounded-2xl border border-gray-100 hover:border-teal-100 hover:shadow-lg transition-all cursor-pointer"
+                      className="group flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 hover:border-teal-100 hover:shadow-lg transition-all cursor-pointer"
                     >
-                      <div className="relative w-20 h-20 mb-3 rounded-xl overflow-hidden bg-teal-50 aspect-square ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform duration-300">
-                        <Image
-                          src={person.image_url || getInitialsAvatar(person.name)}
-                          alt={person.name}
-                          fill
-                          className="object-cover object-[center_20%]"
-                        />
+                      <div className="w-2 h-2 rounded-full bg-teal-400 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-bold text-text-main truncate group-hover:text-primary transition-colors">{person.name}</h4>
+                        {person.country && (
+                          <div className="flex items-center text-xs text-text-muted font-medium mt-0.5">
+                            <MapPin size={12} className="mr-1 flex-shrink-0" /> {person.country}
+                          </div>
+                        )}
                       </div>
-                      <h4 className="text-sm font-bold text-text-main mb-0.5 group-hover:text-primary transition-colors">{person.name}</h4>
-{/* <div className="flex items-center text-[10px] text-text-muted font-bold">
-                         <MapPin size={8} className="mr-1" /> {person.country}
-                      </div> */}
                     </div>
                   ))}
                 </div>

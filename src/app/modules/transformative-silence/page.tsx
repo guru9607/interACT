@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Download, CheckCircle, Clock, Target } from "lucide-react";
+import { ArrowLeft, CheckCircle, Clock, Target } from "lucide-react";
 
 const steps = [
   {
@@ -234,10 +234,10 @@ export default function TransformativeSilenceModule() {
                           {step.activity.type}
                         </span>
                       </div>
-                      <button className="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-2 whitespace-nowrap">
+                      {/* <button className="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors flex items-center gap-2 whitespace-nowrap">
                         <Download size={16} />
                         Download
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
