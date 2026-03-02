@@ -9,3 +9,11 @@ const supabaseUrl = typeof window !== 'undefined'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export function proxyImageUrl(url: string): string {
+  const realUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (typeof window !== 'undefined' && realUrl && url.startsWith(realUrl)) {
+    return url.replace(realUrl, `${window.location.origin}/supabase-proxy`);
+  }
+  return url;
+}

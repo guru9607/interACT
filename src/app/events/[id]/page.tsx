@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { supabase, proxyImageUrl } from "@/lib/supabase";
 import FeedbackForm from "@/components/FeedbackForm";
 import { motion, AnimatePresence } from "framer-motion";
 import { countries } from "@/lib/countries";
@@ -305,7 +305,7 @@ export default function EventDetailPage() {
               {event.facilitators && event.facilitators.length > 0 && (
                 <div className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl border border-white/60 w-fit mb-6">
                   <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-primary overflow-hidden">
-                    {event.facilitators[0].image_url ? <img src={event.facilitators[0].image_url} alt="" className="w-full h-full object-cover" /> : <Users size={20} />}
+                    {event.facilitators[0].image_url ? <img src={proxyImageUrl(event.facilitators[0].image_url)} alt="" className="w-full h-full object-cover" /> : <Users size={20} />}
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Conducted by</p>
@@ -326,7 +326,7 @@ export default function EventDetailPage() {
                      <AnimatePresence mode="wait">
                        <motion.img 
                          key={activeImageIndex}
-                         src={images[activeImageIndex % images.length]} 
+                         src={proxyImageUrl(images[activeImageIndex % images.length])} 
                          alt={event.title} 
                          initial={{ opacity: 0 }}
                          animate={{ opacity: 1 }}

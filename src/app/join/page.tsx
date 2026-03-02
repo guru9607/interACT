@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Calendar, MapPin, Clock, Globe, ChevronRight, Image as ImageIcon } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabase, proxyImageUrl } from "@/lib/supabase";
 
 // Event Data Type
 type Event = {
@@ -251,7 +251,7 @@ export default function JoinPage() {
                       <div className="aspect-[4/3] relative overflow-hidden bg-gray-100">
                         {event.image_url ? (
                           <img 
-                            src={event.image_url} 
+                            src={proxyImageUrl(event.image_url)} 
                             alt={event.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
