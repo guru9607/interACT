@@ -2,14 +2,11 @@
 
 import Link from "next/link";
 
-export function WebsiteGuideContent({ secretQuery }: { secretQuery: string }) {
-  const q = secretQuery;
-
+export const WebsiteGuideContent = () => {
   return (
     <div className="space-y-8 text-text-muted text-sm leading-relaxed">
       <p className="text-xs font-semibold uppercase tracking-wide text-slate-700">
-        Internal tools · Staff secret required · Keep links bookmarked with your session
-        secret when testing
+        Internal tools · Sign in at the staff portal · Facilitators and core team only
       </p>
 
       <section className="rounded-2xl border border-amber-200 bg-amber-50/50 p-6">
@@ -19,7 +16,7 @@ export function WebsiteGuideContent({ secretQuery }: { secretQuery: string }) {
         <p className="mb-2">
           The full ACT arc in one workshop (timings and spoken prompts) lives at{" "}
           <Link
-            href={`/facilitator-guide/three-hour-program${secretQuery}`}
+            href="/facilitator-guide/three-hour-program"
             className="text-teal-700 font-semibold underline"
           >
             /facilitator-guide/three-hour-program
@@ -35,13 +32,13 @@ export function WebsiteGuideContent({ secretQuery }: { secretQuery: string }) {
       <section className="rounded-2xl border border-teal-100 bg-teal-50/40 p-6">
         <h2 className="text-lg font-bold text-text-main mb-3">Staff Portal</h2>
         <p>
-          Entry point after login:{" "}
-          <Link href={`/portal${q}`} className="text-teal-700 font-semibold underline">
+          Entry point:{" "}
+          <Link href="/portal" className="text-teal-700 font-semibold underline">
             /portal
           </Link>
-          . Use the shared staff secret key (stored in this browser after first success).
-          From here you open Event Management, Facilitator Registration, Certificates,
-          this Facilitator Guide, and the public Join page.
+          . Sign in with email and password (core team promotes facilitators in Supabase).
+          From here you open Event Management, facilitator intake, certificates, this
+          Facilitator Guide, and the public Join page.
         </p>
       </section>
 
@@ -49,27 +46,27 @@ export function WebsiteGuideContent({ secretQuery }: { secretQuery: string }) {
         <h2 className="text-lg font-bold text-text-main mb-3">Event Management</h2>
         <p className="mb-2">
           <Link
-            href={`/events-dashboard${q}`}
+            href="/events-dashboard"
             className="text-teal-700 font-semibold underline"
           >
             /events-dashboard
           </Link>{" "}
-          — Create and edit events; set country (timezone &amp; phone dial codes);
-          add sessions; choose{" "}
-          <strong className="text-text-main">ACT module</strong> (Awareness,
-          Contemplation, or Transformative Silence) so participant feedback forms match
-          what you taught. Toggle feedback collection and certificates per session when
-          needed.
+          — Create and edit events; set country (timezone &amp; phone dial codes); add
+          sessions; choose{" "}
+          <strong className="text-text-main">ACT module</strong> (Awareness, Contemplation,
+          or Transformative Silence) so participant feedback forms match what you taught.
+          Toggle feedback collection and certificates per session when needed. Facilitators
+          manage events they created; core team sees all events.
         </p>
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Facilitator Registration</h2>
+        <h2 className="text-lg font-bold text-text-main mb-3">Facilitator intake</h2>
         <p>
-          <Link href={`/facilitators${q}`} className="text-teal-700 font-semibold underline">
+          <Link href="/facilitators" className="text-teal-700 font-semibold underline">
             /facilitators
           </Link>{" "}
-          — Register or update facilitator profiles per your regional process.
+          — Public application form for new facilitators (share the link as needed).
         </p>
       </section>
 
@@ -96,9 +93,8 @@ export function WebsiteGuideContent({ secretQuery }: { secretQuery: string }) {
         <h2 className="text-lg font-bold text-text-main mb-3">Feedback &amp; data</h2>
         <p>
           After sessions, participants submit module-specific reflections from the event
-          flow. Coordinators use dashboard filters and CSV exports (see Event Management
-          reporting areas) for review—ensure the module on the event record matches your
-          room delivery.
+          flow. Coordinators use dashboard filters and CSV exports for review—ensure the
+          module on the event record matches your room delivery.
         </p>
       </section>
 
@@ -108,12 +104,10 @@ export function WebsiteGuideContent({ secretQuery }: { secretQuery: string }) {
           Use the Facilitator Guide index for{" "}
           <strong className="text-text-main">Awareness</strong>,{" "}
           <strong className="text-text-main">Contemplation</strong>, and{" "}
-          <strong className="text-text-main">Transformative Silence</strong> delivery
-          detail; use this page for site navigation. Always enter via Portal so your
-          <code className="mx-1 rounded bg-gray-100 px-1 text-xs">secret</code> query
-          parameter is attached to internal links when you copy URLs for testing.
+          <strong className="text-text-main">Transformative Silence</strong> delivery detail;
+          use this page for site navigation.
         </p>
       </section>
     </div>
   );
-}
+};

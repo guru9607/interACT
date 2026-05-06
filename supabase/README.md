@@ -8,6 +8,17 @@ This folder is how we **version and document** Postgres/Supabase changes in a pr
 |------|---------|
 | `migrations/` | **Authoritative forward changes.** Each file is one logical change, applied in order on hosted Supabase (or local). |
 | `snapshots/schema-reference.sql` | **Human-readable full picture** of `public` tables for developers, code review, and AI context. Updated when the live schema changes. |
+| `scripts/` | **Optional manual SQL** (role promotion, backfills). Not applied automatically — run in Dashboard SQL editor when needed. |
+
+## Staff authentication (Next.js app)
+
+1. Apply migrations **in order** on your Supabase project (SQL Editor): **`migrations/20260507100000_events_created_by_auth_rls.sql`**, then **`migrations/20260508120000_teams_email_and_profile_role_from_roster.sql`** — **or**, if the first file is already applied and you prefer not to rely on the migration filename, paste **`scripts/teams-email-and-roster-profile.sql`** once (same SQL). The latter adds optional **`teams.email`** and updates **`handle_new_user`** (signup → **`facilitator`** when email matches **`facilitators`** or **`teams`**).
+2. In **Authentication → URL configuration**, add redirect URLs:
+   - Site URL (production): `https://your-domain.com`
+   - Redirect allow list: `https://your-domain.com/auth/callback` and local dev `http://localhost:3000/auth/callback` (adjust port).
+3. **`handle_new_user`** creates **`profiles`**. Role defaults to **`participant`** unless the signup email matches **`facilitators.email`** or **`teams.email`** → **`facilitator`** (and links **`user_id`** on those rows when still empty). Core team should set **`teams.email`** per row (see **`scripts/set-teams-roster-email.sql`**). Promote **`admin`** manually via **`scripts/promote-user-to-staff.sql`**.
+
+Legacy **`NEXT_PUBLIC_DASHBOARD_SECRET`** is no longer used by the app once this migration is live — rely on Supabase Auth + `profiles.role`.
 
 ## Workflow (recommended)
 

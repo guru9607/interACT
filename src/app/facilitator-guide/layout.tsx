@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { FacilitatorGate } from "@/components/facilitator-guide/FacilitatorGate";
 
 export default function FacilitatorGuideRootLayout({
   children,
@@ -13,7 +14,7 @@ export default function FacilitatorGuideRootLayout({
         </div>
       }
     >
-      {children}
+      <FacilitatorGate>{children}</FacilitatorGate>
     </Suspense>
   );
 }

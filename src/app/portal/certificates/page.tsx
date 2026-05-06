@@ -1,66 +1,52 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { 
-  Award, 
-  User, 
-  Calendar as CalendarIcon, 
-  MapPin, 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Award,
+  User,
+  Calendar as CalendarIcon,
   ArrowLeft,
   Download,
   Loader2,
   CheckCircle2,
   FileText,
-  Search,
-  ShieldCheck
+  ShieldCheck,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { generateCertificate } from "@/lib/certificate";
-
-const DASHBOARD_SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET;
+import { useStaffAuth } from "@/hooks/useStaffAuth";
 
 interface CertificateFormData {
   name: string;
   eventName: string;
   date: string;
-  type: 'participation' | 'appreciation';
+  type: "participation" | "appreciation";
 }
 
 export default function CertificatesPortal() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50">Loading...</div>}>
-      <CertificatesContent />
-    </Suspense>
-  );
-}
-
-function CertificatesContent() {
-  const searchParams = useSearchParams();
+  const auth = useStaffAuth();
   const router = useRouter();
-  const secret = searchParams.get("secret");
-  const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const [formData, setFormData] = useState<CertificateFormData>({
     name: "",
     eventName: "",
-    date: new Date().toISOString().split('T')[0],
-    type: 'participation',
+    date: new Date().toISOString().split("T")[0],
+    type: "participation",
   });
 
   useEffect(() => {
-    const storedSecret = localStorage.getItem("staff_secret_key");
-    if (secret === DASHBOARD_SECRET || storedSecret === DASHBOARD_SECRET) {
-      setAuthorized(true);
-      fetchEvents();
-    } else {
-      router.push("/portal");
+    if (auth.loading) return;
+    if (!auth.userId) {
+      router.replace("/portal/login");
+      return;
     }
-  }, [secret]);
+    if (!auth.isStaff) return;
+    fetchEvents();
+  }, [auth.loading, auth.userId, auth.isStaff, router]);
 
   async function fetchEvents() {
     const { data } = await supabase
@@ -101,7 +87,26 @@ function CertificatesContent() {
     }
   };
 
-  if (!authorized) return null;
+  if (auth.loading || !auth.userId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="animate-spin text-teal-600" size={40} />
+      </div>
+    );
+  }
+
+  if (!auth.isStaff) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+        <p className="text-text-muted text-sm">
+          Certificates require facilitator or admin access.{" "}
+          <button type="button" onClick={() => router.push("/portal")} className="text-teal-700 underline font-medium">
+            Back to portal
+          </button>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-teal-50/20 pb-20">
@@ -110,9 +115,11 @@ function CertificatesContent() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button 
-                onClick={() => router.push(`/portal?secret=${secret || localStorage.getItem("staff_secret_key")}`)}
+              <button
+                type="button"
+                onClick={() => router.push("/portal")}
                 className="p-2 hover:bg-teal-50 text-teal-600 rounded-xl transition-all"
+                aria-label="Back to portal"
               >
                 <ArrowLeft size={24} />
               </button>

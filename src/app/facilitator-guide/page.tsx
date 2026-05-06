@@ -1,26 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { FacilitatorGate } from "@/components/facilitator-guide/FacilitatorGate";
 import { Sparkles, Heart, Moon, Laptop, ArrowRight, Clock } from "lucide-react";
 
 export default function FacilitatorGuidePage() {
-  return (
-    <FacilitatorGate>
-      <FacilitatorGuideLanding />
-    </FacilitatorGate>
-  );
-}
-
-function FacilitatorGuideLanding() {
-  const searchParams = useSearchParams();
-  const secret = searchParams.get("secret") || "";
-  const q = secret ? `?secret=${encodeURIComponent(secret)}` : "";
-
   const cards = [
     {
-      href: `/facilitator-guide/three-hour-program${q}`,
+      href: "/facilitator-guide/three-hour-program",
       title: "3-hour combined program",
       description:
         "Full ACT facilitator script: Awareness → Contemplation → Silence → integration (timings, prompts, reminders).",
@@ -29,7 +15,7 @@ function FacilitatorGuideLanding() {
       iconClass: "text-amber-700",
     },
     {
-      href: `/facilitator-guide/awareness${q}`,
+      href: "/facilitator-guide/awareness",
       title: "Awareness (A)",
       description:
         "Full 45-minute facilitator manual: objectives, session flow, age adaptations, materials.",
@@ -38,7 +24,7 @@ function FacilitatorGuideLanding() {
       iconClass: "text-teal-600",
     },
     {
-      href: `/facilitator-guide/contemplation${q}`,
+      href: "/facilitator-guide/contemplation",
       title: "Contemplation",
       description:
         "What are my qualities? Session structure, definitions, contemplation practice, Group A/B notes.",
@@ -47,7 +33,7 @@ function FacilitatorGuideLanding() {
       iconClass: "text-rose-600",
     },
     {
-      href: `/facilitator-guide/transformative-silence${q}`,
+      href: "/facilitator-guide/transformative-silence",
       title: "Transformative Silence (T)",
       description:
         "Neutral, practical delivery notes aligned with the public module—session arc and facilitation tips.",
@@ -56,7 +42,7 @@ function FacilitatorGuideLanding() {
       iconClass: "text-indigo-600",
     },
     {
-      href: `/facilitator-guide/website-guide${q}`,
+      href: "/facilitator-guide/website-guide",
       title: "Website guide",
       description:
         "Where Portal, events dashboard, facilitator registration, and public pages fit together.",
@@ -72,14 +58,15 @@ function FacilitatorGuideLanding() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <Link
-              href={`/portal${q}`}
+              href="/portal"
               className="text-sm text-teal-700 font-medium hover:underline"
             >
               ← Portal
             </Link>
             <h1 className="mt-2 text-3xl font-bold text-text-main">Facilitator Guide</h1>
             <p className="mt-1 text-text-muted text-sm max-w-xl">
-              Start with the <strong className="text-text-main font-semibold">3-hour combined script</strong> for a full ACT workshop, or open standalone 45-minute module manuals. Website guide explains internal tools.
+              Start with the <strong className="text-text-main font-semibold">3-hour combined script</strong>{" "}
+              for a full ACT workshop, or open standalone 45-minute module manuals. Website guide explains internal tools.
             </p>
           </div>
         </div>

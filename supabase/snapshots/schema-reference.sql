@@ -7,6 +7,7 @@
 -- =============================================================================
 --
 -- CHANGELOG (append when you update this file):
+--   2026-05-07 — events.created_by (FK auth.users); duplicate event_feedback FK removed in DB.
 --   2026-05-06 — Initial snapshot: event_facilitators, event_feedback, events,
 --                facilitators, profiles, registrations, teams.
 --
@@ -31,8 +32,7 @@ CREATE TABLE public.event_feedback (
   full_name text,
   country text,
   CONSTRAINT event_feedback_pkey PRIMARY KEY (id),
-  CONSTRAINT event_feedback_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.events(id),
-  CONSTRAINT fk_event_feedback_event FOREIGN KEY (event_id) REFERENCES public.events(id)
+  CONSTRAINT event_feedback_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.events(id)
 );
 
 CREATE TABLE public.events (
@@ -59,6 +59,7 @@ CREATE TABLE public.events (
   conductor_type text CHECK (conductor_type = ANY (ARRAY['team'::text, 'facilitator'::text])),
   special_note text,
   sessions jsonb DEFAULT '[]'::jsonb,
+  created_by uuid REFERENCES auth.users(id),
   CONSTRAINT events_pkey PRIMARY KEY (id)
 );
 

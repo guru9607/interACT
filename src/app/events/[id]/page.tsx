@@ -127,17 +127,21 @@ export default function EventDetailPage() {
         });
 
         // Testimonials (Global for this event)
-        const { data: globalFeedback } = await supabase
-          .from('event_feedback')
-          .select('responses, full_name, first_name')
-          .eq('event_id', eventId);
-        
-        if (globalFeedback) {
-          const feedbackToShow = globalFeedback.filter(feedback => {
+        const { data: globalFeedback, error: testimonialError } = await supabase.rpc(
+          "get_event_public_testimonials",
+          { p_event_id: eventId }
+        );
+
+        if (testimonialError) {
+          console.error("Error fetching testimonials:", testimonialError);
+        }
+
+        if (globalFeedback && Array.isArray(globalFeedback)) {
+          const feedbackToShow = globalFeedback.filter((feedback) => {
             const responses = (feedback.responses as Record<string, unknown>) || {};
-            // Robust check for 4 or 5 star ratings (handle both string and number)
-            return Object.values(responses).some(val => 
-              val == 5 || val == 4 || val === '5' || val === '4'
+            return Object.values(responses).some(
+              (val) =>
+                val == 5 || val == 4 || val === "5" || val === "4"
             );
           });
           setTestimonials(feedbackToShow.slice(0, 4));

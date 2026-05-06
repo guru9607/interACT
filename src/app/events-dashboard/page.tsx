@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { useStaffAuth } from "@/hooks/useStaffAuth";
 import { countries } from "@/lib/countries";
 import { 
   Plus, 
@@ -30,29 +31,16 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { FEEDBACK_QUESTIONS, MODULE_LABELS, type ACTModule } from "@/lib/constants";
 
-// Use environment variable for the secret, fallback for local dev
-const DASHBOARD_SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET;
-
 export default function EventsDashboard() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="animate-spin text-primary" size={40} />
-      </div>
-    }>
-      <DashboardContent />
-    </Suspense>
-  );
+  return <DashboardContent />;
 }
 
 function DashboardContent() {
-  const searchParams = useSearchParams();
-  const secret = searchParams.get("secret");
+  const router = useRouter();
+  const auth = useStaffAuth();
   const [activeTab, setActiveTab] = useState<"create" | "manage" | "reports" | "archived">("create");
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<any[]>([]);
-  const [authorized, setAuthorized] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
   const [conductors, setConductors] = useState<any[]>([]);
   const [regCounts, setRegCounts] = useState<Record<number, number>>({});
   const [editingEvent, setEditingEvent] = useState<any | null>(null);
@@ -63,23 +51,22 @@ function DashboardContent() {
   const MANAGEMENT_LIMIT = 20;
 
   useEffect(() => {
-    const storedSecret = localStorage.getItem("staff_secret_key");
-    const validSecret = (secret === DASHBOARD_SECRET) || (storedSecret === DASHBOARD_SECRET);
-    
-    if (validSecret) {
-      setAuthorized(true);
-      fetchUpcomingEvents();
-      fetchConductors();
+    if (auth.loading) return;
+    if (!auth.userId) {
+      router.replace("/portal/login");
+      return;
     }
-    setCheckingAuth(false);
-  }, [secret]);
+    if (!auth.isStaff) return;
+    fetchUpcomingEvents(false);
+    fetchConductors();
+  }, [auth.loading, auth.userId, auth.isStaff, router]);
 
-  // Handle filter changes and tab switches
   useEffect(() => {
-    if (authorized && (activeTab === "manage" || activeTab === "archived")) {
+    if (auth.loading || !auth.isStaff) return;
+    if (activeTab === "manage" || activeTab === "archived") {
       fetchUpcomingEvents(false);
     }
-  }, [facilitatorFilter, activeTab]);
+  }, [facilitatorFilter, activeTab, auth.loading, auth.isStaff]);
 
   async function fetchConductors() {
     try {
@@ -166,7 +153,7 @@ function DashboardContent() {
     setLoadingMore(false);
   }
 
-  if (checkingAuth) {
+  if (auth.loading || !auth.userId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="animate-spin text-primary" size={40} />
@@ -174,22 +161,25 @@ function DashboardContent() {
     );
   }
 
-  if (!authorized) {
+  if (!auth.isStaff) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="max-w-md w-full text-center space-y-6">
-          <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto">
+          <div className="w-20 h-20 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto">
             <AlertCircle size={40} />
           </div>
-          <h1 className="text-2xl font-bold text-text-main">Access Denied</h1>
-          <p className="text-text-muted">
-            This is a protected page. Please use the correct link provided to facilitators.
+          <h1 className="text-2xl font-bold text-text-main">Access pending</h1>
+          <p className="text-text-muted text-sm">
+            Your account is signed in but does not have facilitator or core-team permissions yet.
+            Ask an administrator to set your role in Supabase (<code className="text-xs bg-gray-100 px-1 rounded">profiles.role</code>
+            → facilitator or admin).
           </p>
-          <button 
-            onClick={() => window.location.href = '/portal'}
+          <button
+            type="button"
+            onClick={() => router.push("/portal")}
             className="text-primary font-medium hover:underline"
           >
-            Go to Staff Portal
+            Back to portal
           </button>
         </div>
       </div>
@@ -203,16 +193,21 @@ function DashboardContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <button 
-                  onClick={() => window.location.href = `/portal?secret=${secret}`}
+                <button
+                  type="button"
+                  onClick={() => router.push("/portal")}
                   className="flex items-center gap-2 text-teal-600 font-medium hover:bg-gray-50 px-3 py-2 rounded-lg transition-all text-sm"
                 >
-                  <ArrowRight className="rotate-180" size={16} />
+                  <ArrowRight className="rotate-180" size={16} aria-hidden />
                   Back to Hub
                 </button>
                 <div>
                   <h1 className="text-2xl font-bold text-text-main">Events Dashboard</h1>
-                  <p className="text-sm text-text-muted">Manage upcoming and completed events</p>
+                  <p className="text-sm text-text-muted">
+                    {auth.isAdmin
+                      ? "Core team — all events and reports"
+                      : "Facilitator — events you created (and related registrations / feedback)"}
+                  </p>
                 </div>
               </div>
 

@@ -1,6 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+export { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+/** Shared browser client for `"use client"` modules (cookie-aware via middleware). */
+export const supabase = createClient();

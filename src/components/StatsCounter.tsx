@@ -84,33 +84,18 @@ export default function StatsCounter() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        // 1. Fetch Events Count
-        const { count: eventsCount, error: eventsError } = await supabase
-          .from('events')
-          .select('*', { count: 'exact', head: true });
+        const { data: statsRow, error: statsError } = await supabase.rpc(
+          "get_public_dashboard_stats"
+        );
 
-        // 2. Fetch Registrations Count (Participants)
-        const { count: participantsCount, error: participantsError } = await supabase
-          .from('registrations')
-          .select('*', { count: 'exact', head: true });
+        if (statsError) console.error("Error fetching public stats:", statsError);
 
-        // 3. Fetch Unique Countries from Registrations
-        // Note: For large datasets, use a database function or distinct select. 
-        // For now, client-side distinct is okay for typical website scale.
-        const { data: countriesData, error: countriesError } = await supabase
-          .from('registrations')
-          .select('country');
-
-        if (eventsError) console.error("Error fetching events count:", eventsError);
-        if (participantsError) console.error("Error fetching participants count:", participantsError);
-        if (countriesError) console.error("Error fetching countries:", countriesError);
-
-        const uniqueCountries = new Set(countriesData?.map(r => r.country).filter(Boolean)).size;
+        const row = Array.isArray(statsRow) ? statsRow[0] : statsRow;
 
         setStats({
-          events: eventsCount || 0,
-          participants: participantsCount || 0,
-          countries: uniqueCountries || 0
+          events: row ? Number(row.events_count) || 0 : 0,
+          participants: row ? Number(row.participants_count) || 0 : 0,
+          countries: row ? Number(row.countries_count) || 0 : 0,
         });
 
       } catch (err) {

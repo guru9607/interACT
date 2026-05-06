@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertCircle, Loader2, Sparkles } from "lucide-react";
 
 export default function FacilitatorForm() {
   const [loading, setLoading] = useState(false);
@@ -47,24 +48,56 @@ export default function FacilitatorForm() {
   };
 
   if (submitted) {
+    const portalHref = `/portal/register?email=${encodeURIComponent(formData.email)}&full_name=${encodeURIComponent(formData.full_name)}`;
+
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center p-12 bg-white rounded-3xl border border-teal-100 shadow-xl"
+        className="p-10 md:p-12 bg-white rounded-3xl border border-teal-100 shadow-xl max-w-xl mx-auto text-center space-y-6"
       >
-        <div className="w-20 h-20 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle2 size={40} />
+        <div className="w-20 h-20 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center mx-auto">
+          <CheckCircle2 size={40} aria-hidden />
         </div>
-        <h2 className="text-3xl font-bold text-text-main mb-4">Registration Successful!</h2>
-        <p className="text-text-muted text-lg mb-8">
-          Thank you for joining us on this journey. We will review your application and get in touch with you shortly.
+        <div className="space-y-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-main">
+            Application received
+          </h2>
+          <p className="text-text-muted text-base leading-relaxed">
+            Your facilitator details are saved. Complete one quick step:{" "}
+            <strong className="text-text-main font-semibold">
+              create your facilitator login with the same email
+            </strong>{" "}
+            so you can manage events, reports, and open the Facilitator Guide when your coordinator enables access.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch pt-2">
+          <Link
+            href={portalHref}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-6 py-4 text-white font-bold shadow-lg shadow-teal-600/20 hover:bg-teal-700 transition-colors"
+          >
+            Create facilitator login
+            <ArrowRight size={20} aria-hidden />
+          </Link>
+          <Link
+            href="/portal/login"
+            className="inline-flex items-center justify-center rounded-2xl border border-teal-200 bg-teal-50/80 px-6 py-4 text-sm font-semibold text-teal-800 hover:bg-teal-50 transition-colors"
+          >
+            Already have a login? Sign in
+          </Link>
+        </div>
+
+        <p className="text-xs text-text-muted leading-relaxed">
+          If your email already appears in our facilitator or core-team roster, your account will be recognised as a facilitator automatically after signup.
         </p>
-        <button 
+
+        <button
+          type="button"
           onClick={() => setSubmitted(false)}
-          className="text-teal-600 font-medium hover:underline"
+          className="text-sm text-teal-600 font-medium hover:underline pt-2"
         >
-          Register another facilitator
+          Submit another application
         </button>
       </motion.div>
     );
