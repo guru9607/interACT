@@ -8,7 +8,7 @@ export default function AboutPage() {
     <div className="bg-white min-h-screen font-sans text-slate-800">
       
       {/* Hero Section */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-teal-50 via-white to-blue-50 overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-teal-50 via-white to-slate-50 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-30"></div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-teal-100/50 backdrop-blur-sm text-teal-800 text-sm font-semibold mb-8 shadow-sm border border-teal-200/50">
@@ -16,8 +16,7 @@ export default function AboutPage() {
             Aligned with the 2030 Agenda
           </div>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-8 tracking-tight leading-tight">
-            To face a changing world, <br className="hidden md:block" />
-            you need an <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">unchanging core.</span>
+            Rediscover your core <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-slate-700">goodness.</span>
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-10">
             interACT bridges the gap between inner resilience and global action. We provide youth with the evidence-based cognitive tools needed to achieve the United Nations Sustainable Development Goals.
@@ -152,10 +151,10 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-teal-700 relative overflow-hidden">
+      <section className="py-20 bg-[#2f5f64] relative overflow-hidden">
         {/* Background Gradients */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-teal-300/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-slate-300/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
         <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

@@ -2,22 +2,25 @@ import UnitCard from "@/components/UnitCard";
 
 const modules = [
   {
-    title: "Awareness: Connecting with Innate Goodness",
-    description: "The starting point. We guide participants to recognize themselves as living beings with innate qualities like Peace, Love, and Truth. These are not just concepts, but feelings to be experienced. By becoming aware of this inherent goodness, we lay the foundation for a life of purpose.",
+    title: "Awareness (A)",
+    description:
+      "Notice thoughts, emotions, and sensations without immediate judgment—build presence and a pause before you react. A ~45-minute experiential foundation for the rest of interACT.",
     image: "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=800&auto=format&fit=crop", 
     href: "/modules/awareness",
     number: 1,
   },
   {
-    title: "Contemplation: Strengthening Your Inner Core",
-    description: "Once aware of our core goodness, we nurture it through focused reflection. This stage helps shift focus from external validation to internal resilience. By contemplating innate qualities, participants build deep self-worth and a stable inner core independent of external pressures.",
+    title: "Contemplation: What are my qualities?",
+    description:
+      "Experience innate qualities through guided contemplation, clarify self-worth versus self-esteem, confidence, and respect, and begin a gentle daily practice—in about 45 minutes.",
     image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=80&w=800&auto=format&fit=crop", 
     href: "/modules/contemplation",
     number: 2,
   },
   {
-    title: "Transformative Silence: Accessing Inner Wisdom",
-    description: "Access deep inner wisdom through stillness. This involves a profound experience of discernment between what is true and false. By connecting with the Source of all power, participants stabilize their innate qualities and bring about sustainable, positive life changes.",
+    title: "Transformative Silence (T)",
+    description:
+      "Go beyond outer quiet—freedom from draining thoughts, clearer judgment under pressure, steadier attention, and bringing stillness into everyday habits. Typically ~45 minutes; builds on Awareness and Contemplation.",
     image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=800&auto=format&fit=crop", 
     href: "/modules/transformative-silence",
     number: 3,

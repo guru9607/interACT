@@ -35,8 +35,8 @@ export const MODULE_LABELS = {
 };
 
 export const MODULE_DESCRIPTIONS = {
-    awareness: "Connecting with innate goodness",
-    contemplation: "Discovering inner qualities and strengths.",
-    transformative_silence: "Empowerment through the power of silence.",
+    awareness: "Noticing your inner state—foundation for interACT.",
+    contemplation: "Experiencing innate qualities through contemplation.",
+    transformative_silence: "Silence, discernment, and steadier attention in daily life.",
     combined: "The complete interACT journey.",
 };
