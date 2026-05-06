@@ -9,7 +9,7 @@ export function AwarenessManual() {
         >
           3-hour combined program
         </a>{" "}
-        script (timings and prompts from <em>Facilitator scripts interACT 3hours</em>).
+        script (timings and spoken prompts).
         This page is the <strong>standalone 45-minute Awareness</strong> module manual.
       </p>
       <p className="text-xs font-semibold uppercase tracking-wide text-teal-800">

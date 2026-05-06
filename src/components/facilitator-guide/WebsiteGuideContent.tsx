@@ -21,10 +21,6 @@ export const WebsiteGuideContent = () => {
           >
             /facilitator-guide/three-hour-program
           </Link>
-          — sourced from{" "}
-          <code className="rounded bg-white/80 px-1 text-xs">
-            Facilitator scripts interACT 3hours.docx
-          </code>
           .
         </p>
       </section>

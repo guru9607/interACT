@@ -1,6 +1,5 @@
 /**
- * interACT 3-Hour Program — Facilitator Script
- * Source: content/Facilitator scripts interACT 3hours.docx (institutional)
+ * interACT 3-Hour Program — facilitator script (combined workshop)
  */
 
 export function ThreeHourProgramScript() {

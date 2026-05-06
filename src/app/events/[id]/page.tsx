@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { getSupabaseAnonRead } from "@/lib/supabase/anon-read";
 import FeedbackForm from "@/components/FeedbackForm";
 import { motion, AnimatePresence } from "framer-motion";
 import { countries } from "@/lib/countries";
@@ -68,7 +69,8 @@ export default function EventDetailPage() {
   useEffect(() => {
     async function fetchEvent() {
       try {
-        const { data: eventData, error: eventError } = await supabase
+        const ro = getSupabaseAnonRead();
+        const { data: eventData, error: eventError } = await ro
           .from('events')
           .select('*')
           .eq('id', eventId)
@@ -85,7 +87,7 @@ export default function EventDetailPage() {
         if (eventData.conductor_id && eventData.conductor_type) {
           try {
             if (eventData.conductor_type === 'team') {
-              const { data: teamConductor } = await supabase
+              const { data: teamConductor } = await ro
                 .from('teams')
                 .select('name, role, bio, image_url')
                 .eq('id', eventData.conductor_id.toString())
@@ -100,7 +102,7 @@ export default function EventDetailPage() {
                 }];
               }
             } else if (eventData.conductor_type === 'facilitator') {
-              const { data: facConductor } = await supabase
+              const { data: facConductor } = await ro
                 .from('facilitators')
                 .select('full_name, profession, country')
                 .eq('id', eventData.conductor_id.toString())
@@ -127,7 +129,7 @@ export default function EventDetailPage() {
         });
 
         // Testimonials (Global for this event)
-        const { data: globalFeedback, error: testimonialError } = await supabase.rpc(
+        const { data: globalFeedback, error: testimonialError } = await ro.rpc(
           "get_event_public_testimonials",
           { p_event_id: eventId }
         );

@@ -68,7 +68,7 @@ export default function FacilitatorForm() {
             <strong className="text-text-main font-semibold">
               create your facilitator login with the same email
             </strong>{" "}
-            so you can manage events, reports, and open the Facilitator Guide when your coordinator enables access.
+            so you can sign in to the portal and manage your events.
           </p>
         </div>
 

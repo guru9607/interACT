@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Calendar, MapPin, Clock, Globe, ChevronRight, Image as ImageIcon } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseAnonRead } from "@/lib/supabase/anon-read";
 
 // Event Data Type
 type Event = {
@@ -34,14 +34,14 @@ export default function JoinPage() {
 
   useEffect(() => {
     async function fetchEvents() {
+      const ro = getSupabaseAnonRead();
       try {
         setLoading(true);
         const now = new Date();
         now.setHours(0, 0, 0, 0);
-        const today = now.toISOString().split('T')[0];
 
         // Fetch all active events (Upcoming or Ongoing)
-        const { data: allActive, error: activeError } = await supabase
+        const { data: allActive, error: activeError } = await ro
           .from('events')
           .select('*')
           .in('status', ['upcoming', 'ongoing'])
@@ -68,7 +68,7 @@ export default function JoinPage() {
         setEvents(upcoming);
 
         // Fetch manual past/completed events
-        const { data: completedData, error: completedError } = await supabase
+        const { data: completedData, error: completedError } = await ro
           .from('events')
           .select('*')
           .eq('status', 'completed')
@@ -96,7 +96,8 @@ export default function JoinPage() {
     if (loadingMore) return;
     try {
       setLoadingMore(true);
-      const { data, error } = await supabase
+      const ro = getSupabaseAnonRead();
+      const { data, error } = await ro
         .from('events')
         .select('*')
         .eq('status', 'completed')

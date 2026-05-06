@@ -50,6 +50,11 @@ function DashboardContent() {
   const [loadingMore, setLoadingMore] = useState(false);
   const MANAGEMENT_LIMIT = 20;
 
+  const contentTab: typeof activeTab =
+    !auth.loading && auth.isStaff && !auth.isAdmin && activeTab === "reports"
+      ? "manage"
+      : activeTab;
+
   useEffect(() => {
     if (auth.loading) return;
     if (!auth.userId) {
@@ -66,7 +71,21 @@ function DashboardContent() {
     if (activeTab === "manage" || activeTab === "archived") {
       fetchUpcomingEvents(false);
     }
-  }, [facilitatorFilter, activeTab, auth.loading, auth.isStaff]);
+  }, [facilitatorFilter, activeTab, auth.loading, auth.isStaff, auth.isAdmin, auth.userId]);
+
+  useEffect(() => {
+    if (auth.loading || !auth.isStaff) return;
+    if (!auth.isAdmin && facilitatorFilter !== "") {
+      setFacilitatorFilter("");
+    }
+  }, [auth.loading, auth.isStaff, auth.isAdmin, facilitatorFilter]);
+
+  useEffect(() => {
+    if (auth.loading || !auth.isStaff) return;
+    if (!auth.isAdmin && activeTab === "reports") {
+      setActiveTab("manage");
+    }
+  }, [auth.loading, auth.isStaff, auth.isAdmin, activeTab]);
 
   async function fetchConductors() {
     try {
@@ -110,8 +129,17 @@ function DashboardContent() {
        query = query.neq('status', 'archived');
     }
 
-    if (facilitatorFilter) {
-      query = query.eq('conductor_id', facilitatorFilter);
+    if (auth.isStaff && !auth.isAdmin && auth.userId) {
+      query = query.eq("created_by", auth.userId);
+    }
+
+    if (facilitatorFilter && auth.isAdmin) {
+      const sep = facilitatorFilter.indexOf(":");
+      if (sep > 0) {
+        const ctype = facilitatorFilter.slice(0, sep);
+        const cid = facilitatorFilter.slice(sep + 1);
+        query = query.eq("conductor_type", ctype).eq("conductor_id", cid);
+      }
     }
 
     const { data, count, error } = await query
@@ -236,17 +264,20 @@ function DashboardContent() {
                   <HistoryIcon size={16} />
                   Manage
                 </button>
-                <button
-                  onClick={() => {
-                    setActiveTab("reports");
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    activeTab === "reports" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
-                  }`}
-                >
-                  <Award size={16} />
-                  Reports
-                </button>
+                {auth.isAdmin ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab("reports");
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      activeTab === "reports" ? "bg-white text-primary shadow-sm" : "text-text-muted hover:text-text-main"
+                    }`}
+                  >
+                    <Award size={16} aria-hidden />
+                    Reports
+                  </button>
+                ) : null}
               </div>
 
               {/* Separator */}
@@ -276,7 +307,7 @@ function DashboardContent() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <AnimatePresence mode="wait">
-          {activeTab === "create" ? (
+          {contentTab === "create" ? (
             <motion.div
               key="create"
               initial={{ opacity: 0, y: 20 }}
@@ -293,7 +324,7 @@ function DashboardContent() {
                 initialData={editingEvent}
               />
             </motion.div>
-          ) : activeTab === "manage" ? (
+          ) : contentTab === "manage" ? (
             <motion.div
               key="manage"
               initial={{ opacity: 0, y: 20 }}
@@ -311,13 +342,14 @@ function DashboardContent() {
                 facilitatorFilter={facilitatorFilter}
                 onFilterChange={setFacilitatorFilter}
                 regCounts={regCounts}
+                showFacilitatorFilter={auth.isAdmin}
                 onEdit={(event: any) => {
                   setEditingEvent(event);
                   setActiveTab("create");
                 }}
               />
             </motion.div>
-          ) : activeTab === "archived" ? (
+          ) : contentTab === "archived" ? (
              <motion.div
               key="archived"
               initial={{ opacity: 0, y: 20 }}
@@ -335,6 +367,7 @@ function DashboardContent() {
                 facilitatorFilter={facilitatorFilter}
                 onFilterChange={setFacilitatorFilter}
                 regCounts={regCounts}
+                showFacilitatorFilter={auth.isAdmin}
                 isArchived={true}
                 onEdit={() => {}} // Can't edit archived events directly
               />
@@ -849,6 +882,7 @@ function ManageEventsList({
   facilitatorFilter,
   onFilterChange,
   regCounts, 
+  showFacilitatorFilter,
   isArchived = false,
   onEdit 
 }: { 
@@ -861,7 +895,8 @@ function ManageEventsList({
   loadingMore: boolean,
   facilitatorFilter: string,
   onFilterChange: (id: string) => void,
-  regCounts: any, 
+  regCounts: any,
+  showFacilitatorFilter: boolean,
   isArchived?: boolean,       // New prop to toggle view mode
   onEdit: (event: any) => void 
 }) {
@@ -1171,19 +1206,26 @@ function ManageEventsList({
             {isArchived ? "Restore items or delete them forever" : "Manage scheduling and complete past events"}
           </p>
         </div>
-        <div className="w-full md:w-64">
-          <select
-            className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
-            value={facilitatorFilter}
-            onChange={(e) => onFilterChange(e.target.value)}
-          >
-            <option value="">All Facilitators</option>
-            {conductors.map((c: any) => (
-              <option key={`${c.type}-${c.id}`} value={c.id}>
-                {c.name} ({c.type})
-              </option>
-            ))}
-          </select>
+        <div className="w-full md:w-64 md:flex-shrink-0">
+          {showFacilitatorFilter ? (
+            <select
+              aria-label="Filter events by featured conductor or core team"
+              className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
+              value={facilitatorFilter}
+              onChange={(e) => onFilterChange(e.target.value)}
+            >
+              <option value="">All conductors</option>
+              {conductors.map((c: any) => (
+                <option key={`${c.type}-${c.id}`} value={`${c.type}:${c.id}`}>
+                  {c.name} ({c.type})
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p className="text-sm text-text-muted md:text-right py-2">
+              Only events you created are listed here.
+            </p>
+          )}
         </div>
       </div>
 
