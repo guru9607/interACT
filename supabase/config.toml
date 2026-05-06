@@ -1,0 +1,21 @@
+# Minimal Supabase CLI project config.
+# Full reference: https://supabase.com/docs/guides/cli/config
+# Set project_id to match your Supabase project if you use the CLI with this repo.
+
+project_id = "interact-website"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
