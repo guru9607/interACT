@@ -60,7 +60,7 @@ export default function FacilitatorForm() {
           <CheckCircle2 size={40} aria-hidden />
         </div>
         <div className="space-y-2">
-          <h2 className="text-2xl md:text-3xl font-bold text-text-main">
+          <h2 className="text-2xl md:text-3xl font-semibold text-text-main">
             Application received
           </h2>
           <p className="text-text-muted text-base leading-relaxed">
@@ -75,7 +75,7 @@ export default function FacilitatorForm() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch pt-2">
           <Link
             href={portalHref}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-6 py-4 text-white font-bold shadow-lg shadow-teal-600/20 hover:bg-teal-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-6 py-4 text-white font-semibold shadow-lg shadow-teal-600/20 hover:bg-teal-700 transition-colors"
           >
             Create facilitator login
             <ArrowRight size={20} aria-hidden />
@@ -440,7 +440,7 @@ export default function FacilitatorForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl shadow-lg shadow-teal-600/20 hover:bg-teal-700 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70 disabled:hover:translate-y-0"
+            className="w-full py-4 bg-teal-600 text-white font-semibold rounded-2xl shadow-lg shadow-teal-600/20 hover:bg-teal-700 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70 disabled:hover:translate-y-0"
           >
             {loading ? (
               <>

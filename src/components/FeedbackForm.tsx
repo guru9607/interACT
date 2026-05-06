@@ -108,7 +108,7 @@ export default function FeedbackForm({
           <div className="w-24 h-24 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-8">
             <CheckCircle2 size={48} className="text-teal-500" />
           </div>
-          <h2 className="text-3xl font-bold text-text-main mb-4 italic">Thank You!</h2>
+          <h2 className="text-3xl font-semibold text-text-main mb-4 italic">Thank You!</h2>
           <p className="text-lg text-text-muted leading-relaxed mb-8">
             Your heart-felt feedback has been received. It helps us grow together.
           </p>
@@ -124,7 +124,7 @@ export default function FeedbackForm({
                   new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
                   `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
                 )}
-                className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all cursor-pointer"
+                className="w-full py-4 bg-teal-600 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all cursor-pointer"
               >
                 <Award size={24} />
                 Download Certificate
@@ -133,7 +133,7 @@ export default function FeedbackForm({
 
             <button
               onClick={onClose}
-              className="w-full py-4 bg-gray-50 text-text-muted font-bold rounded-2xl hover:bg-gray-100 transition-all cursor-pointer"
+              className="w-full py-4 bg-gray-50 text-text-muted font-semibold rounded-2xl hover:bg-gray-100 transition-all cursor-pointer"
             >
               Close
             </button>
@@ -163,14 +163,14 @@ export default function FeedbackForm({
         <div className="p-8 pt-10 flex items-start justify-between border-b border-gray-50 bg-linear-to-b from-teal-50/20 to-transparent">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] uppercase tracking-widest font-bold rounded-full">
+              <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] uppercase tracking-widest font-semibold rounded-full">
                 Step {step} of 2
               </span>
               <span className="text-text-muted text-[10px] uppercase tracking-widest font-medium">
                 • {MODULE_LABELS[actModule]}
               </span>
             </div>
-            <h2 className="text-2xl font-bold text-text-main tracking-tight italic">
+            <h2 className="text-2xl font-semibold text-text-main tracking-tight italic">
               {step === 1 ? "Start your journey" : "Share your experience"}
             </h2>
           </div>
@@ -202,7 +202,7 @@ export default function FeedbackForm({
                   </div>
                   
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                    <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
                       Full Name <span className="text-red-500">*</span>
                       {shouldGenerateCertificate && (
                         <span className="ml-2 lowercase font-normal opacity-60">(as you want it on your certificate)</span>
@@ -219,7 +219,7 @@ export default function FeedbackForm({
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                    <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
@@ -237,7 +237,7 @@ export default function FeedbackForm({
 
                   <div className="grid sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-1 space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                      <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
                         Country <span className="text-red-500">*</span>
                       </label>
                       <select
@@ -252,11 +252,11 @@ export default function FeedbackForm({
                     </div>
 
                     <div className="sm:col-span-2 space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-wider font-bold text-text-muted ml-1">
+                      <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
                         Phone Number <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-bold text-sm pointer-events-none">
+                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-semibold text-sm pointer-events-none">
                           {country.code}
                         </div>
                         <input
@@ -289,10 +289,10 @@ export default function FeedbackForm({
                 {questions.map((q, idx) => (
                   <div key={q.id} className="space-y-5">
                     <div className="flex gap-4">
-                      <span className="shrink-0 w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-bold border border-primary/10">
+                      <span className="shrink-0 w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-semibold border border-primary/10">
                         {idx + 1}
                       </span>
-                      <label className="text-base font-bold text-text-main leading-snug pt-1">
+                      <label className="text-base font-semibold text-text-main leading-snug pt-1">
                         {q.question} <span className="text-red-500">*</span>
                       </label>
                     </div>
@@ -322,7 +322,7 @@ export default function FeedbackForm({
                                 : "bg-white text-text-muted border-gray-100 hover:border-primary/50 hover:bg-teal-50/30"
                             }`}
                           >
-                            <span className="text-lg font-bold">{num}</span>
+                            <span className="text-lg font-semibold">{num}</span>
                             {num === 5 && <Sparkles size={10} className={responses[q.id] === '5' ? "text-white" : "text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity"} />}
                           </button>
                         ))}
@@ -340,7 +340,7 @@ export default function FeedbackForm({
           {step === 2 && (
             <button
               onClick={() => setStep(1)}
-              className="flex-1 py-4 bg-white text-text-main font-bold rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="flex-1 py-4 bg-white text-text-main font-semibold rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <ArrowLeft size={18} />
               Back
@@ -350,7 +350,7 @@ export default function FeedbackForm({
           <button
             onClick={step === 1 ? () => setStep(2) : handleSubmit}
             disabled={loading || (step === 1 ? !isStep1Complete : !isStep2Complete)}
-            className="flex-2 py-4 bg-primary text-white font-bold rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale cursor-pointer"
+            className="flex-2 py-4 bg-primary text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale cursor-pointer"
           >
             {loading ? (
               <Loader2 className="animate-spin" size={20} />

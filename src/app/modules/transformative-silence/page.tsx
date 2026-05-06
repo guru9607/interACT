@@ -76,7 +76,7 @@ export default function TransformativeSilenceModule() {
               <div className="inline-block px-3 py-1 bg-indigo-100 text-indigo-900 rounded-full text-sm font-medium mb-4">
                 Module 3 · Transformative Silence (T)
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-text-main mb-4">
+              <h1 className="text-4xl md:text-5xl font-semibold text-text-main mb-4">
                 Transformative Silence
               </h1>
               <p className="text-xl text-text-muted max-w-3xl">
@@ -93,14 +93,14 @@ export default function TransformativeSilenceModule() {
                 <Clock size={16} className="mr-2" />
                 <span className="text-sm">Typical session</span>
               </div>
-              <div className="text-2xl font-bold text-text-main">~45 minutes</div>
+              <div className="text-2xl font-semibold text-text-main">~45 minutes</div>
             </div>
             <div className="bg-white/70 backdrop-blur-md border border-blue-100/60 p-4 rounded-lg shadow-sm">
               <div className="flex items-center text-text-muted mb-1">
                 <Target size={16} className="mr-2" />
                 <span className="text-sm">Who it&apos;s for</span>
               </div>
-              <div className="text-lg font-bold text-text-main leading-snug">
+              <div className="text-lg font-semibold text-text-main leading-snug">
                 Ages 18–22 &amp; 23–35
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function TransformativeSilenceModule() {
                 <Moon size={16} className="mr-2" />
                 <span className="text-sm">Format</span>
               </div>
-              <div className="text-lg font-bold text-text-main leading-snug">
+              <div className="text-lg font-semibold text-text-main leading-snug">
                 Live, guided workshop
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function TransformativeSilenceModule() {
 
       <section className="py-12 border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-text-main mb-4">
+          <h2 className="text-2xl font-semibold text-text-main mb-4">
             What you&apos;ll learn
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -138,7 +138,7 @@ export default function TransformativeSilenceModule() {
               </ul>
             </div>
             <div>
-              <h3 className="font-bold text-text-main mb-3">Why it matters</h3>
+              <h3 className="font-semibold text-text-main mb-3">Why it matters</h3>
               <p className="text-text-muted leading-relaxed mb-4">
                 Awareness builds noticing; Contemplation builds contact with stable
                 inner strengths. Transformative Silence adds longer pockets of stillness
@@ -156,7 +156,7 @@ export default function TransformativeSilenceModule() {
 
       <section className="py-12 border-b bg-gray-50/50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-text-main mb-2">
+          <h2 className="text-2xl font-semibold text-text-main mb-2">
             Ideas you&apos;ll explore
           </h2>
           <p className="text-text-muted mb-8 max-w-3xl">
@@ -179,7 +179,7 @@ export default function TransformativeSilenceModule() {
 
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-text-main mb-2">
+          <h2 className="text-2xl font-semibold text-text-main mb-2">
             What the session is like
           </h2>
           <p className="text-text-muted mb-8 max-w-3xl">
@@ -197,7 +197,7 @@ export default function TransformativeSilenceModule() {
                   <Sparkles size={18} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-text-main mb-1">{block.title}</h3>
+                  <h3 className="font-semibold text-text-main mb-1">{block.title}</h3>
                   <p className="text-text-muted text-sm leading-relaxed">
                     {block.description}
                   </p>
@@ -210,7 +210,7 @@ export default function TransformativeSilenceModule() {
 
       <section className="py-12 bg-gradient-to-r from-primary to-teal-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-semibold text-white mb-4">
             Continue your journey
           </h2>
           <p className="text-xl text-white/90 mb-8">
@@ -219,7 +219,7 @@ export default function TransformativeSilenceModule() {
           </p>
           <Link
             href="/modules"
-            className="inline-flex items-center px-8 py-4 bg-white text-primary font-bold rounded-full hover:bg-cream transition-all shadow-xl"
+            className="inline-flex items-center px-8 py-4 bg-white text-primary font-semibold rounded-full hover:bg-cream transition-all shadow-xl"
           >
             Return to modules overview
           </Link>

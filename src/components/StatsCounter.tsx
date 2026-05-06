@@ -65,7 +65,7 @@ function StatItem({ icon, label, targetValue, suffix = "+" }: StatItemProps) {
           {icon}
         </div>
       </div>
-      <div className="text-4xl md:text-5xl font-bold text-text-main mb-2">
+      <div className="text-4xl md:text-5xl font-semibold text-text-main mb-2">
         {count.toLocaleString()}
         {suffix}
       </div>

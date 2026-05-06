@@ -19,7 +19,7 @@ export const FacilitatorGate = ({ children }: { children: ReactNode }) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
         <div className="max-w-md text-center space-y-4">
-          <h1 className="text-xl font-bold text-text-main">Facilitator access</h1>
+          <h1 className="text-xl font-semibold text-text-main">Facilitator access</h1>
           <p className="text-text-muted text-sm">
             Sign in with an account that has been granted facilitator or core-team access.
             New accounts default to participant until an administrator updates your role in

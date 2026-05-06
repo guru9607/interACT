@@ -63,7 +63,7 @@ export default function FacilitatorGuidePage() {
             >
               ← Portal
             </Link>
-            <h1 className="mt-2 text-3xl font-bold text-text-main">Facilitator Guide</h1>
+            <h1 className="mt-2 text-3xl font-semibold text-text-main">Facilitator Guide</h1>
             <p className="mt-1 text-text-muted text-sm max-w-xl">
               Start with the <strong className="text-text-main font-semibold">3-hour combined script</strong>{" "}
               for a full ACT workshop, or open standalone 45-minute module manuals. Website guide explains internal tools.
@@ -86,11 +86,11 @@ export default function FacilitatorGuidePage() {
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm">
                       <Icon className={card.iconClass} size={22} aria-hidden />
                     </span>
-                    <span className="text-xs font-bold text-text-muted tabular-nums">
+                    <span className="text-xs font-semibold text-text-muted tabular-nums">
                       {index + 1}
                     </span>
                   </div>
-                  <h2 className="text-lg font-bold text-text-main mb-2">{card.title}</h2>
+                  <h2 className="text-lg font-semibold text-text-main mb-2">{card.title}</h2>
                   <p className="text-sm text-text-muted leading-relaxed flex-1">
                     {card.description}
                   </p>

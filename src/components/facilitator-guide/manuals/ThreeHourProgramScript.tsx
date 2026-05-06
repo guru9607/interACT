@@ -34,7 +34,7 @@ export function ThreeHourProgramScript() {
       />
 
       <section>
-        <h2 className="text-lg font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2">
+        <h2 className="text-lg font-semibold text-teal-800 mb-4 border-b border-teal-100 pb-2">
           AWARENESS · 0:10 – 1:00
         </h2>
 
@@ -92,7 +92,7 @@ export function ThreeHourProgramScript() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-rose-800 mb-4 border-b border-rose-100 pb-2">
+        <h2 className="text-lg font-semibold text-rose-800 mb-4 border-b border-rose-100 pb-2">
           CONTEMPLATION · 1:00 – 1:50
         </h2>
 
@@ -153,7 +153,7 @@ export function ThreeHourProgramScript() {
       />
 
       <section>
-        <h2 className="text-lg font-bold text-indigo-800 mb-4 border-b border-indigo-100 pb-2">
+        <h2 className="text-lg font-semibold text-indigo-800 mb-4 border-b border-indigo-100 pb-2">
           TRANSFORMATIVE SILENCE · 2:00 – 2:40
         </h2>
 
@@ -198,7 +198,7 @@ export function ThreeHourProgramScript() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+        <h2 className="text-lg font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
           INTEGRATION · 2:40 – 3:00
         </h2>
 
@@ -240,7 +240,7 @@ export function ThreeHourProgramScript() {
       </section>
 
       <section className="rounded-2xl border-2 border-amber-200 bg-amber-50/60 p-6">
-        <h2 className="text-lg font-bold text-amber-900 mb-3">
+        <h2 className="text-lg font-semibold text-amber-900 mb-3">
           Facilitator reminders (keep visible)
         </h2>
         <ul className="list-disc pl-5 space-y-2 text-amber-950/90">
@@ -266,7 +266,7 @@ function ScriptBlock({
   return (
     <div className="mb-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-baseline gap-2 mb-3">
-        <span className="text-xs font-bold uppercase tracking-wide text-teal-700">
+        <span className="text-xs font-semibold uppercase tracking-wide text-teal-700">
           {time}
         </span>
         <span className="font-semibold text-text-main">{title}</span>

@@ -14,7 +14,9 @@
   --color-teal-600: #217d74;
   --color-teal-700: #1a655f;
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Body sets --font-sans via next/font (Outfit); fallback for utilities */
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
 }
 
 :root {
@@ -27,9 +29,35 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-weight: 400;
+  font-synthesis-weight: none;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+@layer components {
+  .auth-card-shell {
+    @apply max-w-md w-full bg-white rounded-3xl border border-teal-100/80 shadow-lg shadow-teal-900/5;
+  }
+
+  .auth-page-bg {
+    @apply min-h-screen bg-teal-50/40 flex items-center justify-center p-6;
+  }
+
+  .auth-primary-btn {
+    @apply w-full py-3.5 bg-teal-600 text-white font-semibold rounded-2xl hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 shadow-md shadow-teal-600/15 disabled:opacity-60;
+  }
+
+  .field-label-muted {
+    @apply block text-left text-xs font-medium text-text-muted uppercase tracking-wider;
+  }
 }
 
 ::selection {

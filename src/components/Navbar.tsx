@@ -35,7 +35,7 @@ export default function Navbar() {
                     className="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
                   />
                 </div>
-                <span className="text-2xl font-bold text-primary tracking-tight">
+                <span className="text-2xl font-semibold text-primary tracking-tight">
                   interACT
                 </span>
             </Link>

@@ -86,7 +86,7 @@ export default function TeamPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-black text-text-main mb-4 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-semibold text-text-main mb-4 tracking-tight">
             Our Global <span className="text-teal-600">Family</span>
           </h1>
           <p className="text-lg text-text-muted max-w-2xl mx-auto leading-relaxed font-light">
@@ -105,10 +105,10 @@ export default function TeamPage() {
             {visionaries.length > 0 && (
               <section className="relative">
                  <div className="flex flex-col items-center mb-10">
-                   <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold tracking-wide mb-3 shadow-sm">
+                   <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold tracking-wide mb-3 shadow-sm">
                       THE ROOTS
                    </div>
-                   <h2 className="text-3xl md:text-4xl font-extrabold text-text-main text-center">Visionaries</h2>
+                   <h2 className="text-3xl md:text-4xl font-semibold text-text-main text-center">Visionaries</h2>
                  </div>
                  
                  <div className="flex flex-wrap justify-center gap-8 md:gap-16">
@@ -131,8 +131,8 @@ export default function TeamPage() {
                          </div>
                        </div>
                        <div className="text-center relative z-10">
-                         <h3 className="text-xl md:text-2xl font-bold text-text-main mb-1 group-hover:text-primary transition-colors">{person.name}</h3>
-                         <p className="text-primary font-bold uppercase tracking-wider text-xs">{person.role}</p>
+                         <h3 className="text-xl md:text-2xl font-semibold text-text-main mb-1 group-hover:text-primary transition-colors">{person.name}</h3>
+                         <p className="text-primary font-semibold uppercase tracking-wider text-xs">{person.role}</p>
                        </div>
                      </div>
                    ))}
@@ -144,7 +144,7 @@ export default function TeamPage() {
             {advisors.length > 0 && (
               <section className="bg-cream/30 py-8 rounded-[2.5rem] px-6">
                  <div className="flex flex-col items-center mb-8">
-                   <h2 className="text-2xl font-bold text-text-main">Strategic Advisors</h2>
+                   <h2 className="text-2xl font-semibold text-text-main">Strategic Advisors</h2>
                    <div className="h-1 w-10 bg-teal-200 mt-2 rounded-full"></div>
                  </div>
 
@@ -163,7 +163,7 @@ export default function TeamPage() {
                           className="object-cover object-[center_20%]"
                         />
                       </div>
-                      <h4 className="text-base font-bold text-text-main mb-0.5 leading-tight">{person.name}</h4>
+                      <h4 className="text-base font-semibold text-text-main mb-0.5 leading-tight">{person.name}</h4>
                       <p className="text-[10px] text-teal-600 font-medium">{person.role}</p>
                     </div>
                   ))}
@@ -175,7 +175,7 @@ export default function TeamPage() {
             {directors.length > 0 && (
               <section>
                  <div className="flex items-center gap-6 mb-10">
-                    <h2 className="text-2xl md:text-3xl font-bold text-text-main whitespace-nowrap">Directors</h2>
+                    <h2 className="text-2xl md:text-3xl font-semibold text-text-main whitespace-nowrap">Directors</h2>
                     <div className="h-px flex-1 bg-gradient-to-r from-teal-100 to-transparent"></div>
                 </div>
 
@@ -196,10 +196,10 @@ export default function TeamPage() {
                           />
                         </div>
                       </div>
-                      <h3 className="text-lg font-bold text-text-main mb-1 truncate w-full group-hover:text-primary transition-colors">{person.name}</h3>
+                      <h3 className="text-lg font-semibold text-text-main mb-1 truncate w-full group-hover:text-primary transition-colors">{person.name}</h3>
                       <p className="text-teal-600 font-semibold text-[11px] uppercase tracking-widest mb-3 h-8 flex items-center justify-center line-clamp-2 px-2">{person.role}</p>
                       {/* {person.country && (
-                        <div className="inline-flex items-center text-[10px] uppercase tracking-widest text-text-muted bg-gray-50 px-2.5 py-0.5 rounded-full font-bold">
+                        <div className="inline-flex items-center text-[10px] uppercase tracking-widest text-text-muted bg-gray-50 px-2.5 py-0.5 rounded-full font-semibold">
                           <MapPin size={9} className="mr-1" /> {person.country}
                         </div>
                       )} */}
@@ -214,7 +214,7 @@ export default function TeamPage() {
               <section className="relative py-8">
                  <div className="flex items-center gap-6 mb-10 justify-end">
                     <div className="h-px flex-1 bg-gradient-to-l from-teal-100 to-transparent"></div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-text-main whitespace-nowrap">Global Ambassadors</h2>
+                    <h2 className="text-2xl md:text-3xl font-semibold text-text-main whitespace-nowrap">Global Ambassadors</h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {ambassadors.map((person) => (
@@ -225,7 +225,7 @@ export default function TeamPage() {
                     >
                       <div className="w-2 h-2 rounded-full bg-teal-400 flex-shrink-0" />
                       <div className="min-w-0">
-                        <h4 className="text-sm font-bold text-text-main truncate group-hover:text-primary transition-colors">{person.name}</h4>
+                        <h4 className="text-sm font-semibold text-text-main truncate group-hover:text-primary transition-colors">{person.name}</h4>
                         {person.country && (
                           <div className="flex items-center text-xs text-text-muted font-medium mt-0.5">
                             <MapPin size={12} className="mr-1 flex-shrink-0" /> {person.country}
@@ -244,7 +244,7 @@ export default function TeamPage() {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-teal-800 rounded-full blur-3xl -z-0"></div>
                 
                 <div className="relative z-10 flex flex-col items-center mb-10">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 text-center">Global Operational Team</h2>
+                    <h2 className="text-2xl md:text-3xl font-semibold text-white mb-3 text-center">Global Operational Team</h2>
                     <p className="text-teal-200 text-center max-w-2xl font-light text-sm">The creative hands and hearts behind the interACT movement.</p>
                 </div>
                 
@@ -263,7 +263,7 @@ export default function TeamPage() {
                           className="object-cover object-[center_20%]"
                         />
                       </div>
-                      <h4 className="text-xs font-bold text-white mb-1 group-hover:text-teal-300 transition-colors uppercase tracking-wider">{person.name}</h4>
+                      <h4 className="text-xs font-semibold text-white mb-1 group-hover:text-teal-300 transition-colors uppercase tracking-wider">{person.name}</h4>
                       <p className="text-[10px] text-teal-200/70 font-medium line-clamp-1">{person.role}</p>
                     </div>
                   ))}
@@ -275,13 +275,13 @@ export default function TeamPage() {
             {otherTeam.length > 0 && (
                <section>
                  <div className="flex items-center gap-6 mb-16">
-                    <h2 className="text-2xl font-bold text-text-main whitespace-nowrap">Core Team</h2>
+                    <h2 className="text-2xl font-semibold text-text-main whitespace-nowrap">Core Team</h2>
                     <div className="h-px flex-1 bg-teal-100"></div>
                 </div>
                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                   {otherTeam.map((person) => (
                     <div key={person.id} onClick={() => openModal(person)} className="group flex flex-col items-center p-6 bg-gray-50 rounded-3xl border border-gray-100 hover:bg-white hover:shadow-xl transition-all cursor-pointer">
-                       <h3 className="font-bold text-sm">{person.name}</h3>
+                       <h3 className="font-semibold text-sm">{person.name}</h3>
                        <p className="text-xs text-text-muted">{person.role}</p>
                     </div>
                   ))}

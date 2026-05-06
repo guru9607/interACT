@@ -196,7 +196,7 @@ function DashboardContent() {
           <div className="w-20 h-20 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto">
             <AlertCircle size={40} />
           </div>
-          <h1 className="text-2xl font-bold text-text-main">Access pending</h1>
+          <h1 className="text-2xl font-semibold text-text-main">Access pending</h1>
           <p className="text-text-muted text-sm">
             Your account is signed in but does not have facilitator or core-team permissions yet.
             Ask an administrator to set your role in Supabase (<code className="text-xs bg-gray-100 px-1 rounded">profiles.role</code>
@@ -230,7 +230,7 @@ function DashboardContent() {
                   Back to Hub
                 </button>
                 <div>
-                  <h1 className="text-2xl font-bold text-text-main">Events Dashboard</h1>
+                  <h1 className="text-2xl font-semibold text-text-main">Events Dashboard</h1>
                   <p className="text-sm text-text-muted">
                     {auth.isAdmin
                       ? "Core team — all events and reports"
@@ -573,7 +573,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
   return (
     <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-teal-900/5">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-text-main">{initialData ? "Edit Event" : "Create New Event"}</h2>
+        <h2 className="text-xl font-semibold text-text-main">{initialData ? "Edit Event" : "Create New Event"}</h2>
         {initialData && (
           <button 
             type="button"
@@ -689,13 +689,13 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
         <div className="space-y-6 pt-4 border-t border-gray-100">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-lg font-bold text-text-main">Event Sessions</h3>
+              <h3 className="text-lg font-semibold text-text-main">Event Sessions</h3>
               <p className="text-xs text-text-muted">Manage days, feedback collection, and certificates</p>
             </div>
             <button 
               type="button" 
               onClick={addSession}
-              className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 text-teal-600 rounded-lg text-xs font-bold hover:bg-teal-600 hover:text-white transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 text-teal-600 rounded-lg text-xs font-semibold hover:bg-teal-600 hover:text-white transition-all"
             >
               <Plus size={14} /> Add Session
             </button>
@@ -716,7 +716,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
                 
                 <div className="grid md:grid-cols-4 gap-4 items-end">
                   <div className="space-y-1.5 md:col-span-1">
-                    <label className="text-[10px] uppercase font-bold text-text-muted tracking-wider">Day {idx + 1} Date</label>
+                    <label className="text-[10px] uppercase font-semibold text-text-muted tracking-wider">Day {idx + 1} Date</label>
                     <input
                       required
                       type="date"
@@ -727,7 +727,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
                   </div>
                   
                   <div className="space-y-1.5 md:col-span-1">
-                    <label className="text-[10px] uppercase font-bold text-text-muted tracking-wider">Module</label>
+                    <label className="text-[10px] uppercase font-semibold text-text-muted tracking-wider">Module</label>
                     <select
                       className={`w-full px-3 py-2 bg-white border border-gray-200 rounded-lg outline-none focus:border-primary text-sm ${sessionFeedbackCounts[session.id] ? 'opacity-70 bg-gray-50' : ''}`}
                       disabled={!!sessionFeedbackCounts[session.id]}
@@ -740,12 +740,12 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
                       <option value="combined">Complete ACT</option>
                     </select>
                     {sessionFeedbackCounts[session.id] && (
-                      <p className="text-[9px] text-teal-600 font-bold mt-1">Locked: {sessionFeedbackCounts[session.id]} Feedback(s) received</p>
+                      <p className="text-[9px] text-teal-600 font-semibold mt-1">Locked: {sessionFeedbackCounts[session.id]} Feedback(s) received</p>
                     )}
                   </div>
 
                   <div className="space-y-1.5 md:col-span-1">
-                    <label className="text-[10px] uppercase font-bold text-text-muted tracking-wider">Start Time</label>
+                    <label className="text-[10px] uppercase font-semibold text-text-muted tracking-wider">Start Time</label>
                     <input
                       required
                       type="time"
@@ -756,7 +756,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
                   </div>
 
                   <div className="space-y-1.5 md:col-span-1">
-                    <label className="text-[10px] uppercase font-bold text-text-muted tracking-wider">End Time</label>
+                    <label className="text-[10px] uppercase font-semibold text-text-muted tracking-wider">End Time</label>
                     <input
                       required
                       type="time"
@@ -862,7 +862,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-hover transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           {loading ? 'Saving...' : (initialData ? 'Update Event' : 'Create Event')}
         </button>
@@ -1201,7 +1201,7 @@ function ManageEventsList({
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-xl font-bold text-text-main">{isArchived ? "Trash Can" : "Events Management"}</h2>
+          <h2 className="text-xl font-semibold text-text-main">{isArchived ? "Trash Can" : "Events Management"}</h2>
           <p className="text-sm text-text-muted">
             {isArchived ? "Restore items or delete them forever" : "Manage scheduling and complete past events"}
           </p>
@@ -1241,7 +1241,7 @@ function ManageEventsList({
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-lg font-bold text-text-main">{event.title}</h3>
+                  <h3 className="text-lg font-semibold text-text-main">{event.title}</h3>
                   <div className="flex items-center gap-2">
                     {!isArchived ? (
                         <>
@@ -1299,9 +1299,9 @@ function ManageEventsList({
                     if (lastDate < now) {
                       return (
                         <>
-                          <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-bold rounded-full">COMPLETED</span>
+                          <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-[10px] font-semibold rounded-full">COMPLETED</span>
                           {!event.image_url && (
-                            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-full flex items-center gap-1">
+                            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-semibold rounded-full flex items-center gap-1">
                               <ImageIcon size={10} /> PHOTOS MISSING
                             </span>
                           )}
@@ -1310,10 +1310,10 @@ function ManageEventsList({
                     }
 
                     if (firstDate <= now && lastDate >= now) {
-                      return <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-extrabold rounded-full animate-pulse border border-amber-200">ONGOING</span>;
+                      return <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-semibold rounded-full animate-pulse border border-amber-200">ONGOING</span>;
                     }
 
-                    return <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full">UPCOMING</span>;
+                    return <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-semibold rounded-full">UPCOMING</span>;
                   })()}
                 </div>
                 <div className="flex flex-wrap gap-4 text-sm text-text-muted">
@@ -1475,7 +1475,7 @@ function ReportsView() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-xl font-bold text-text-main">Global Reports</h2>
+        <h2 className="text-xl font-semibold text-text-main">Global Reports</h2>
         <p className="text-sm text-text-muted">Export analytics and feedback across all events</p>
       </div>
 
@@ -1485,7 +1485,7 @@ function ReportsView() {
             <MessageSquare size={24} />
           </div>
           <div>
-            <h3 className="font-bold text-text-main">Feedback Reports</h3>
+            <h3 className="font-semibold text-text-main">Feedback Reports</h3>
             <p className="text-sm text-text-muted italic">Download all feedback received across all sessions and countries.</p>
           </div>
           <div className="space-y-2 pt-2">
@@ -1535,7 +1535,7 @@ function ReportsView() {
             <Users size={24} />
           </div>
           <div>
-            <h3 className="font-bold text-text-main">Impact Statistics</h3>
+            <h3 className="font-semibold text-text-main">Impact Statistics</h3>
             <p className="text-sm text-text-muted">High-level stats for UN reporting (Coming Soon)</p>
           </div>
           <div className="h-[100px] flex items-center justify-center border-2 border-dashed border-gray-100 rounded-2xl text-xs text-text-muted">

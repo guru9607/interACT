@@ -20,7 +20,7 @@ export function TransformativeSilenceManual() {
       </p>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Aims for participants</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Aims for participants</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>
             Experience silence as inner freedom—not only outer quiet; space from draining
@@ -44,7 +44,7 @@ export function TransformativeSilenceManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Suggested session arc</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Suggested session arc</h2>
         <ol className="list-decimal pl-5 space-y-3">
           <li>
             <strong className="text-text-main">Freedom of thought</strong> — Notice what
@@ -72,7 +72,7 @@ export function TransformativeSilenceManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Facilitation reminders</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Facilitation reminders</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>Keep language practical and inclusive; match the neutral public module tone.</li>
           <li>Protect silence: avoid filling with interpretation or hype.</li>

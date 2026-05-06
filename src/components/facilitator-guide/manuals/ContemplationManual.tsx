@@ -18,7 +18,7 @@ export function ContemplationManual() {
       </p>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Purpose</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Purpose</h2>
         <p>
           Support awareness of innate inner qualities and structured experience through
           contemplation. Shift emphasis from external validation toward internal
@@ -27,7 +27,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Learning outcomes</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Learning outcomes</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>Recognize innate qualities within themselves.</li>
           <li>Experience at least one inner quality through guided contemplation.</li>
@@ -40,7 +40,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Core concept</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Core concept</h2>
         <p>
           Qualities such as calmness, kindness, patience, clarity can be accessed through
           focused inner attention; they are not only rewards for external achievement.
@@ -48,7 +48,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Definitions (teach clearly)</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Definitions (teach clearly)</h2>
         <ul className="list-disc pl-5 space-y-2">
           <li>
             <strong className="text-text-main">Self-worth</strong> — Valuable as I am,
@@ -70,7 +70,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Session structure</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Session structure</h2>
         <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
           <table className="w-full text-left text-xs sm:text-sm">
             <thead>
@@ -117,7 +117,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Contemplation practice</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Contemplation practice</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>Sit comfortably; reduce distractions.</li>
           <li>Choose one quality (e.g. calmness, kindness, patience).</li>
@@ -146,7 +146,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Facilitation</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Facilitation</h2>
         <p className="mb-2">
           <strong className="text-text-main">Do:</strong> steady tone, enough silence,
           simple language, experiential focus.
@@ -158,7 +158,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Post-session practice</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Post-session practice</h2>
         <p>
           ~5 minutes daily: quiet space, one quality, sustain attention on experience
           without picking it apart.
@@ -166,7 +166,7 @@ export function ContemplationManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Outcomes &amp; limitations</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Outcomes &amp; limitations</h2>
         <p>
           Expect increased awareness of qualities, initial stability, introduction to
           repeatable practice. Not instant permanent change; ongoing practice matters for

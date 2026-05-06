@@ -53,7 +53,7 @@ export default function FacilitatorsPage() {
             </p>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-bold text-text-main mb-8 tracking-tighter leading-[1.1]">
+          <h1 className="text-4xl md:text-7xl font-semibold text-text-main mb-8 tracking-tighter leading-[1.1]">
             Empower the <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400">
               Next Generation
@@ -66,7 +66,7 @@ export default function FacilitatorsPage() {
           </p>
 
           <div className="inline-flex items-center justify-center p-1 bg-teal-50 rounded-2xl border border-teal-100 mb-12">
-            <div className="px-4 py-2 bg-white rounded-xl shadow-sm text-sm font-bold text-teal-800">
+            <div className="px-4 py-2 bg-white rounded-xl shadow-sm text-sm font-semibold text-teal-800">
               Registration Open
             </div>
             <div className="px-4 py-2 text-sm font-medium text-teal-600/70">

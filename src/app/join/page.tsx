@@ -134,7 +134,7 @@ export default function JoinPage() {
             <Globe size={16} className="mr-2" />
             Global Events
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-main mb-6 tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-main mb-6 tracking-tight">
             Be the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">Change</span>
           </h1>
           <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed">
@@ -197,10 +197,10 @@ export default function JoinPage() {
                               lastDate.setHours(0, 0, 0, 0);
                               
                               if (firstDate <= now && lastDate >= now) {
-                                return <span className="px-2 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-700 animate-pulse">ONGOING</span>;
+                                return <span className="px-2 py-1 rounded-md text-xs font-semibold bg-amber-100 text-amber-700 animate-pulse">ONGOING</span>;
                               }
                               if (firstDate > now) {
-                                return <span className="px-2 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-600">UPCOMING</span>;
+                                return <span className="px-2 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-600">UPCOMING</span>;
                               }
                             }
                             return null;
@@ -210,7 +210,7 @@ export default function JoinPage() {
                             {event.location}, {event.country}
                           </span>
                         </div>
-                        <h3 className="text-xl font-bold text-text-main mb-1 group-hover:text-primary transition-colors">
+                        <h3 className="text-xl font-semibold text-text-main mb-1 group-hover:text-primary transition-colors">
                           {event.title}
                         </h3>
                         <div className="flex items-center gap-4 text-sm text-text-muted">
@@ -242,7 +242,7 @@ export default function JoinPage() {
           {!loading && pastEvents.length > 0 && (
             <div className="pt-20">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-text-main mb-4">Glimpse of Events</h2>
+                <h2 className="text-3xl font-semibold text-text-main mb-4">Glimpse of Events</h2>
                 <p className="text-text-muted">Glimpses into our previous gatherings and milestones</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -262,21 +262,21 @@ export default function JoinPage() {
                           </div>
                         )}
                         <div className="absolute top-4 left-4">
-                           <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-bold text-teal-600 shadow-sm">
+                           <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold text-teal-600 shadow-sm">
                              IMPACT
                            </span>
                         </div>
                       </div>
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-lg font-bold text-text-main line-clamp-1 group-hover:text-primary transition-colors">
+                          <h3 className="text-lg font-semibold text-text-main line-clamp-1 group-hover:text-primary transition-colors">
                             {event.title}
                           </h3>
                         </div>
                         <div className="flex items-center gap-3 text-xs text-text-muted">
                           <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                           <span className="flex items-center gap-1"><MapPin size={12} /> {event.country || "India"}</span>
-                          <span className="px-2 py-0.5 rounded-full bg-teal-50 text-teal-600 font-bold ml-auto">IMPACT</span>
+                          <span className="px-2 py-0.5 rounded-full bg-teal-50 text-teal-600 font-semibold ml-auto">IMPACT</span>
                         </div>
                       </div>
                     </div>
@@ -289,7 +289,7 @@ export default function JoinPage() {
                   <button 
                     onClick={loadMorePast}
                     disabled={loadingMore}
-                    className="px-8 py-3 bg-white border-2 border-primary text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all disabled:opacity-50 flex items-center gap-2 mx-auto"
+                    className="px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-2xl hover:bg-primary hover:text-white transition-all disabled:opacity-50 flex items-center gap-2 mx-auto"
                   >
                     {loadingMore ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div> : "View More Impacts"}
                   </button>

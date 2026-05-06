@@ -10,7 +10,7 @@ export const WebsiteGuideContent = () => {
       </p>
 
       <section className="rounded-2xl border border-amber-200 bg-amber-50/50 p-6">
-        <h2 className="text-lg font-bold text-text-main mb-3">
+        <h2 className="text-lg font-semibold text-text-main mb-3">
           3-hour combined facilitator script
         </h2>
         <p className="mb-2">
@@ -26,7 +26,7 @@ export const WebsiteGuideContent = () => {
       </section>
 
       <section className="rounded-2xl border border-teal-100 bg-teal-50/40 p-6">
-        <h2 className="text-lg font-bold text-text-main mb-3">Staff Portal</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Staff Portal</h2>
         <p>
           Entry point:{" "}
           <Link href="/portal" className="text-teal-700 font-semibold underline">
@@ -39,7 +39,7 @@ export const WebsiteGuideContent = () => {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Event Management</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Event Management</h2>
         <p className="mb-2">
           <Link
             href="/events-dashboard"
@@ -57,7 +57,7 @@ export const WebsiteGuideContent = () => {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Facilitator intake</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Facilitator intake</h2>
         <p>
           <Link href="/facilitators" className="text-teal-700 font-semibold underline">
             /facilitators
@@ -67,7 +67,7 @@ export const WebsiteGuideContent = () => {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Public pages (participants)</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Public pages (participants)</h2>
         <ul className="list-disc pl-5 space-y-2">
           <li>
             <Link href="/modules" className="text-teal-700 font-semibold underline">
@@ -86,7 +86,7 @@ export const WebsiteGuideContent = () => {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Feedback &amp; data</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Feedback &amp; data</h2>
         <p>
           After sessions, participants submit module-specific reflections from the event
           flow. Coordinators use dashboard filters and CSV exports for review—ensure the
@@ -95,7 +95,7 @@ export const WebsiteGuideContent = () => {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">This guide</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">This guide</h2>
         <p>
           Use the Facilitator Guide index for{" "}
           <strong className="text-text-main">Awareness</strong>,{" "}

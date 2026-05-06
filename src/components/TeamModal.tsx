@@ -76,12 +76,12 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
               <>
                 {member.category && (
                   <div className="mb-2">
-                    <span className="inline-block px-3 py-1 bg-teal-50 text-primary text-xs font-bold uppercase tracking-wider rounded-full mb-3">
+                    <span className="inline-block px-3 py-1 bg-teal-50 text-primary text-xs font-semibold uppercase tracking-wider rounded-full mb-3">
                       {member.category}
                     </span>
                   </div>
                 )}
-                <h2 className="text-3xl font-bold text-text-main mb-1">{member.name}</h2>
+                <h2 className="text-3xl font-semibold text-text-main mb-1">{member.name}</h2>
                 <p className="text-lg text-primary font-medium">{member.role}</p>
 
                 {/* {member.country && member.category?.toLowerCase() !== 'global ambassadors' && (
@@ -98,7 +98,7 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
                 <div className="mt-8 pt-6 border-t border-gray-100">
                   <button 
                     onClick={onClose}
-                    className="text-sm font-bold text-text-main hover:text-primary transition-colors"
+                    className="text-sm font-semibold text-text-main hover:text-primary transition-colors"
                   >
                     Close Details
                   </button>

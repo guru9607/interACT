@@ -22,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${outfit.variable} font-sans antialiased bg-cream text-text-main flex flex-col min-h-screen`}>
+      <body
+        suppressHydrationWarning
+        className={`${outfit.className} ${outfit.variable} antialiased bg-cream text-text-main flex flex-col min-h-screen`}
+      >
         <Navbar />
         <main className="flex-grow pt-16">
           {children}

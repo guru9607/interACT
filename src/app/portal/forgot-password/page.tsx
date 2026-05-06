@@ -30,14 +30,14 @@ export default function PortalForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-teal-50/30 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-[2.5rem] p-10 shadow-2xl shadow-teal-900/10 border border-teal-100">
+    <div className="auth-page-bg">
+      <div className="auth-card-shell p-8 sm:p-10">
         <div className="flex flex-col items-center text-center space-y-6">
           <div className="w-20 h-20 bg-teal-50 text-teal-600 rounded-3xl flex items-center justify-center">
             <Mail size={40} aria-hidden />
           </div>
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-text-main">Reset password</h1>
+            <h1 className="text-3xl font-semibold text-text-main">Reset password</h1>
             <p className="text-text-muted text-sm">
               Existing facilitators without a password yet can use this flow after an admin has
               invited or registered their email.
@@ -52,7 +52,7 @@ export default function PortalForgotPasswordPage() {
           ) : null}
 
           <form onSubmit={handleSubmit} className="w-full space-y-4">
-            <label className="block text-left text-xs font-semibold text-text-main uppercase tracking-wide">
+            <label className="field-label-muted">
               Email
               <input
                 type="email"
@@ -60,13 +60,13 @@ export default function PortalForgotPasswordPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-2 w-full px-4 py-3 bg-gray-50 border border-teal-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none"
+                className="mt-2 w-full px-4 py-3 text-text-main font-normal bg-white border border-teal-100/90 rounded-xl shadow-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-shadow"
               />
             </label>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl hover:bg-teal-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-600/20 disabled:opacity-60"
+              className="auth-primary-btn"
             >
               {loading ? <Loader2 className="animate-spin" size={22} /> : null}
               Send reset link

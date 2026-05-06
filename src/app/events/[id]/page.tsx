@@ -252,7 +252,7 @@ export default function EventDetailPage() {
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div></div>;
-  if (!event) return <div className="min-h-screen flex items-center justify-center text-center"><h1 className="text-2xl font-bold mb-4">Event Not Found</h1><Link href="/join" className="text-primary hover:underline">← Back to Events</Link></div>;
+  if (!event) return <div className="min-h-screen flex items-center justify-center text-center"><h1 className="text-2xl font-semibold mb-4">Event Not Found</h1><Link href="/join" className="text-primary hover:underline">← Back to Events</Link></div>;
 
   return (
     <div className="bg-white min-h-screen ">
@@ -289,7 +289,7 @@ export default function EventDetailPage() {
                 <span className="text-text-muted flex items-center"><Globe size={16} className="mr-1.5" />{event.region}</span>
               </div>
 
-              <h1 className="text-2xl md:text-3xl font-bold text-text-main mb-4 leading-tight">
+              <h1 className="text-2xl md:text-3xl font-semibold text-text-main mb-4 leading-tight">
                 {event.title}
               </h1>
               
@@ -314,8 +314,8 @@ export default function EventDetailPage() {
                     {event.facilitators[0].image_url ? <img src={event.facilitators[0].image_url} alt="" className="w-full h-full object-cover" /> : <Users size={20} />}
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Conducted by</p>
-                    <p className="text-base font-bold text-text-main leading-tight">{event.facilitators[0].name}</p>
+                    <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">Conducted by</p>
+                    <p className="text-base font-semibold text-text-main leading-tight">{event.facilitators[0].name}</p>
                   </div>
                 </div>
               )}
@@ -388,7 +388,7 @@ export default function EventDetailPage() {
         <div className="grid lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2 space-y-10">
             <section>
-              <h2 className="text-xl font-extrabold text-text-main mb-4 flex items-center gap-3">
+              <h2 className="text-xl font-semibold text-text-main mb-4 flex items-center gap-3">
                 <div className="w-1.5 h-6 bg-primary rounded-full" />
                 Your Transformative Journey
               </h2>
@@ -399,11 +399,11 @@ export default function EventDetailPage() {
             <section>
               <div className="flex justify-between items-end mb-8">
                 <div>
-                  <h2 className="text-3xl font-extrabold text-text-main mb-2">Event Roadmap</h2>
+                  <h2 className="text-3xl font-semibold text-text-main mb-2">Event Roadmap</h2>
                   <p className="text-text-muted font-medium">Follow the journey through each module.</p>
                 </div>
                 {event.sessions.length > 0 && (
-                  <div className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl text-sm font-bold border border-teal-100">
+                  <div className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl text-sm font-semibold border border-teal-100">
                     {event.sessions.length} Session{event.sessions.length > 1 ? 's' : ''}
                   </div>
                 )}
@@ -433,18 +433,18 @@ export default function EventDetailPage() {
                     >
                       {/* Step Circle */}
                       <div className={`absolute left-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border-2 border-white shadow-sm flex items-center justify-center z-10 bg-white text-gray-400`}>
-                        <span className="text-[10px] font-bold">{idx + 1}</span>
+                        <span className="text-[10px] font-semibold">{idx + 1}</span>
                       </div>
 
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                          <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-0.5">{formatDate(session.date)}</p>
-                          <p className="text-lg font-black text-text-main leading-tight">
+                          <p className="text-[10px] font-semibold text-primary uppercase tracking-widest mb-0.5">{formatDate(session.date)}</p>
+                          <p className="text-lg font-semibold text-text-main leading-tight">
                             {MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
                           </p>
                           <div className="flex flex-wrap gap-4 mt-1">
                             {(session.start_time || session.end_time) && (
-                              <p className="text-xs font-bold text-text-muted flex items-center gap-1.5">
+                              <p className="text-xs font-semibold text-text-muted flex items-center gap-1.5">
                                 <Clock size={12} /> {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
                               </p>
                             )}
@@ -455,7 +455,7 @@ export default function EventDetailPage() {
                           {canFeedback ? (
                             <button 
                               onClick={() => { setActiveSession(session); setShowFeedbackForm(true); }}
-                              className="px-5 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition-all text-xs font-bold shadow-lg shadow-primary/20 flex items-center gap-2"
+                              className="px-5 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition-all text-xs font-semibold shadow-lg shadow-primary/20 flex items-center gap-2"
                             >
                               <Send size={14} className="fill-white/20" /> Feedback
                             </button>
@@ -483,12 +483,12 @@ export default function EventDetailPage() {
                 
                 <div className="flex items-center justify-between mb-8 relative">
                   <div>
-                    <h2 className="text-xl font-black text-text-main italic mb-1">Impact Echoes</h2>
-                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest opacity-60">Real stories from real participants</p>
+                    <h2 className="text-xl font-semibold text-text-main italic mb-1">Impact Echoes</h2>
+                    <p className="text-[10px] text-text-muted font-semibold uppercase tracking-widest opacity-60">Real stories from real participants</p>
                   </div>
                   <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-teal-100">
                     <Star className="text-amber-400 fill-amber-400" size={12} />
-                    <span className="text-xs font-black text-text-main tracking-tight">Community Love</span>
+                    <span className="text-xs font-semibold text-text-main tracking-tight">Community Love</span>
                   </div>
                 </div>
 
@@ -515,14 +515,14 @@ export default function EventDetailPage() {
                           </p>
                         </div>
                         <div className="flex items-center gap-4 border-t border-gray-50 pt-4">
-                          <div className="w-9 h-9 rounded-xl bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-black text-xs shadow-lg shadow-teal-500/20">
+                          <div className="w-9 h-9 rounded-xl bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-semibold text-xs shadow-lg shadow-teal-500/20">
                             {(t.full_name as string || t.first_name as string)?.[0]?.toUpperCase() || 'P'}
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-sm font-black text-text-main tracking-tight">
+                            <span className="text-sm font-semibold text-text-main tracking-tight">
                               {t.full_name as string || t.first_name as string || 'Anonymous Participant'}
                             </span>
-                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest opacity-60">Verified Feedback</span>
+                            <span className="text-[9px] font-semibold text-text-muted uppercase tracking-widest opacity-60">Verified Feedback</span>
                           </div>
                         </div>
                       </motion.div>
@@ -540,7 +540,7 @@ export default function EventDetailPage() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 opacity-50" />
               </div>
 
-              <h3 className="text-2xl font-bold text-text-main mb-4 relative">
+              <h3 className="text-2xl font-semibold text-text-main mb-4 relative">
                 {(() => {
                   const now = new Date();
                   now.setHours(0, 0, 0, 0);
@@ -573,7 +573,7 @@ export default function EventDetailPage() {
                       <p className="text-text-muted text-sm italic mb-4">
                         This event has concluded. Thank you to everyone who participated!
                       </p>
-                      <Link href="/join" className="block w-full py-4 bg-gray-900 text-white text-center font-bold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20">Explore More Events</Link>
+                      <Link href="/join" className="block w-full py-4 bg-gray-900 text-white text-center font-semibold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20">Explore More Events</Link>
                     </div>
                   );
                 }
@@ -584,20 +584,20 @@ export default function EventDetailPage() {
                       <div className="w-20 h-20 bg-teal-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-teal-600 shadow-inner">
                         <CheckCircle2 size={40} />
                       </div>
-                      <h4 className="text-2xl font-black text-text-main mb-2 tracking-tight">You&apos;re Registered!</h4>
+                      <h4 className="text-2xl font-semibold text-text-main mb-2 tracking-tight">You&apos;re Registered!</h4>
                       <p className="text-text-muted font-medium mb-8">Ready to start your journey? Check your email for details.</p>
                       
                       <div className="space-y-4">
                         <div className="relative">
-                          <button onClick={() => setShowCalendarMenu(!showCalendarMenu)} className="w-full px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/30">
+                          <button onClick={() => setShowCalendarMenu(!showCalendarMenu)} className="w-full px-6 py-4 bg-primary text-white font-semibold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/30">
                             <Calendar size={20} /> Add to Calendar <ChevronDown size={18} className={`transition-transform ${showCalendarMenu ? 'rotate-180' : ''}`} />
                           </button>
                           <AnimatePresence>
                             {showCalendarMenu && (
                               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="absolute top-full left-0 right-0 mt-4 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2">
-                                <button onClick={addToGoogleCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Google Calendar</button>
-                                <button onClick={addToOutlookCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm">Outlook Calendar</button>
-                                <button onClick={generateEventCalendarFile} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-bold text-gray-700 text-sm text-primary">Download .ics</button>
+                                <button onClick={addToGoogleCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-semibold text-gray-700 text-sm">Google Calendar</button>
+                                <button onClick={addToOutlookCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-semibold text-gray-700 text-sm">Outlook Calendar</button>
+                                <button onClick={generateEventCalendarFile} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-semibold text-gray-700 text-sm text-primary">Download .ics</button>
                               </motion.div>
                             )}
                           </AnimatePresence>
@@ -610,15 +610,15 @@ export default function EventDetailPage() {
                 return (
                   <form onSubmit={handleSubmit} className="space-y-5 relative">
                     <div>
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Full Name</label>
+                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Full Name</label>
                       <input type="text" name="name" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="Your Name" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Email Address</label>
+                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Email Address</label>
                       <input type="email" name="email" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="hello@example.com" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Country</label>
+                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Country</label>
                       <div className="relative group">
                         <select 
                           name="country" 
@@ -640,9 +640,9 @@ export default function EventDetailPage() {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Phone Number</label>
+                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Phone Number</label>
                       <div className="flex items-stretch overflow-hidden bg-gray-50 border border-transparent rounded-2xl focus-within:bg-white focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                        <div className="px-5 py-3.5 bg-gray-100/50 border-r border-gray-200 text-text-muted font-bold text-sm min-w-[70px] flex items-center justify-center">
+                        <div className="px-5 py-3.5 bg-gray-100/50 border-r border-gray-200 text-text-muted font-semibold text-sm min-w-[70px] flex items-center justify-center">
                           {countries.find(c => c.name === regCountry)?.code || "+"}
                         </div>
                         <input 
@@ -656,7 +656,7 @@ export default function EventDetailPage() {
                         />
                       </div>
                     </div>
-                    <button type="submit" className="w-full py-4.5 bg-primary text-white font-black rounded-2xl hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-1 active:translate-y-0">Complete Registration</button>
+                    <button type="submit" className="w-full py-4.5 bg-primary text-white font-semibold rounded-2xl hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-1 active:translate-y-0">Complete Registration</button>
                   </form>
                 );
               })()}

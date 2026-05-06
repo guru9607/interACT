@@ -27,40 +27,40 @@ export default function Home() {
     <div className="flex flex-col min-h-screen overflow-x-hidden">
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-teal-50 via-cream to-white">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-50"></div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-20 right-0 w-96 h-96 bg-teal-200/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal-100/30 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-50" />
+        <div className="absolute top-20 right-0 w-96 h-96 bg-teal-200/20 rounded-full blur-3xl -z-10 animate-pulse" aria-hidden />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal-100/30 rounded-full blur-3xl -z-10" aria-hidden />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
+          <motion.div
             className="text-center max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.div 
+            <motion.div
               className="inline-flex items-center px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-teal-100 text-teal-800 text-sm font-medium mb-8 shadow-sm hover:border-teal-200 transition-colors cursor-default"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <Sparkles size={14} className="mr-2 text-teal-600" />
+              <Sparkles size={14} className="mr-2 text-teal-600 shrink-0" aria-hidden />
               A Global Youth Initiative
             </motion.div>
-            
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-text-main mb-8 tracking-tight leading-[1.1]">
+
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold text-text-main mb-8 tracking-tight leading-[1.1]">
               Rediscover your <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400">
                 Core Goodness
               </span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-text-muted mb-10 leading-relaxed max-w-2xl mx-auto font-light">
-              In a world of noise, find your inner clarity. <span className="font-medium text-teal-700">interACT</span> helps you reconnect with your <span className="text-teal-700 font-semibold">innate goodness</span> through awareness and transformative silence.
+              In a world of noise, find your inner clarity.{' '}
+              <span className="font-medium text-teal-700">interACT</span> helps you reconnect with your{' '}
+              <span className="text-teal-700 font-medium">innate goodness</span> through awareness and transformative silence.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/modules"
@@ -87,7 +87,7 @@ export default function Home() {
             <motion.div 
               {...fadeInUp}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-text-main mb-6">
+              <h2 className="text-3xl md:text-4xl font-semibold text-text-main mb-6">
                 Your Path to Inner Strength
               </h2>
               <div className="space-y-6 text-lg text-text-muted leading-relaxed">
@@ -131,7 +131,7 @@ export default function Home() {
             className="text-center mb-16"
             {...fadeInUp}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
               Unlock Your Potential
             </h2>
             <p className="text-lg text-teal-100 max-w-2xl mx-auto opacity-90">
@@ -154,7 +154,7 @@ export default function Home() {
                 <div className="w-14 h-14 bg-teal-500/30 rounded-2xl flex items-center justify-center mb-6 text-white border border-white/20">
                   <Sparkles size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Innate Awareness</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Innate Awareness</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
                   Recognize yourself as a living being with innate qualities of peace and love. Understand that your thoughts are the seeds of your life's outcomes.
                 </p>
@@ -168,7 +168,7 @@ export default function Home() {
                 <div className="w-14 h-14 bg-teal-500/30 rounded-2xl flex items-center justify-center mb-6 text-white border border-white/20">
                   <Shield size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Internal Resilience</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Internal Resilience</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
                   Build deep self-worth and inner strength. Shift focus from external validation to stable internal factors like security and character.
                 </p>
@@ -182,7 +182,7 @@ export default function Home() {
                 <div className="w-14 h-14 bg-teal-500/30 rounded-2xl flex items-center justify-center mb-6 text-white border border-white/20">
                   <Zap size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Inner Wisdom</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">Inner Wisdom</h3>
                 <p className="text-teal-50 font-light leading-relaxed">
                   Access deep discernment through silence. Connect with the ultimate source of power to bring about sustainable change and clarity.
                 </p>
@@ -198,7 +198,7 @@ export default function Home() {
             className="text-center mb-16"
             {...fadeInUp}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-text-main mb-4">
+            <h2 className="text-3xl md:text-4xl font-semibold text-text-main mb-4">
               The interACT Framework
             </h2>
             <p className="text-lg text-text-muted max-w-2xl mx-auto">
@@ -218,10 +218,10 @@ export default function Home() {
               variants={fadeInUp}
               className="group p-8 rounded-3xl bg-white border border-teal-100 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-bold text-xl mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-semibold text-xl mb-6 group-hover:scale-110 transition-transform">
                 A
               </div>
-              <h3 className="text-2xl font-bold text-text-main mb-4">Awareness</h3>
+              <h3 className="text-2xl font-semibold text-text-main mb-4">Awareness</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
                 Connect with your innate goodness. Recognize yourself as a living being, an eternal energy with qualities of Peace, Love, and Truth.
               </p>
@@ -232,10 +232,10 @@ export default function Home() {
               variants={fadeInUp}
               className="group p-8 rounded-3xl bg-white border border-teal-100 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-bold text-xl mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-semibold text-xl mb-6 group-hover:scale-110 transition-transform">
                 C
               </div>
-              <h3 className="text-2xl font-bold text-text-main mb-4">Contemplation</h3>
+              <h3 className="text-2xl font-semibold text-text-main mb-4">Contemplation</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
                 Strengthen your inner core through reflection. Learn to shift your focus from external validation to internal resilience and deep self-worth.
               </p>
@@ -246,10 +246,10 @@ export default function Home() {
               variants={fadeInUp}
               className="group p-8 rounded-3xl bg-white border border-teal-100 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-bold text-xl mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 font-semibold text-xl mb-6 group-hover:scale-110 transition-transform">
                 T
               </div>
-              <h3 className="text-2xl font-bold text-text-main mb-4">Transformative Silence</h3>
+              <h3 className="text-2xl font-semibold text-text-main mb-4">Transformative Silence</h3>
               <p className="text-text-muted mb-6 leading-relaxed">
                 Access inner wisdom. Discern between truth and false, and connect with the Source of power to stabilize your original qualities.
               </p>
@@ -267,7 +267,7 @@ export default function Home() {
               className="space-y-8"
               {...fadeInUp}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-4xl font-bold text-text-main leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-4xl font-semibold text-text-main leading-tight">
                 interACT and the <br/>
                 <span className="text-teal-600">UN Sustainable Development Goals</span>
               </h2>

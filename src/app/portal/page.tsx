@@ -37,24 +37,26 @@ export default function PortalPage() {
 
   if (!auth.userId) {
     return (
-      <div className="min-h-screen bg-teal-50/30 flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-white rounded-[2.5rem] p-10 shadow-xl border border-teal-100 text-center space-y-6">
-          <ShieldCheck className="mx-auto text-teal-600" size={48} aria-hidden />
-          <h1 className="text-2xl font-bold text-text-main">Staff Portal</h1>
-          <p className="text-text-muted text-sm">
-            Sign in with your facilitator login. New colleagues create an account first — roster emails get facilitator access automatically.
-          </p>
-          <div className="flex flex-col gap-3">
+      <div className="auth-page-bg">
+        <div className="auth-card-shell max-w-md p-8 sm:p-10 text-center space-y-6">
+          <ShieldCheck className="mx-auto text-teal-600" size={40} aria-hidden />
+          <div className="space-y-2">
+            <h1 className="text-2xl font-semibold text-text-main tracking-tight">Staff portal</h1>
+            <p className="text-text-muted text-sm leading-relaxed">
+              Sign in with your facilitator login. New colleagues create an account first — roster emails get facilitator access automatically.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 w-full">
             <Link
               href="/portal/login"
-              className="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl hover:bg-teal-700 transition-all inline-flex items-center justify-center gap-2"
+              className="auth-primary-btn"
             >
               Sign in
               <ArrowRight size={20} aria-hidden />
             </Link>
             <Link
               href="/portal/register"
-              className="text-sm text-teal-700 font-semibold underline"
+              className="text-sm text-teal-700 font-medium underline underline-offset-4"
             >
               Create facilitator login
             </Link>
@@ -68,7 +70,7 @@ export default function PortalPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
         <div className="max-w-lg bg-white rounded-3xl border border-amber-100 p-10 shadow-lg text-center space-y-4">
-          <h1 className="text-xl font-bold text-text-main">Waiting for access</h1>
+          <h1 className="text-xl font-semibold text-text-main">Waiting for access</h1>
           <p className="text-text-muted text-sm">
             Signed in as <strong className="text-text-main">{auth.role ?? "participant"}</strong>.
             If you expected facilitator access, sign up with the <strong className="text-text-main">same email</strong> as your facilitator application or your core-team roster entry (including <code className="text-xs bg-gray-100 px-1 rounded">teams.email</code> in the database). Otherwise ask a core-team admin to promote you to{" "}
@@ -138,7 +140,7 @@ export default function PortalPage() {
             <div className="flex items-center gap-4 text-teal-600">
               <ShieldCheck size={32} aria-hidden />
               <div>
-                <h1 className="text-2xl font-bold text-text-main leading-none">interACT Hub</h1>
+                <h1 className="text-2xl font-semibold text-text-main leading-none">interACT Hub</h1>
                 <p className="text-xs text-text-muted mt-1 uppercase tracking-wider font-semibold">
                   {auth.isAdmin ? "Core team (admin)" : "Facilitator"}
                 </p>
@@ -183,7 +185,7 @@ export default function PortalPage() {
                   <ArrowRight size={20} aria-hidden />
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-text-main mb-2">{item.title}</h3>
+              <h3 className="text-xl font-semibold text-text-main mb-2">{item.title}</h3>
               <p className="text-text-muted leading-relaxed text-sm">{item.description}</p>
             </motion.div>
           ))}

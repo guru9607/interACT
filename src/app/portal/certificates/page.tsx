@@ -124,7 +124,7 @@ export default function CertificatesPortal() {
                 <ArrowLeft size={24} />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-text-main flex items-center gap-2">
+                <h1 className="text-xl font-semibold text-text-main flex items-center gap-2">
                   <Award className="text-teal-600" size={24} />
                   Certificate Generator
                 </h1>
@@ -142,7 +142,7 @@ export default function CertificatesPortal() {
             <div className="bg-white rounded-[2.5rem] p-8 border border-teal-100 shadow-xl shadow-teal-900/5 space-y-6">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-main flex items-center gap-2">
+                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
                     <User size={16} className="text-teal-600" />
                     {formData.type === 'participation' ? "Recipient Full Name" : "Keynote Speaker Name"}
                   </label>
@@ -157,7 +157,7 @@ export default function CertificatesPortal() {
 
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-main flex items-center gap-2">
+                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
                     <FileText size={16} className="text-teal-600" />
                     Event / Program Title
                   </label>
@@ -185,7 +185,7 @@ export default function CertificatesPortal() {
                               }}
                               className="w-full text-left px-6 py-3 hover:bg-teal-50 transition-colors text-sm border-b border-gray-50 last:border-0"
                             >
-                              <div className="font-bold text-text-main">{event.title}</div>
+                              <div className="font-semibold text-text-main">{event.title}</div>
                               <div className="text-[10px] text-text-muted">{event.date}</div>
                             </button>
                           ))}
@@ -195,14 +195,14 @@ export default function CertificatesPortal() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-main flex items-center gap-2">
+                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
                     <ShieldCheck size={16} className="text-teal-600" />
                     Certificate Type
                   </label>
                   <div className="grid grid-cols-2 gap-4">
                     <button
                       onClick={() => setFormData({ ...formData, type: 'participation' })}
-                      className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      className={`px-4 py-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                         formData.type === 'participation'
                         ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/20"
                         : "bg-gray-50 text-text-muted border-gray-100 hover:bg-white hover:border-teal-200"
@@ -213,7 +213,7 @@ export default function CertificatesPortal() {
                     </button>
                     <button
                       onClick={() => setFormData({ ...formData, type: 'appreciation' })}
-                      className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      className={`px-4 py-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                         formData.type === 'appreciation'
                         ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/20"
                         : "bg-gray-50 text-text-muted border-gray-100 hover:bg-white hover:border-teal-200"
@@ -226,7 +226,7 @@ export default function CertificatesPortal() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-main flex items-center gap-2">
+                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
                     <CalendarIcon size={16} className="text-teal-600" />
                     Presentation Date
                   </label>
@@ -242,7 +242,7 @@ export default function CertificatesPortal() {
               <button
                 onClick={handleDownload}
                 disabled={loading || !formData.name || !formData.eventName}
-                className={`w-full py-5 rounded-[2rem] font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-xl ${
+                className={`w-full py-5 rounded-[2rem] font-semibold text-lg flex items-center justify-center gap-3 transition-all shadow-xl ${
                   loading 
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
                   : "bg-teal-600 text-white hover:bg-teal-700 shadow-teal-600/20 hover:scale-[1.02] active:scale-95"
@@ -258,7 +258,7 @@ export default function CertificatesPortal() {
             </div>
 
             <div className="p-6 bg-teal-900/5 rounded-3xl border border-teal-900/10">
-              <h3 className="font-bold text-teal-800 text-sm mb-2">Pro Tip</h3>
+              <h3 className="font-semibold text-teal-800 text-sm mb-2">Pro Tip</h3>
               <p className="text-xs text-teal-700/70 leading-relaxed">
                 Start typing the event name to see suggestions from recent events. Selecting a suggested event will automatically fill in the correct title and event date.
               </p>
@@ -267,7 +267,7 @@ export default function CertificatesPortal() {
 
           {/* Preview Side */}
           <div className="hidden lg:block space-y-4">
-            <h2 className="text-sm font-bold text-text-main uppercase tracking-widest opacity-50 px-2">Live Preview</h2>
+            <h2 className="text-sm font-semibold text-text-main uppercase tracking-widest opacity-50 px-2">Live Preview</h2>
             <div className="bg-white rounded-[2rem] border border-teal-100 shadow-2xl overflow-hidden sticky top-32">
               <div className="aspect-[1.414/1] bg-[#fffef9] relative group">
                 {/* Visual Placeholder for the SVG Preview */}
@@ -277,21 +277,21 @@ export default function CertificatesPortal() {
                       <div className="w-16 h-8 rounded animate-pulse bg-gray-200" />
                     </div>
                     <div className="text-[1.5vw] font-serif tracking-[1vw] uppercase mb-2 text-gray-400">Certificate</div>
-                    <div className={`text-[0.8vw] font-serif tracking-[0.4vw] mb-8 font-bold text-teal-500`}>
+                    <div className={`text-[0.8vw] font-serif tracking-[0.4vw] mb-8 font-semibold text-teal-500`}>
                       OF {formData.type.toUpperCase()}
                     </div>
                     
                     <div className="text-[0.6vw] italic mb-4 text-gray-400">
                       {formData.type === 'participation' ? "This recognition is proudly presented to" : "This honorary distinction is bestowed upon the Keynote Speaker"}
                     </div>
-                    <div className="text-[2.5vw] font-serif font-bold mb-1 h-[4vw] text-gray-800">
+                    <div className="text-[2.5vw] font-serif font-semibold mb-1 h-[4vw] text-gray-800">
                       {formData.name || (formData.type === 'participation' ? "Recipient Name" : "Speaker Name")}
                     </div>
                     <div className={`w-1/2 h-0.5 mx-auto mb-6 bg-teal-600/30`} />
                     <div className="text-[0.6vw] mb-4 text-gray-400">
                       {formData.type === 'participation' ? "for completion of the program" : "In profound recognition of contribution as Keynote Speaker at"}
                     </div>
-                    <div className={`text-[1.5vw] font-serif font-bold mb-8 text-teal-700`}>
+                    <div className={`text-[1.5vw] font-serif font-semibold mb-8 text-teal-700`}>
                       {formData.eventName || "Program Title"}
                     </div>
                     <div className="flex justify-around mt-auto pt-8">
@@ -309,7 +309,7 @@ export default function CertificatesPortal() {
 
                 {/* Overlay for "Preview Only" */}
                 <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                   <div className="px-4 py-2 bg-text-main text-white text-xs font-bold rounded-full">Visual Reference Only</div>
+                   <div className="px-4 py-2 bg-text-main text-white text-xs font-semibold rounded-full">Visual Reference Only</div>
                 </div>
               </div>
             </div>

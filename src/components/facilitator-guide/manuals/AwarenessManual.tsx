@@ -18,7 +18,7 @@ export function AwarenessManual() {
       </p>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Module overview</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Module overview</h2>
         <p>
           Introduces recognizing internal state: thoughts, emotions, bodily sensations
           without immediate judgment or reaction. Builds baseline self-awareness for later
@@ -28,7 +28,7 @@ export function AwarenessManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">
+        <h2 className="text-lg font-semibold text-text-main mb-2">
           Learning objectives (by end of session)
         </h2>
         <ul className="list-disc pl-5 space-y-1">
@@ -40,7 +40,7 @@ export function AwarenessManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Core concepts</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Core concepts</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>Awareness as observation, not evaluation.</li>
           <li>Internal experience is dynamic and transient.</li>
@@ -50,7 +50,7 @@ export function AwarenessManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-3">Session flow (45 minutes)</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-3">Session flow (45 minutes)</h2>
         <ol className="list-decimal pl-5 space-y-4">
           <li>
             <strong className="text-text-main">Opening (5 min)</strong> — Introduce
@@ -105,7 +105,7 @@ export function AwarenessManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Facilitator guidelines</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Facilitator guidelines</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>Calm, neutral, non-judgmental tone.</li>
           <li>Prioritize experience over lecturing.</li>
@@ -116,7 +116,7 @@ export function AwarenessManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Materials</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Materials</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li>Timer</li>
           <li>Slides optional, minimal text</li>
@@ -125,7 +125,7 @@ export function AwarenessManual() {
       </section>
 
       <section>
-        <h2 className="text-lg font-bold text-text-main mb-2">Outcomes</h2>
+        <h2 className="text-lg font-semibold text-text-main mb-2">Outcomes</h2>
         <p>
           Participants leave with practical understanding of awareness, direct experience
           observing internal states, and a simple daily-life tool. Foundation for later
