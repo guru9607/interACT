@@ -13,39 +13,68 @@ export default function FacilitatorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 via-cream to-white py-24 md:py-32 overflow-x-hidden">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute top-8 left-8 z-20">
+    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-b from-[#fcfbf7] via-[#f7fbf9] to-[#f4faf8] py-16 md:py-24 overflow-hidden relative">
+      {/* Decorative Drifting Glow Blobs */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            x: [0, 30, -10, 0],
+            y: [0, -30, 20, 0],
+            scale: [1, 1.1, 0.95, 1],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-[10%] -left-[10%] w-[45vw] h-[45vw] rounded-full bg-teal-100/30 blur-[100px]"
+        />
+        <motion.div
+          animate={{
+            x: [0, -20, 30, 0],
+            y: [0, 40, -30, 0],
+            scale: [1, 0.9, 1.1, 1],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-[#E9C46A]/10 blur-[120px]"
+        />
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Sleek Floating Back Button */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
           <button
             type="button"
             onClick={handleBackToPortal}
-            className="flex items-center gap-2 text-teal-600 font-medium hover:bg-white/50 px-4 py-2 rounded-xl transition-all"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-teal-700 bg-white/80 border border-teal-100/50 shadow-sm backdrop-blur-md px-4 py-2.5 rounded-2xl transition-all duration-300 hover:bg-white hover:border-teal-200 hover:-translate-y-0.5 hover:shadow active:scale-95 cursor-pointer"
             aria-label="Back to staff portal"
           >
-            <ArrowLeft size={18} aria-hidden />
-            Staff portal
+            <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" aria-hidden />
+            <span>Staff portal</span>
           </button>
-        </div>
-        <div className="absolute -top-10 -left-20 w-72 h-72 bg-teal-200/20 rounded-full blur-3xl -z-10 animate-pulse" />
-        <div className="absolute -bottom-10 -right-20 w-96 h-96 bg-cream/50 rounded-full blur-3xl -z-10" />
+        </motion.div>
 
+        {/* Header Block */}
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-200 text-teal-700 text-sm font-semibold shadow-sm">
-              <Users size={14} className="mr-2" aria-hidden />
-              Facilitator application
+          <div className="flex flex-col items-center gap-5 mb-6">
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-teal-500/10 border border-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wider shadow-sm">
+              <Users size={12} className="mr-2" aria-hidden />
+              Facilitator Intake
             </div>
-            <p className="text-xs text-text-muted max-w-md">
+            
+            <p className="text-xs text-text-muted max-w-md bg-teal-50/40 backdrop-blur-sm border border-teal-100/30 px-4 py-1.5 rounded-full">
               This form is public. Coordinators sign in at{" "}
               <button
                 type="button"
                 onClick={handleBackToPortal}
-                className="text-teal-700 font-semibold underline"
+                className="text-teal-700 font-bold underline hover:text-teal-800 transition-colors"
               >
                 /portal
               </button>{" "}
@@ -53,41 +82,42 @@ export default function FacilitatorsPage() {
             </p>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-semibold text-text-main mb-8 tracking-tighter leading-[1.1]">
+          <h1 className="text-4xl md:text-6xl font-bold text-text-main mb-6 tracking-tight leading-[1.1] font-sans">
             Empower the <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500">
               Next Generation
             </span>
           </h1>
 
-          <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed font-light mb-10">
-            We are inviting dedicated instruments to facilitate the interACT journey, guiding
-            youth to rediscover their core goodness.
+          <p className="text-lg md:text-xl text-text-muted max-w-2xl mx-auto leading-relaxed font-light mb-8">
+            We are inviting dedicated instruments to facilitate the interACT journey, guiding youth to rediscover their core goodness.
           </p>
 
-          <div className="inline-flex items-center justify-center p-1 bg-teal-50 rounded-2xl border border-teal-100 mb-12">
-            <div className="px-4 py-2 bg-white rounded-xl shadow-sm text-sm font-semibold text-teal-800">
+          <div className="inline-flex items-center justify-center p-1 bg-teal-50/70 border border-teal-100/50 rounded-2xl shadow-sm backdrop-blur-sm">
+            <div className="px-4 py-2 bg-white rounded-xl shadow-xs text-xs font-bold uppercase tracking-wider text-teal-800">
               Registration Open
             </div>
-            <div className="px-4 py-2 text-sm font-medium text-teal-600/70">
+            <div className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-teal-600/70">
               Cycle 2025-26
             </div>
           </div>
         </motion.div>
 
+        {/* Animated Multi-Step Form Wrapper */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
         >
           <FacilitatorForm />
         </motion.div>
 
+        {/* Footer/Disclaimer section */}
         <motion.div
-          className="mt-16 text-center text-text-muted text-sm space-y-2 opacity-60"
+          className="mt-16 text-center text-text-muted text-xs space-y-2 opacity-50 font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 0.8 }}
         >
           <p>By registering, you agree to join the global interACT facilitator community.</p>
           <p>For any questions, please contact our global coordination team.</p>
