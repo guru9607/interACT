@@ -90,14 +90,14 @@ function DashboardContent() {
   async function fetchConductors() {
     try {
       // Fetch both with separate calls to catch individual errors
-      const { data: teamData, error: teamError } = await supabase.from('teams').select('id, name').order('name');
-      const { data: facData, error: facError } = await supabase.from('facilitators').select('id, full_name');
+      const { data: teamData, error: teamError } = await supabase.from('teams').select('id, name, user_id').order('name');
+      const { data: facData, error: facError } = await supabase.from('facilitators').select('id, full_name, user_id');
       
       if (teamError) console.error("DEBUG: teamError", teamError);
       if (facError) console.error("DEBUG: facError", facError);
 
-      const teamList = teamData?.map((t: any) => ({ id: t.id, name: t.name, type: 'team' })) || [];
-      const facList = facData?.map((f: any) => ({ id: f.id, name: f.full_name, type: 'facilitator' })) || [];
+      const teamList = teamData?.map((t: any) => ({ id: t.id, name: t.name, type: 'team', user_id: t.user_id })) || [];
+      const facList = facData?.map((f: any) => ({ id: f.id, name: f.full_name, type: 'facilitator', user_id: f.user_id })) || [];
       
       console.log(`DEBUG: Found ${teamList.length} Team members and ${facList.length} Facilitators`);
 
@@ -389,6 +389,7 @@ function DashboardContent() {
 }
 
 function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: () => void, conductors: any[], initialData?: any }) {
+  const auth = useStaffAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
@@ -396,7 +397,6 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
     region: initialData?.region || "Asia",
     type: initialData?.type || "In-Person",
     description: initialData?.description || "",
-    agenda: Array.isArray(initialData?.agenda) ? initialData.agenda.join("\n") : (initialData?.agenda || ""),
     country: initialData?.country || "",
     conductor_id: initialData?.conductor_id || "",
     conductor_type: initialData?.conductor_type || "",
@@ -424,7 +424,6 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
         region: initialData.region || "Asia",
         type: initialData.type || "In-Person",
         description: initialData.description || "",
-        agenda: Array.isArray(initialData.agenda) ? initialData.agenda.join("\n") : (initialData.agenda || ""),
         country: initialData.country || "",
         conductor_id: initialData.conductor_id || "",
         conductor_type: initialData.conductor_type || "",
@@ -469,7 +468,6 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
         region: "Asia",
         type: "In-Person",
         description: "",
-        agenda: "",
         country: "",
         conductor_id: "",
         conductor_type: "",
@@ -486,6 +484,20 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
       });
     }
   }, [initialData]);
+
+  // Default conductor when conductors list is loaded and we are in create mode (not editing)
+  useEffect(() => {
+    if (!initialData && conductors.length > 0 && !formData.conductor_id && auth.userId) {
+      const self = conductors.find((c: any) => c.user_id === auth.userId);
+      if (self) {
+        setFormData(prev => ({
+          ...prev,
+          conductor_type: self.type,
+          conductor_id: self.id.toString()
+        }));
+      }
+    }
+  }, [conductors, initialData, auth.userId]);
 
   const addSession = () => {
     const lastSession = formData.sessions[formData.sessions.length - 1];
@@ -527,18 +539,12 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
     e.preventDefault();
     setLoading(true);
 
-    // Standardize agenda (split by lines into array)
-    const processedAgenda = formData.agenda
-      .split("\n")
-      .map((item: string) => item.trim())
-      .filter((item: string) => item !== "");
-
     // For backward compatibility, keep the main date and act_module as the first session
     const firstSession = formData.sessions[0];
     
     const payload = {
       ...formData,
-      agenda: processedAgenda,
+      agenda: [],
       date: firstSession.date,
       act_module: firstSession.module,
       start_time: firstSession.start_time,
@@ -673,17 +679,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-text-main">Event Agenda (One item per line) <span className="text-red-500">*</span></label>
-          <textarea
-            required
-            rows={4}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
-            value={formData.agenda}
-            onChange={(e) => setFormData({ ...formData, agenda: e.target.value })}
-            placeholder="Introduction&#10;Workshop Session&#10;Meditation&#10;Closing"
-          />
-        </div>
+
 
         {/* Multi-session Manager */}
         <div className="space-y-6 pt-4 border-t border-gray-100">
@@ -816,47 +812,59 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
             Host / Conductor <span className="text-red-500">*</span>
           </label>
           <div className="space-y-3">
-            <select
-            required
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
-            value={`${formData.conductor_type}:${formData.conductor_id}`}
-            onChange={(e) => {
-              const val = e.target.value;
-              if (!val) {
-                setFormData({ ...formData, conductor_type: "", conductor_id: "" });
-                return;
-              }
-              const [type, id] = val.split(":");
-              setFormData({ 
-                ...formData, 
-                conductor_type: type, 
-                conductor_id: id 
-              });
-            }}
-          >
-            <option value="">Select a conductor...</option>
-            
-            <optgroup label="Registered Facilitators">
-              {conductors.filter((c: any) => c.type === 'facilitator').length > 0 ? (
-                conductors.filter((c: any) => c.type === 'facilitator').map((c: any) => (
-                  <option key={`fac-${c.id}`} value={`facilitator:${c.id}`}>
-                    {c.name}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No facilitators registered yet</option>
-              )}
-            </optgroup>
- 
-            <optgroup label="Core Team">
-              {conductors.filter((c: any) => c.type === 'team').map((c: any) => (
-                <option key={`team-${c.id}`} value={`team:${c.id}`}>
-                  {c.name}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-          <p className="text-[10px] text-text-muted ml-1">This person will be featured on the event page.</p>
+            {auth.isAdmin ? (
+              <select
+                required
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer"
+                value={formData.conductor_type && formData.conductor_id ? `${formData.conductor_type}:${formData.conductor_id}` : ""}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (!val) {
+                    setFormData({ ...formData, conductor_type: "", conductor_id: "" });
+                    return;
+                  }
+                  const [type, id] = val.split(":");
+                  setFormData({ 
+                    ...formData, 
+                    conductor_type: type, 
+                    conductor_id: id 
+                  });
+                }}
+              >
+                <option value="">Select a conductor...</option>
+                
+                <optgroup label="Registered Facilitators">
+                  {conductors.filter((c: any) => c.type === 'facilitator').length > 0 ? (
+                    conductors.filter((c: any) => c.type === 'facilitator').map((c: any) => (
+                      <option key={`fac-${c.id}`} value={`facilitator:${c.id}`}>
+                        {c.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>No facilitators registered yet</option>
+                  )}
+                </optgroup>
+     
+                <optgroup label="Core Team">
+                  {conductors.filter((c: any) => c.type === 'team').map((c: any) => (
+                    <option key={`team-${c.id}`} value={`team:${c.id}`}>
+                      {c.name}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+            ) : (
+              <div className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-text-muted text-sm font-medium">
+                {(() => {
+                  const selectedConductor = conductors.find(
+                    (c: any) => c.type === formData.conductor_type && c.id.toString() === formData.conductor_id.toString()
+                  );
+                  const selfConductor = conductors.find((c: any) => c.user_id === auth.userId);
+                  return selectedConductor?.name || selfConductor?.name || "Assigning host...";
+                })()}
+              </div>
+            )}
+            <p className="text-[10px] text-text-muted ml-1">This person will be featured on the event page.</p>
           </div>
         </div>
         <button
