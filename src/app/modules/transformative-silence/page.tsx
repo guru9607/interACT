@@ -4,50 +4,22 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
-  Clock,
   Users,
-  Target,
   CheckCircle2,
-  FileText,
-  Compass,
   TreePine,
   Footprints,
   Eye,
   Grid,
-  ShieldCheck,
+  Compass,
   Sparkles,
 } from "lucide-react";
 
 const learningObjectives = [
   "Experience reflective silence as an empirical grounding practice.",
-  "Develop greater awareness of internal reaction patterns and how they can be intentionally altered.",
-  "Strengthen the neuro-cognitive ability to pause before reacting under interpersonal friction.",
-  "Explore innate qualities such as calmness, clarity, patience, compassion, and responsibility.",
-  "Reflect on how silence and intentional attention influence daily communication and relationships.",
-  "Practice structured reflective activities individually, in dyads, and across collective cohorts.",
-];
-
-const coreConcepts = [
-  {
-    concept: "Transformative Silence",
-    definition: "A structured reflective pause that supports grounding and intentional response.",
-  },
-  {
-    concept: "Grounding",
-    definition: "Feeling mentally and physically present, anchored, and attentive.",
-  },
-  {
-    concept: "Reflective Attention",
-    definition: "Observing thoughts, emotions, and reactions without immediately responding to them.",
-  },
-  {
-    concept: "Intentional Response",
-    definition: "Creating space to respond thoughtfully rather than reacting automatically.",
-  },
-  {
-    concept: "Inner Qualities",
-    definition: "Personal qualities such as calmness, clarity, compassion, courage, respect, and responsibility strengthened through practice.",
-  },
+  "Identify automatic reaction patterns and discover how to pause.",
+  "Strengthen emotional self-regulation during interpersonal tension.",
+  "Explore and activate innate qualities (calmness, clarity, compassion, courage).",
+  "Translate inner stillness into intentional, constructive communication.",
 ];
 
 const experientialActivities = [
@@ -56,35 +28,40 @@ const experientialActivities = [
     title: "Tree Grounding Practice",
     icon: TreePine,
     description:
-      "Participants stand with feet shoulder-width apart, relaxing shoulders and bringing attention to breathing. Visualizing the steady, balanced posture of a tree through changing weather, participants silently reflect: 'What helps me remain steady during difficulty? How do I usually react under stress? What helps me pause before responding?'",
+      "A steady standing posture exercise connecting to natural respiration. Visualizing the rooted steadiness of a tree to remain calm during stressful situations.",
+    tag: "Physical Grounding",
   },
   {
     number: "02",
     title: "Guided Nature & Stream Reflection",
     icon: Compass,
     description:
-      "A structured contemplative commentary guiding attention inward: watching thoughts slow down by a fresh-flowing river surrounded by lush trees and vibrant nature. Participants anchor attention into innate qualities—peace, love, happiness, bliss, patience, and acceptance—rejuvenating the inner self to align thoughts, words, and actions.",
+      "A gentle contemplative visualization: watching busy thoughts slow down beside a flowing river, reconnecting with innate peace, clarity, and patience.",
+    tag: "Mental Calm",
   },
   {
     number: "03",
-    title: "Walking Reflection Activity (3 Sheets)",
+    title: "Walking Reflection Activity",
     icon: Footprints,
     description:
-      "Participants receive three symbolic sheets: Sheet 1 (A challenge, reaction pattern, or habit), Sheet 2 (The words 'Transformative Silence'), and Sheet 3 (A quality or response they wish to strengthen). Moving silently through each station, participants reflect on how automatic patterns affect relationships and what changes when a conscious pause is taken.",
+      "Moving mindfully across three symbolic stations: observing an automatic reaction habit, experiencing conscious silence, and choosing a thoughtful response.",
+    tag: "Pattern Interruption",
   },
   {
     number: "04",
     title: "Perspective Reflection Practice",
     icon: Eye,
     description:
-      "Participants examine a situation they continue mentally replaying: 'What thoughts keep repeating? How does repeatedly revisiting this affect my peace of mind? What changes when I observe it calmly rather than reactively?' Shifting from rumination to constructive intentional response.",
+      "Examining a situation you repeatedly replay in your mind: shifting from rumination and blame to objective, calm observation.",
+    tag: "Cognitive Reframing",
   },
   {
     number: "05",
-    title: "Transformative Silence Scrabble Activity",
+    title: "Values Scrabble Activity",
     icon: Grid,
     description:
-      "Using the literal letters from the phrase 'Transformative Silence', participants assemble meaningful words representing reflective attention and core values: Calmness, Clarity, Patience, Focus, Courage, Respect, Grounding, Awareness, Responsibility, and Compassion.",
+      "An interactive exercise assembling core qualities (calmness, clarity, courage, respect, compassion) from the letters of 'Transformative Silence'.",
+    tag: "Group Collaboration",
   },
 ];
 
@@ -103,14 +80,14 @@ export default function TransformativeSilenceModule() {
     <div className="bg-white min-h-screen font-sans text-slate-800">
 
       {/* ─────────────────────────────────────────────────────────────
-          1. INSTITUTIONAL SYLLABUS HEADER (SDG 17 NAVY)
+          1. HEADER & OVERVIEW
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
         <div className="h-1.5 w-full bg-[#19486A]" aria-hidden="true" />
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
 
-          <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center justify-between gap-4 mb-4">
             <Link
               href="/modules"
               className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-[#0072CE] transition-colors"
@@ -122,41 +99,41 @@ export default function TransformativeSilenceModule() {
                 ACT-103
               </span>
               <span className="text-[11px] font-bold text-[#19486A] bg-slate-100 border border-slate-300 px-2 py-0.5 rounded flex items-center gap-1">
-                <Users size={11} /> UN SDG 17.17
+                <Users size={11} /> SDG 17.17
               </span>
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block">
-              Module 03 · Aligned with the interACT Standards Framework
+              Module 03 · 60–75 Minutes
             </span>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight">
               Transformative Silence (T): Grounding &amp; Intentional Response
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-3xl">
-              Introduces reflective silence as a structured experiential practice that supports grounding the self to one's original state, and averting attention from patterned reaction to intentional response. Not presented as a spiritual or therapeutic process, but as a reflective attention practice that helps participants choose constructive behavioral responses.
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl font-normal">
+              Reflective silence as an experiential grounding practice. Shift attention from automatic, impulsive reactions to calm, intentional responses.
             </p>
 
-            {/* Course Specifications Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-200 text-xs">
-              <div className="bg-white p-3 rounded border border-slate-200">
-                <span className="text-slate-400 block font-medium">Session Duration:</span>
+            {/* Quick Specs Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+              <div className="bg-white p-2.5 rounded border border-slate-200">
+                <span className="text-slate-400 block text-[11px]">Duration:</span>
                 <span className="font-semibold text-slate-800">60–75 minutes</span>
               </div>
-              <div className="bg-white p-3 rounded border border-slate-200">
-                <span className="text-slate-400 block font-medium">Target Demographics:</span>
-                <span className="font-semibold text-slate-800">Group A (18–22) &amp; Group B (23–35)</span>
+              <div className="bg-white p-2.5 rounded border border-slate-200">
+                <span className="text-slate-400 block text-[11px]">Target Ages:</span>
+                <span className="font-semibold text-slate-800">18–22 &amp; 23–35</span>
               </div>
-              <div className="bg-white p-3 rounded border border-slate-200">
-                <span className="text-slate-400 block font-medium">Core Activities:</span>
-                <span className="font-semibold text-slate-800">Tree Grounding &amp; Walking Reflection</span>
+              <div className="bg-white p-2.5 rounded border border-slate-200">
+                <span className="text-slate-400 block text-[11px]">Mode:</span>
+                <span className="font-semibold text-slate-800">Experiential Workshop</span>
               </div>
-              <div className="bg-white p-3 rounded border border-slate-200">
-                <span className="text-slate-400 block font-medium">UN 2030 Alignment:</span>
-                <span className="font-semibold text-[#19486A]">SDG Target 17.17 (Civil Attunement)</span>
+              <div className="bg-white p-2.5 rounded border border-slate-200">
+                <span className="text-slate-400 block text-[11px]">UN SDG:</span>
+                <span className="font-semibold text-[#19486A]">SDG 17.17 (Partnership)</span>
               </div>
             </div>
 
@@ -166,191 +143,149 @@ export default function TransformativeSilenceModule() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          2. LEARNING OBJECTIVES & CORE CONCEPTS
+          2. CORE LEARNING OBJECTIVES
       ───────────────────────────────────────────────────────────── */}
-      <section className="py-12 md:py-16 bg-white border-b border-slate-200">
+      <section className="py-8 sm:py-14 bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          <div className="grid md:grid-cols-12 gap-10">
+          <div className="max-w-2xl mb-6">
+            <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
+              Learning Outcomes
+            </span>
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              What You Will Develop
+            </h2>
+          </div>
 
-              {/* Left 6 Cols: Objectives */}
-              <div className="md:col-span-6 space-y-4">
-                <h2 className="text-xl font-serif font-bold text-[#0B2545]">
-                  Learning Objectives
-                </h2>
-                <p className="text-xs text-slate-500">
-                  Measurable behavioral competencies developed in Module ACT-103:
-                </p>
-
-                    <div className="space-y-3 pt-1">
-                      {learningObjectives.map((item, idx) => (
-                        <div key={idx} className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded">
-                          <CheckCircle2 size={16} className="text-[#19486A] shrink-0 mt-0.5" />
-                          <span className="text-xs sm:text-sm text-slate-700 leading-snug">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-            </div>
-
-                  {/* Right 6 Cols: Core Concepts Table */}
-                  <div className="md:col-span-6 space-y-4">
-                    <h2 className="text-xl font-serif font-bold text-[#0B2545]">
-                      Core Concepts
-                    </h2>
-                    <p className="text-xs text-slate-500">
-                      Foundational definitions of the reflective silence framework:
-                    </p>
-
-                      <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-2xs divide-y divide-slate-100">
-                        {coreConcepts.map((item, idx) => (
-                          <div key={idx} className="p-3 text-xs space-y-0.5">
-                            <span className="font-bold text-[#0B2545] block font-serif">
-                              {item.concept}
-                            </span>
-                            <span className="text-slate-600 leading-relaxed block">
-                              {item.definition}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-              </section>
-
-              {/* ─────────────────────────────────────────────────────────────
-          3. EXPERIENTIAL ACTIVITIES (SESSION FLOW: 60-75 MIN)
-      ───────────────────────────────────────────────────────────── */}
-              <section className="py-12 md:py-16 bg-[#F8F9FA] border-b border-slate-200">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-                  <div className="mb-8">
-                    <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
-                      Methodological Repertory
-                    </span>
-                    <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
-                      Session Flow &amp; Structured Activities (60–75 Minutes)
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Five sequenced experiential practices facilitating deep grounding and intentional pause
-                    </p>
-                  </div>
-
-                          <div className="space-y-4">
-                            {experientialActivities.map((act) => {
-                              const Icon = act.icon;
-                              return (
-                <div
-                  key={act.number}
-                  className="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-2xs hover:border-[#19486A] transition-colors space-y-2"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-xs font-bold text-white bg-[#19486A] px-2 py-0.5 rounded">
-                        {act.number}
-                      </span>
-                      <h3 className="text-base font-serif font-bold text-[#0B2545]">
-                        {act.title}
-                      </h3>
-                    </div>
-                    <Icon size={18} className="text-[#19486A]" />
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed pt-1">
-                    {act.description}
-                  </p>
-                </div>
-                          );
-            })}
-                        </div>
-
-                      </div>
-      </section>
-
-                  {/* ─────────────────────────────────────────────────────────────
-          4. CANONICAL INNER QUALITIES FRAMEWORK
-      ───────────────────────────────────────────────────────────── */}
-                  <section className="py-12 md:py-16 bg-white border-b border-slate-200">
-                    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-                          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3 mb-8">
-                            <div>
-                              <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
-                                Value Taxonomy
-                              </span>
-                              <h3 className="text-2xl font-serif font-bold text-[#0B2545]">
-                                Canonical Inner Qualities Framework
-                              </h3>
-                            </div>
-                            <span className="text-xs text-slate-500">
-                              Cultivated and integrated through Transformative Silence
-                            </span>
-                          </div>
-
-                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {canonicalQualities.map((item, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="border border-slate-200 rounded p-4 bg-[#F8F9FA] hover:border-[#19486A] transition-colors space-y-1"
-                                  >
-                                      <div className="text-xs font-bold font-serif text-[#0B2545]">
-                                        {item.quality}
-                                      </div>
-                                        <div className="text-xs text-slate-600">
-                                          {item.meaning}
-                                        </div>
-                                      </div>
+          <div className="grid sm:grid-cols-2 gap-2.5">
+            {learningObjectives.map((obj, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-2.5 p-3 rounded bg-[#F8F9FA] border border-slate-200 text-xs sm:text-sm text-slate-700"
+              >
+                <CheckCircle2 size={16} className="text-[#19486A] shrink-0 mt-0.5" />
+                <span>{obj}</span>
+              </div>
             ))}
-                                    </div>
+          </div>
 
-                                    {/* Closing Reflection Directive */}
-                                    <div className="mt-8 p-5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 space-y-2">
-                                      <span className="text-[10px] font-bold text-[#19486A] uppercase tracking-wider block">
-                                        Closing Integration Directive
-                                      </span>
-                                      <p className="leading-relaxed italic">
-                                        “Moments of pause and reflective attention can help us respond with greater calmness, clarity, and intentionality. Even brief moments of silence can create space between reaction and response. Carry one moment of conscious pause with you today.”
-                                      </p>
-                                    </div>
-
-                                  </div>
+        </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          5. NEXT SYLLABUS CONTINUATION
+          3. FIVE EXPERIENTIAL PRACTICES
+          Visual Cards with Custom Icons
       ───────────────────────────────────────────────────────────── */}
-                              < section className = "py-12 bg-[#0B2545] text-white" >
-                              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                                <div className="space-y-1">
-                                  <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider block">
-                                    Complete Curriculum
-                                  </span>
-                                  <h3 className="text-xl font-serif font-bold text-white">
-                                    Ready to Experience or Host interACT?
-                                  </h3>
-                                  <p className="text-xs text-slate-300">
-                                    Bring certified experiential workshops to your university, school, or community initiative.
-                                  </p>
-                                </div>
+      <section className="py-8 sm:py-14 bg-[#F8F9FA] border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                                <div className="shrink-0 flex flex-wrap gap-3">
-                                  <Link
-                                    href="/join"
-                                    className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
-                                  >
-                                    Host a Workshop
-                                  </Link>
-                                  <Link
-                                    href="/modules"
-                                    className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors"
-                                  >
-                                    Explore All 15 Modules
-                                  </Link>
-                                </div>
-                              </div>
+          <div className="max-w-2xl mb-6 sm:mb-8">
+            <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
+              Experiential Methodology
+            </span>
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              Five Core Practices
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Practical exercises designed to experience stillness and strengthen intentional response.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {experientialActivities.map((act) => {
+              const Icon = act.icon;
+              return (
+                <div
+                  key={act.number}
+                  className="p-5 bg-white rounded-lg border border-slate-200 shadow-2xs space-y-2 hover:border-slate-300 transition-colors flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-[#19486A]">
+                        <Icon size={16} />
+                      </span>
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase">
+                        {act.tag}
+                      </span>
+                    </div>
+                    <h3 className="text-sm sm:text-base font-serif font-bold text-[#0B2545]">
+                      {act.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {act.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
       </section>
 
-                      </div>
-                      );
+      {/* ─────────────────────────────────────────────────────────────
+          4. CANONICAL INNER QUALITIES
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-8 sm:py-12 bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          <div className="max-w-2xl mb-6">
+            <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
+              Inner Capacities
+            </span>
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              Qualities Strengthened in Silence
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+            {canonicalQualities.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-3 bg-[#F8F9FA] rounded border border-slate-200 space-y-1 hover:border-[#19486A] transition-colors"
+              >
+                <div className="text-xs font-bold text-[#0B2545]">
+                  {item.quality}
+                </div>
+                <div className="text-[11px] text-slate-500 leading-snug">
+                  {item.meaning}
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          5. COMPLETE CURRICULUM ARC CLOSURE
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-10 bg-[#0B2545] text-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider block">
+              Curriculum Complete
+            </span>
+            <h3 className="text-lg sm:text-xl font-serif font-bold text-white">
+              Ready to Join an interACT Gathering?
+            </h3>
+            <p className="text-xs text-slate-300">
+              Free public workshops are organized regularly across colleges and communities worldwide.
+            </p>
+          </div>
+
+          <div className="shrink-0 flex gap-2">
+            <Link
+              href="/join"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
+            >
+              Find a Workshop
+              <ArrowRight size={14} className="ml-1.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
 }

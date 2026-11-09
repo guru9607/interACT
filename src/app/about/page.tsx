@@ -1,136 +1,114 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowRight,
   BookOpen,
-  Brain,
-  CheckCircle2,
   Check,
   X,
   ExternalLink,
-  FileText,
   Globe,
   Heart,
-  Layers,
-  Leaf,
   ShieldCheck,
   Users,
+  ChevronDown,
 } from "lucide-react";
 
 export default function AboutPage() {
+  const [showBoundaries, setShowBoundaries] = useState(false);
+  const [showCitations, setShowCitations] = useState(false);
+
   return (
     <div className="bg-white min-h-screen font-sans text-slate-800">
       
       {/* ─────────────────────────────────────────────────────────────
-          1. INSTITUTIONAL HEADER & EXECUTIVE SUMMARY
-          Authentic UN Position Paper / Policy Dossier Format
+          1. HEADER & MISSION
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        {/* Tri-color SDG Top Ribbon */}
-        <div className="h-1 w-full flex" aria-hidden="true">
+        <div className="h-1.5 w-full flex" aria-hidden="true">
           <span className="flex-1 bg-[#4C9F38]" />
           <span className="flex-1 bg-[#00AED9]" />
           <span className="flex-1 bg-[#19486A]" />
         </div>
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14 md:pt-16 md:pb-18">
-          
-          {/* Classification Tag */}
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-4">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-3">
             <Globe size={14} className="shrink-0" />
-            <span>UN 2030 Agenda Strategic Impact Dossier · Civil Society Alignment</span>
+            <span>UN 2030 Agenda Strategic Alignment</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-6">
-            Linking Contemplative Capacities to the Sustainable Development Goals
+          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-3">
+            Connecting Contemplative Skills to the Global Goals
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-4xl mb-8">
-            interACT was established as an open-access civil society initiative to address the global crisis in youth mental health and societal fragmentation. Rather than treating contemplative skills as a private luxury, the curriculum establishes personal awareness as an indispensable empirical precursor to the United Nations 2030 Agenda—specifically <strong className="font-semibold text-slate-900">Good Health &amp; Well-being (SDG 3)</strong>, <strong className="font-semibold text-slate-900">Peace &amp; Strong Institutions (SDG 16)</strong>, and <strong className="font-semibold text-slate-900">Partnerships for the Goals (SDG 17)</strong>.
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mb-6">
+            interACT is an open-access youth initiative dedicated to addressing the global youth mental health crisis. We link inner contemplation directly to the UN Sustainable Development Goals—specifically Good Health (SDG 3), Peace (SDG 16), and Global Partnerships (SDG 17).
           </p>
 
-          {/* Quick Institutional Index */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-200 text-xs">
-            <div>
-              <span className="text-slate-400 block font-medium">Document Ref:</span>
-              <span className="font-mono font-semibold text-slate-800">DOC-IA-03-SDG</span>
+          {/* Quick Index */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Core Alignment:</span>
+              <span className="font-semibold text-slate-800">SDG 3 · 16 · 17</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-medium">Target Goals:</span>
-              <span className="font-semibold text-slate-800">SDG 3 · SDG 16 · SDG 17</span>
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Target Ages:</span>
+              <span className="font-semibold text-slate-800">Youth (18–35)</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-medium">Evidence Standards:</span>
-              <span className="font-semibold text-slate-800">WHO 2021 &amp; UNESCO</span>
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Evidence Base:</span>
+              <span className="font-semibold text-slate-800">WHO &amp; UNESCO</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-medium">License / Status:</span>
-              <span className="font-semibold text-[#0072CE]">Open Educational Resource</span>
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Access Mode:</span>
+              <span className="font-semibold text-[#0072CE]">100% Free &amp; Open</span>
             </div>
           </div>
-
         </div>
       </section>
 
-
       {/* ─────────────────────────────────────────────────────────────
-          2. STRATEGIC MAPPING: TARGETING THE GOALS
-          Structured SDG Matrix with Official Color Identification
+          2. STRATEGIC MAPPING: THREE UN GOALS
       ───────────────────────────────────────────────────────────── */}
-      <section className="py-16 lg:py-20 bg-white border-b border-slate-200">
+      <section className="py-8 sm:py-14 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="max-w-3xl mb-12">
-            <div className="text-xs font-bold text-[#0072CE] uppercase tracking-wider mb-2">
-              Strategic Alignment
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] tracking-tight mb-4">
-              Direct Contribution to UN SDG Targets
+          <div className="max-w-2xl mb-6 sm:mb-8">
+            <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
+              SDG Alignment
+            </span>
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              How interACT Advances UN 2030 Targets
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              The curriculum is engineered so that every contemplative exercise corresponds to a measurable human capacity required to achieve the 2030 targets.
-            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             
             {/* SDG 3 — Green */}
-            <div className="border border-slate-200 rounded-lg bg-white shadow-sm overflow-hidden flex flex-col">
+            <div className="border border-slate-200 rounded-lg bg-white shadow-xs overflow-hidden flex flex-col hover:border-slate-300 transition-colors">
               <div className="h-1.5 w-full bg-[#4C9F38]" aria-hidden="true" />
               
-              <div className="p-7 flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-[#4C9F38] rounded-md text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    <Heart size={22} />
-                  </div>
-                  <span className="text-[11px] font-bold text-[#4C9F38] uppercase tracking-wider bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
-                    Goal 3 · Target 3.4
+              <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="w-9 h-9 rounded bg-emerald-50 text-[#4C9F38] flex items-center justify-center font-bold border border-emerald-100">
+                    <Heart size={18} />
+                  </span>
+                  <span className="text-[11px] font-bold text-[#4C9F38] uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Target 3.4
                   </span>
                 </div>
 
-                <h3 className="text-xl font-serif font-bold text-[#0B2545] mb-2">
-                  Good Health &amp; Well-being
+                <h3 className="text-lg font-serif font-bold text-[#0B2545] mb-2">
+                  SDG 3: Good Health &amp; Well-being
                 </h3>
 
-                <p className="text-xs font-serif italic text-emerald-800 bg-emerald-50/60 p-3 rounded border-l-2 border-[#4C9F38] mb-4 leading-relaxed">
-                  &ldquo;Awareness of core goodness is a seed that produces a healthy mindset which actively helps to achieve good health and holistic wellbeing.&rdquo;
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  By developing self-awareness and somatic grounding, youth build resilience against anxiety, burnout, and emotional fatigue.
                 </p>
 
-                <div className="space-y-3 text-xs text-slate-600 flex-1">
-                  <div>
-                    <strong className="text-slate-800 block mb-0.5">UN Target 3.4:</strong>
-                    By 2030, reduce by one-third premature mortality from non-communicable diseases through prevention and treatment and promote mental health and well-being.
-                  </div>
-                  <div>
-                    <strong className="text-slate-800 block mb-0.5">interACT Mechanism:</strong>
-                    Somatic self-regulation, down-regulating sympathetic stress, and identifying non-reactive thought patterns.
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="font-semibold text-slate-500">WHO (2021) Supported</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Mental Well-being</span>
                   <Link href="/modules/awareness" className="font-bold text-[#4C9F38] hover:underline">
                     Module A →
                   </Link>
@@ -139,40 +117,29 @@ export default function AboutPage() {
             </div>
 
             {/* SDG 16 — Light Blue */}
-            <div className="border border-slate-200 rounded-lg bg-white shadow-sm overflow-hidden flex flex-col">
+            <div className="border border-slate-200 rounded-lg bg-white shadow-xs overflow-hidden flex flex-col hover:border-slate-300 transition-colors">
               <div className="h-1.5 w-full bg-[#00AED9]" aria-hidden="true" />
               
-              <div className="p-7 flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-[#00AED9] rounded-md text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    <ShieldCheck size={22} />
-                  </div>
-                  <span className="text-[11px] font-bold text-[#00689D] uppercase tracking-wider bg-sky-50 px-2.5 py-1 rounded border border-sky-200">
-                    Goal 16 · Target 16.1
+              <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="w-9 h-9 rounded bg-sky-50 text-[#00689D] flex items-center justify-center font-bold border border-sky-100">
+                    <ShieldCheck size={18} />
+                  </span>
+                  <span className="text-[11px] font-bold text-[#00689D] uppercase tracking-wider bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+                    Target 16.1
                   </span>
                 </div>
 
-                <h3 className="text-xl font-serif font-bold text-[#0B2545] mb-2">
-                  Peace, Justice &amp; Stability
+                <h3 className="text-lg font-serif font-bold text-[#0B2545] mb-2">
+                  SDG 16: Peace from Within
                 </h3>
 
-                <p className="text-xs font-serif italic text-sky-900 bg-sky-50/60 p-3 rounded border-l-2 border-[#00AED9] mb-4 leading-relaxed">
-                  &ldquo;Contemplation allows the deep experience of innate qualities which changes negative cycles of thought into righteous, compassionate decisions.&rdquo;
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Contemplation grounds self-worth in enduring innate qualities, replacing hostility and reactivity with compassion and respect.
                 </p>
 
-                <div className="space-y-3 text-xs text-slate-600 flex-1">
-                  <div>
-                    <strong className="text-slate-800 block mb-0.5">UN Target 16.1:</strong>
-                    Significantly reduce all forms of violence and related death rates everywhere. Fostering &ldquo;Peace from Within&rdquo; as the prerequisite for societal peace.
-                  </div>
-                  <div>
-                    <strong className="text-slate-800 block mb-0.5">interACT Mechanism:</strong>
-                    Cognitive reframing, values-based discernment, and disengaging from aggressive, polarizing social stimuli.
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="font-semibold text-slate-500">UNESCO MGIEP Ref</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Conflict Reduction</span>
                   <Link href="/modules/contemplation" className="font-bold text-[#00689D] hover:underline">
                     Module C →
                   </Link>
@@ -181,40 +148,29 @@ export default function AboutPage() {
             </div>
 
             {/* SDG 17 — Navy */}
-            <div className="border border-slate-200 rounded-lg bg-white shadow-sm overflow-hidden flex flex-col">
+            <div className="border border-slate-200 rounded-lg bg-white shadow-xs overflow-hidden flex flex-col hover:border-slate-300 transition-colors">
               <div className="h-1.5 w-full bg-[#19486A]" aria-hidden="true" />
               
-              <div className="p-7 flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-[#19486A] rounded-md text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                    <Users size={22} />
-                  </div>
-                  <span className="text-[11px] font-bold text-[#19486A] uppercase tracking-wider bg-slate-100 px-2.5 py-1 rounded border border-slate-300">
-                    Goal 17 · Target 17.17
+              <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="w-9 h-9 rounded bg-slate-100 text-[#19486A] flex items-center justify-center font-bold border border-slate-200">
+                    <Users size={18} />
+                  </span>
+                  <span className="text-[11px] font-bold text-[#19486A] uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
+                    Target 17.17
                   </span>
                 </div>
 
-                <h3 className="text-xl font-serif font-bold text-[#0B2545] mb-2">
-                  Partnerships for the Goals
+                <h3 className="text-lg font-serif font-bold text-[#0B2545] mb-2">
+                  SDG 17: Global Partnerships
                 </h3>
 
-                <p className="text-xs font-serif italic text-slate-800 bg-slate-100 p-3 rounded border-l-2 border-[#19486A] mb-4 leading-relaxed">
-                  &ldquo;Transformative Silence allows acceptance, appreciation, and attention in listening, which is the key for genuine cross-cultural collaboration.&rdquo;
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Shared silence and deep listening quiet polarization, enabling authentic collaboration and empathy across diverse youth communities.
                 </p>
 
-                <div className="space-y-3 text-xs text-slate-600 flex-1">
-                  <div>
-                    <strong className="text-slate-800 block mb-0.5">UN Target 17.17:</strong>
-                    Encourage and promote effective public, public-private, and civil society partnerships, building on the experience of collaborative alliances.
-                  </div>
-                  <div>
-                    <strong className="text-slate-800 block mb-0.5">interACT Mechanism:</strong>
-                    Receptive stillness, non-violent communication protocols, and multi-stakeholder peer circles.
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="font-semibold text-slate-500">UN Policy Brief Ref</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-slate-400">Civil Society Action</span>
                   <Link href="/modules/transformative-silence" className="font-bold text-[#19486A] hover:underline">
                     Module T →
                   </Link>
@@ -227,308 +183,148 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* ─────────────────────────────────────────────────────────────
-          3. THE SCIENTIFIC & CLINICAL EVIDENCE
-          Documented Research Baseline with Epidemiological Citations
+          3. WHAT INTERACT IS / IS NOT (COLLAPSIBLE)
       ───────────────────────────────────────────────────────────── */}
-      <section className="py-16 lg:py-20 bg-[#F8F9FA] border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
-            <div className="lg:col-span-6 space-y-6">
-              <div className="text-xs font-bold text-[#0072CE] uppercase tracking-wider">
-                Epidemiological Urgency
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] leading-tight">
-                Why Human Capacity Building Is Non-Negotiable
-              </h2>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                The urgency to achieve the 2030 Agenda is underscored by a profound global crisis in adolescent wellbeing. When youth are overwhelmed by anxiety, the cognitive capacity for long-term sustainable action is paralyzed.
-              </p>
-
-              <div className="space-y-4 pt-2">
-                
-                <div className="p-4 bg-white border border-slate-200 rounded flex items-start gap-4 shadow-sm">
-                  <div className="w-9 h-9 rounded bg-red-50 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <Brain size={18} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-900">1 in 7 Adolescents Globally (14%)</h4>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                      Experience a diagnosed mental disorder (WHO, 2021). Depression, anxiety, and behavioral disorders are leading causes of illness and disability among young people.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-white border border-slate-200 rounded flex items-start gap-4 shadow-sm">
-                  <div className="w-9 h-9 rounded bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Leaf size={18} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-900">59% Suffer Extreme Eco-Anxiety</h4>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                      Across 10 nations surveyed by <em>The Lancet Planetary Health</em> (2021), youth reported intense feelings of powerlessness and existential despair regarding climate polycrises.
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div className="lg:col-span-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-sm space-y-6">
-                
-                <div className="border-b border-slate-100 pb-4">
-                  <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
-                    Pedagogical Efficacy
-                  </span>
-                  <h3 className="text-lg font-semibold text-slate-900">
-                    Empirical Foundations of the ACT Methodology
-                  </h3>
-                </div>
-
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  interACT delivers a structured <strong>15-lesson cognitive curriculum (~7 total hours)</strong>. By deploying validated reflection instruments—such as <em>Thought Pattern Trackers</em> and <em>Somatic Presence Protocols</em>—participants acquire measurable self-regulation competencies.
-                </p>
-
-                <div className="grid grid-cols-2 gap-4">
-                  
-                  <div className="p-4 bg-slate-50 border border-slate-200 rounded">
-                    <div className="text-3xl font-serif font-bold text-[#4C9F38] mb-1">
-                      31%
-                    </div>
-                    <div className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                      Anxiety Reduction
-                    </div>
-                    <div className="text-[11px] text-slate-500 mt-1 leading-tight">
-                      Validated in meta-analyses of standardized MBSR protocols (Khoury et al., 2015).
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 border border-slate-200 rounded">
-                    <div className="text-3xl font-serif font-bold text-[#00AED9] mb-1">
-                      High
-                    </div>
-                    <div className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                      Emotional Regulation
-                    </div>
-                    <div className="text-[11px] text-slate-500 mt-1 leading-tight">
-                      Systematic review of cognitive &amp; mindfulness training in youth (Dunning et al., 2019).
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="bg-blue-50/70 border border-blue-200 rounded p-3.5 text-xs text-slate-700">
-                  <strong className="text-[#0B2545] font-semibold block mb-0.5">Non-Clinical &amp; Non-Sectarian Safeguards:</strong>
-                  The curriculum does not provide psychotherapy or medical diagnosis. It is an educational life-skills framework focused on innate cognitive capacities and emotional stability.
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          3.5 METHODOLOGICAL SCOPE: WHAT INTERACT IS / IS NOT
-      ───────────────────────────────────────────────────────────── */}
-      <section className="py-16 bg-white border-b border-slate-200">
+      <section className="py-8 sm:py-12 bg-[#F8F9FA] border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
-              Methodological Integrity · Official Standard
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
-              What interACT Is / What interACT Is Not
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-              Transparent, non-sectarian educational boundaries governing all interACT youth sessions.
-            </p>
-          </div>
 
           <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-xs">
-            <div className="grid grid-cols-1 md:grid-cols-2 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
-              <div className="p-3.5 bg-emerald-50/80 text-emerald-900 border-b md:border-b-0 md:border-r border-slate-200 flex items-center gap-2">
-                <Check size={16} className="text-emerald-700" />
-                <span>interACT IS</span>
+            <button
+              type="button"
+              onClick={() => setShowBoundaries(!showBoundaries)}
+              className="w-full p-4 sm:p-5 flex items-center justify-between text-left bg-white hover:bg-slate-50 transition-colors cursor-pointer"
+            >
+              <div>
+                <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-0.5">
+                  Methodology &amp; Boundaries
+                </span>
+                <h3 className="text-base sm:text-lg font-serif font-bold text-[#0B2545]">
+                  What interACT Is &amp; What interACT Is Not
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Clear, non-sectarian educational boundaries governing all youth workshops.
+                </p>
               </div>
-              <div className="p-3.5 bg-rose-50/80 text-rose-900 flex items-center gap-2">
-                <X size={16} className="text-rose-700" />
-                <span>interACT IS NOT</span>
-              </div>
-            </div>
+              <ChevronDown
+                size={18}
+                className={`text-slate-400 transition-transform ${showBoundaries ? "rotate-180" : ""}`}
+              />
+            </button>
 
-            <div className="divide-y divide-slate-100 text-xs sm:text-sm">
-              {[
-                { is: "Reflective experiential learning", isNot: "Motivational preaching" },
-                { is: "Acknowledging the present moment", isNot: "Distraction from life’s goals or plans" },
-                { is: "Strengthening your inner core", isNot: "Therapy or counselling" },
-                { is: "Developing self-worth, self-confidence, self-esteem, & self-respect", isNot: "Spiritual conversion" },
-                { is: "Rejuvenating exercise with moments of guided silence", isNot: "Trauma processing or emotional treatment" },
-                { is: "Pause-building & intentional response training", isNot: "Religious talk" },
-              ].map((row, idx) => (
-                <div key={idx} className="grid grid-cols-1 md:grid-cols-2">
-                  <div className="p-4 flex items-start gap-2.5 text-slate-700 md:border-r border-slate-100 bg-white">
-                    <span className="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span>
-                    <span>{row.is}</span>
+            {showBoundaries && (
+              <div className="border-t border-slate-200">
+                <div className="grid grid-cols-2 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                  <div className="p-3 bg-emerald-50 text-emerald-900 border-r border-slate-200 flex items-center gap-1.5">
+                    <Check size={14} className="text-emerald-700" />
+                    <span>interACT IS</span>
                   </div>
-                  <div className="p-4 flex items-start gap-2.5 text-slate-500 bg-slate-50/50">
-                    <span className="text-rose-600 font-bold shrink-0 mt-0.5">✗</span>
-                    <span>{row.isNot}</span>
+                  <div className="p-3 bg-rose-50 text-rose-900 flex items-center gap-1.5">
+                    <X size={14} className="text-rose-700" />
+                    <span>interACT IS NOT</span>
                   </div>
                 </div>
-              ))}
-            </div>
+
+                <div className="divide-y divide-slate-100 text-xs">
+                  {[
+                    { is: "Reflective experiential learning", isNot: "Motivational preaching" },
+                    { is: "Acknowledging the present moment", isNot: "Distraction from life’s goals" },
+                    { is: "Strengthening your inner core", isNot: "Clinical therapy or counselling" },
+                    { is: "Developing self-worth & self-respect", isNot: "Spiritual conversion" },
+                    { is: "Rejuvenating exercise with guided silence", isNot: "Trauma processing" },
+                    { is: "Pause-building & intentional response", isNot: "Religious talk" },
+                  ].map((row, idx) => (
+                    <div key={idx} className="grid grid-cols-2">
+                      <div className="p-3 flex items-start gap-2 text-slate-700 border-r border-slate-100 bg-white">
+                        <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                        <span>{row.is}</span>
+                      </div>
+                      <div className="p-3 flex items-start gap-2 text-slate-500 bg-slate-50/50">
+                        <span className="text-rose-600 font-bold shrink-0">✗</span>
+                        <span>{row.isNot}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
         </div>
       </section>
 
-
       {/* ─────────────────────────────────────────────────────────────
-          4. INSTITUTIONAL CALL TO COOPERATION
-          Clean UN Navy Ground without Floating Blurs
+          4. CALL TO ACTION
       ───────────────────────────────────────────────────────────── */}
-      <section className="py-16 bg-[#0B2545] text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          
-          <div className="inline-block px-3 py-1 bg-white/10 text-sky-200 text-xs font-bold uppercase tracking-wider rounded border border-white/20">
-            Open Educational Partnership
-          </div>
-
-          <h2 className="text-2xl sm:text-4xl font-serif font-bold text-white tracking-tight leading-snug">
-            Partner with interACT to Foster Resilient Youth Leadership
+      <section className="py-10 sm:py-14 bg-[#0B2545] text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+          <h2 className="text-xl sm:text-3xl font-serif font-bold text-white">
+            Bring interACT to Your Campus or Community
           </h2>
-
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            All curriculum syllabi, participant reflection toolkits, and impact evaluation rubrics are accessible for universities, secondary schools, and civil society youth organizations worldwide.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            All curriculum syllabi, participant reflection toolkits, and workshop formats are offered free of charge.
           </p>
-
-          <div className="flex flex-wrap justify-center gap-3 pt-4">
+          <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/modules"
-              className="inline-flex items-center justify-center px-6 py-3 rounded text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-sm"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs sm:text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors"
             >
-              Explore the 15 Modules
-              <ArrowRight size={16} className="ml-2" />
+              Explore Modules
+              <ArrowRight size={14} className="ml-1.5" />
             </Link>
-
             <Link
               href="/join"
-              className="inline-flex items-center justify-center px-6 py-3 rounded text-sm font-semibold bg-white text-[#0B2545] hover:bg-slate-100 transition-colors shadow-sm"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs sm:text-sm font-semibold bg-white text-[#0B2545] hover:bg-slate-100 transition-colors"
             >
-              Host a Campus Workshop
-            </Link>
-
-            <Link
-              href="/team"
-              className="inline-flex items-center justify-center px-6 py-3 rounded text-sm font-semibold bg-transparent text-slate-200 border border-slate-500 hover:bg-white/10 transition-colors"
-            >
-              Institutional Leadership
+              Find an Upcoming Event
             </Link>
           </div>
-
         </div>
       </section>
 
-
       {/* ─────────────────────────────────────────────────────────────
-          5. SCHOLARLY CITATIONS & DATA SOURCES
-          Formal UN Digital Library Reference Format
+          5. SCHOLARLY CITATIONS (COLLAPSIBLE)
       ───────────────────────────────────────────────────────────── */}
-      <section className="bg-white border-t border-slate-200 py-12 text-slate-600 text-xs">
+      <section className="bg-white border-t border-slate-200 py-6 text-slate-600 text-xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold uppercase tracking-wider text-xs">
-            <BookOpen size={16} className="text-[#0072CE]" />
-            <span>Formal Scientific &amp; Institutional References</span>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3 text-[11px] leading-relaxed">
-            <div>
-              <a
-                href="https://sdgs.un.org/goals/goal3"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#0072CE] transition-colors inline-flex items-center gap-1 font-medium text-slate-700"
-              >
-                <ExternalLink size={11} className="shrink-0" />
-                World Health Organization (2021). Adolescent Mental Health Fact Sheet. Geneva: WHO.
-              </a>
-              <p className="text-slate-500 pl-4 mt-0.5">Foundational data for UN SDG Target 3.4 mental health promotion.</p>
+          <button
+            type="button"
+            onClick={() => setShowCitations(!showCitations)}
+            className="w-full flex items-center justify-between text-left py-2 font-semibold text-slate-700 uppercase tracking-wider text-[11px] hover:text-[#0072CE] transition-colors cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <BookOpen size={14} className="text-[#0072CE]" />
+              <span>Scientific &amp; Institutional Citations (WHO, UNESCO, UNICEF, Lancet)</span>
             </div>
+            <ChevronDown
+              size={16}
+              className={`text-slate-400 transition-transform ${showCitations ? "rotate-180" : ""}`}
+            />
+          </button>
 
-            <div>
-              <a
-                href="https://mgiep.unesco.org/rethinking-learning"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#0072CE] transition-colors inline-flex items-center gap-1 font-medium text-slate-700"
-              >
-                <ExternalLink size={11} className="shrink-0" />
-                UNESCO MGIEP (2020). Rethinking Learning: A Review of Social and Emotional Learning for Education Systems.
-              </a>
-              <p className="text-slate-500 pl-4 mt-0.5">Evidence mapping for peaceful societies and UN SDG Target 16.1.</p>
+          {showCitations && (
+            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3 pt-4 border-t border-slate-100 text-[11px] leading-relaxed">
+              <div>
+                <span className="font-semibold text-slate-800">World Health Organization (2021):</span> Adolescent Mental Health Fact Sheet. Geneva: WHO (SDG 3.4).
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800">UNESCO MGIEP (2020):</span> Rethinking Learning: A Review of Social and Emotional Learning for Peaceful Societies (SDG 16.1).
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800">UNICEF (2021):</span> State of the World&apos;s Children: On My Mind (SDG 17).
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800">The Lancet Planetary Health (2021):</span> Climate anxiety in children and young people.
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800">Khoury et al. (2015):</span> Mindfulness-based stress reduction for healthy individuals: A meta-analysis.
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800">UN DGC (2020):</span> Guidelines for Civil Society Entities Aligned with the 2030 Agenda.
+              </div>
             </div>
-
-            <div>
-              <a
-                href="https://www.unicef.org/media/108161/file/SOWC-2021-Policy-Brief-Child-Adolescent-Mental-Health.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#0072CE] transition-colors inline-flex items-center gap-1 font-medium text-slate-700"
-              >
-                <ExternalLink size={11} className="shrink-0" />
-                UNICEF (2021). The State of the World&apos;s Children 2021: On My Mind.
-              </a>
-              <p className="text-slate-500 pl-4 mt-0.5">Youth mental health investments and civil society partnerships (SDG 17).</p>
-            </div>
-
-            <div>
-              <a
-                href="https://r.jordan.im/download/mindfulness/khoury2015.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#0072CE] transition-colors inline-flex items-center gap-1 font-medium text-slate-700"
-              >
-                <ExternalLink size={11} className="shrink-0" />
-                Khoury, B. et al. (2015). Mindfulness-based stress reduction for healthy individuals: A meta-analysis.
-              </a>
-              <p className="text-slate-500 pl-4 mt-0.5"><em>Journal of Psychosomatic Research</em>, 78(6), 519-528.</p>
-            </div>
-
-            <div>
-              <a
-                href="https://www.thelancet.com/journals/lanplh/article/PIIS2542-5196(21)00278-3/fulltext"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#0072CE] transition-colors inline-flex items-center gap-1 font-medium text-slate-700"
-              >
-                <ExternalLink size={11} className="shrink-0" />
-                Hickman, C. et al. (2021). Climate anxiety in children and young people.
-              </a>
-              <p className="text-slate-500 pl-4 mt-0.5"><em>The Lancet Planetary Health</em>, 5(12), e863-e873.</p>
-            </div>
-
-            <div>
-              <a
-                href="https://www.un.org/en/about-us/universal-declaration-of-human-rights"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#0072CE] transition-colors inline-flex items-center gap-1 font-medium text-slate-700"
-              >
-                <ExternalLink size={11} className="shrink-0" />
-                United Nations Department of Global Communications (DGC).
-              </a>
-              <p className="text-slate-500 pl-4 mt-0.5">Guidelines for civil society organizations supporting the 2030 Agenda.</p>
-            </div>
-          </div>
+          )}
 
         </div>
       </section>

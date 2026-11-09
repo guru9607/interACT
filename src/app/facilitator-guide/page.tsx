@@ -63,10 +63,10 @@ export default function FacilitatorGuidePage() {
       href: "/facilitator-guide/transformative-silence",
       title: "Module Transformative Silence (T) Manual",
       subtitle: "Autonomic Stillness & Practical Discernment",
-      duration: "45 Minutes",
+      duration: "60–75 Minutes",
       format: "Standalone Module",
       description:
-        "Neutral experiential delivery manual focusing on cognitive stillness, impulse discernment, silence protection rules, and translating inner clarity into daily behavioral shifts.",
+        "Neutral experiential delivery manual focusing on cognitive stillness, the Tree Grounding Practice, Walking Reflection, Perspective Reflection, Scrabble activity, and translating inner clarity into intentional response.",
       status: "CORE SYLLABUS",
     },
     {
