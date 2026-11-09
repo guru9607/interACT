@@ -30,29 +30,7 @@ export default function Home() {
           Clean, Inspiring & Mobile-First
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        {/* Tri-color SDG Hairline */}
-        <div className="h-1 w-full flex" aria-hidden="true">
-          <span className="flex-1 bg-[#4C9F38]" />
-          <span className="flex-1 bg-[#00AED9]" />
-          <span className="flex-1 bg-[#19486A]" />
-        </div>
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 sm:pb-16">
-
-          {/* Subheader Badge */}
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-6 text-xs font-semibold tracking-wider uppercase text-slate-500">
-            <div className="flex items-center gap-2 text-[#0072CE]">
-              <Globe size={14} className="shrink-0" />
-              <span>International Youth Initiative · UN 2030 Agenda</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-600">
-              <span className="text-emerald-700 font-bold">SDG 3</span>
-              <span>·</span>
-              <span className="text-sky-700 font-bold">SDG 16</span>
-              <span>·</span>
-              <span className="text-slate-800 font-bold">SDG 17</span>
-            </div>
-          </div>
 
           {/* Main Grid */}
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">

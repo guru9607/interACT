@@ -88,8 +88,6 @@ export default function ContemplationModule() {
           1. HEADER & OVERVIEW
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        <div className="h-1.5 w-full bg-[#00AED9]" aria-hidden="true" />
-
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
 
           <div className="flex items-center justify-between gap-4 mb-4">

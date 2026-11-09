@@ -155,41 +155,34 @@ export default function JoinPage() {
           UN DGC Standard Event Registry Banner
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        {/* Tri-color SDG Ribbon */}
-        <div className="h-1 w-full flex" aria-hidden="true">
-          <span className="flex-1 bg-[#4C9F38]" />
-          <span className="flex-1 bg-[#00AED9]" />
-          <span className="flex-1 bg-[#19486A]" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14 md:pt-16 md:pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
           
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-4">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-3">
             <Globe size={14} className="shrink-0" />
-            <span>Global Youth Registry · International Assemblies &amp; Workshops</span>
+            <span>Global Youth Registry · Workshops &amp; Gatherings</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-5">
-            Global Workshops &amp; Community Assemblies
+          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-3">
+            Global Workshops &amp; Community Gatherings
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-3xl mb-8">
-            interACT convenes structured cognitive reflection circles and youth workshops worldwide. All events are open-access, non-sectarian, and conducted under the United Nations 2030 Agenda framework for mental wellbeing (SDG 3), peace from within (SDG 16), and cross-cultural partnership (SDG 17).
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mb-6">
+            Join structured reflection circles and youth workshops worldwide. 100% free, non-sectarian, and aligned with the United Nations 2030 Agenda for mental well-being (SDG 3), inner peace (SDG 16), and partnership (SDG 17).
           </p>
 
           {/* Quick Registration Highlights */}
-          <div className="grid sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200 text-xs text-slate-700">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-[#4C9F38] shrink-0" />
-              <span>Free Public Participation (No Fees)</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-slate-200 text-xs text-slate-700">
+            <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
+              <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0" />
+              <span>100% Free for All Youth</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-[#00AED9] shrink-0" />
+            <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
+              <CheckCircle2 size={15} className="text-[#00AED9] shrink-0" />
               <span>Standardized 3-Hour &amp; Modular Tracks</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-[#19486A] shrink-0" />
-              <span>Verifiable Certificate of Completion</span>
+            <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
+              <CheckCircle2 size={15} className="text-[#19486A] shrink-0" />
+              <span>Verifiable Completion Certificate</span>
             </div>
           </div>
 
@@ -201,7 +194,7 @@ export default function JoinPage() {
           2. REGIONAL SELECTION & ACTIVE WORKSHOPS
           Clean Institutional Tab Bar & Structured Event Cards
       ───────────────────────────────────────────────────────────── */}
-      <section className="py-12 md:py-16 bg-white border-b border-slate-200">
+      <section className="py-8 sm:py-12 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">

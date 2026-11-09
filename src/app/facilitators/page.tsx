@@ -17,14 +17,7 @@ export default function FacilitatorsPage() {
             1. INSTITUTIONAL HEADER & ACCREDITATION DIRECTIVE
         ───────────────────────────────────────────────────────────── */}
         <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-          {/* Tri-color SDG Ribbon */}
-          <div className="h-1 w-full flex" aria-hidden="true">
-            <span className="flex-1 bg-[#4C9F38]" />
-            <span className="flex-1 bg-[#00AED9]" />
-            <span className="flex-1 bg-[#19486A]" />
-          </div>
-
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 md:pt-14 md:pb-14">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
             
             <div className="flex items-center justify-between gap-4 mb-6">
               <Link

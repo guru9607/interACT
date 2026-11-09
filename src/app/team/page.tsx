@@ -44,44 +44,37 @@ export default async function TeamPage() {
           1. INSTITUTIONAL HEADER & GOVERNANCE MANDATE
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        {/* Tri-color SDG Ribbon */}
-        <div className="h-1 w-full flex" aria-hidden="true">
-          <span className="flex-1 bg-[#4C9F38]" />
-          <span className="flex-1 bg-[#00AED9]" />
-          <span className="flex-1 bg-[#19486A]" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14 md:pt-16 md:pb-16">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-3">
             <Globe size={14} className="shrink-0" />
             <span>Civil Society Governance · Leadership &amp; Regional Secretariat</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-5">
+          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-3">
             Leadership, Regional Directors &amp; Global Secretariat
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-3xl mb-8">
-            The interACT initiative is governed by an international, multi-stakeholder civil society roster comprising founders, continental regional directors, youth ambassadors, and an operational secretariat across five continents—advancing the United Nations 2030 Agenda through validated contemplative pedagogy.
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mb-6">
+            The interACT initiative is guided by an international civil society team comprising founders, regional directors, youth advisors, and operational coordinators across five continents.
           </p>
 
           {/* 4-Column Governance Ledger */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-200 text-xs">
-            <div>
-              <span className="text-slate-400 block font-medium">Governance Body:</span>
-              <span className="font-semibold text-slate-800">25 International Officers</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Leadership:</span>
+              <span className="font-semibold text-slate-800">25 Officers</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-medium">Geographic Reach:</span>
-              <span className="font-semibold text-slate-800">10+ Member Nations</span>
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Geographic Reach:</span>
+              <span className="font-semibold text-slate-800">10+ Nations</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-medium">Regional Mandates:</span>
-              <span className="font-semibold text-slate-800">5 Continental Divisions</span>
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Divisions:</span>
+              <span className="font-semibold text-slate-800">5 Continents</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-medium">Operational Status:</span>
-              <span className="font-semibold text-[#0072CE]">Pro-Bono Civil Society</span>
+            <div className="bg-white p-2.5 rounded border border-slate-200">
+              <span className="text-slate-400 block text-[11px]">Status:</span>
+              <span className="font-semibold text-[#0072CE]">Civil Society Initiative</span>
             </div>
           </div>
         </div>
@@ -90,7 +83,7 @@ export default async function TeamPage() {
       {/* ─────────────────────────────────────────────────────────────
           2. LEADERSHIP ROSTER (BY FORMAL TIERS)
       ───────────────────────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14">
         <TeamRosterClient team={team} />
       </div>
 

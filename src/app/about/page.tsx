@@ -26,12 +26,6 @@ export default function AboutPage() {
           1. HEADER & MISSION
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        <div className="h-1.5 w-full flex" aria-hidden="true">
-          <span className="flex-1 bg-[#4C9F38]" />
-          <span className="flex-1 bg-[#00AED9]" />
-          <span className="flex-1 bg-[#19486A]" />
-        </div>
-
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-3">
             <Globe size={14} className="shrink-0" />

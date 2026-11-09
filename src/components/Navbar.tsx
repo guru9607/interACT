@@ -40,15 +40,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* 2. Official UN Tri-color SDG Ribbon (3px height) */}
-      <div className="h-[3px] w-full flex" aria-hidden="true">
-        <div className="flex-[3] bg-[#4C9F38]" title="SDG 3: Good Health & Well-being" />
-        <div className="flex-[3] bg-[#00AED9]" title="SDG 16: Peace & Justice" />
-        <div className="flex-[2] bg-[#19486A]" title="SDG 17: Partnerships for the Goals" />
-      </div>
-
-      {/* 3. Main Brand Navigation Bar */}
-      <nav className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      {/* 2. Main Brand Navigation Bar */}
+      <nav className="bg-white/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo & Identity */}
@@ -138,6 +131,13 @@ export default function Navbar() {
           </div>
         )}
       </nav>
+
+      {/* 3. Official UN Tri-color SDG Ribbon (3px height) framing the bottom of header */}
+      <div className="h-[3px] w-full flex" aria-hidden="true">
+        <div className="flex-[3] bg-[#4C9F38]" title="SDG 3: Good Health & Well-being" />
+        <div className="flex-[3] bg-[#00AED9]" title="SDG 16: Peace & Justice" />
+        <div className="flex-[2] bg-[#19486A]" title="SDG 17: Partnerships for the Goals" />
+      </div>
     </header>
   );
 }
