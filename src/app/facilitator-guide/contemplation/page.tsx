@@ -5,11 +5,12 @@ import { ContemplationManual } from "@/components/facilitator-guide/manuals/Cont
 
 export default function FacilitatorContemplationPage() {
   return (
-    <GuideChrome title="Contemplation">
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold text-text-main mb-6 sr-only">
-          Facilitator manual · Contemplation
-        </h1>
+    <GuideChrome 
+      title="Module Contemplation (C) Manual" 
+      docCode="DOC-ACT-102" 
+      sdgColor="#00AED9"
+    >
+      <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-xs">
         <ContemplationManual />
       </div>
     </GuideChrome>

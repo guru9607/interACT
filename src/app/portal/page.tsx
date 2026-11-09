@@ -11,14 +11,16 @@ import {
   LayoutDashboard,
   Award,
   Loader2,
+  Lock,
+  LogOut,
+  Globe,
+  Building2,
 } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AuthBackground from "@/components/AuthBackground";
 
-// A robust helper to load the brand logo with a vector fallback
 function LogoFallbackIcon({ defaultIcon }: { defaultIcon: React.ReactNode }) {
   const [logoLoaded, setLogoLoaded] = useState(true);
   return logoLoaded ? (
@@ -44,231 +46,251 @@ export default function PortalPage() {
     router.refresh();
   };
 
-  // Loading Screen redesign
+  // Loading Screen
   if (auth.loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[#fcfbf7] relative overflow-hidden select-none">
-        <div className="absolute inset-0 bg-[radial-gradient(#2d9a90_0.75px,transparent_0.75px)] [background-size:24px_24px] opacity-[0.02]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl" />
-        <div className="relative flex flex-col items-center space-y-4">
-          <Loader2 className="animate-spin text-teal-600" size={40} />
-          <p className="text-xs text-text-muted font-semibold tracking-wider uppercase opacity-60">Loading interACT Hub...</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F9FA]">
+        <div className="text-center space-y-3">
+          <Loader2 className="animate-spin text-[#0072CE] mx-auto" size={32} />
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Loading Staff &amp; Facilitator Portal...
+          </p>
         </div>
       </div>
     );
   }
 
-  // Not Logged In Required Gating
+  // Not Logged In
   if (!auth.userId) {
     return (
       <AuthBackground>
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="w-full max-w-md bg-white/75 backdrop-blur-xl border border-white/60 shadow-[0_32px_64px_-16px_rgba(27,67,61,0.08)] rounded-[2.5rem] p-8 sm:p-10 text-center space-y-6"
-        >
-          {/* Decorative Logo / Icon Container */}
-          <div className="relative group mx-auto w-20">
-            <div className="absolute inset-0 bg-teal-500/10 rounded-3xl blur-xl group-hover:scale-110 transition-transform duration-500" />
-            <div className="relative w-20 h-20 bg-white/95 rounded-[1.6rem] border border-teal-100/60 shadow-sm flex items-center justify-center p-4 transition-all duration-300 hover:scale-[1.03]">
-              <LogoFallbackIcon defaultIcon={<ShieldCheck size={32} className="text-teal-600" />} />
+        <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-xs text-center space-y-6">
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-14 h-14 bg-slate-50 border border-slate-200 rounded p-2 flex items-center justify-center">
+              <LogoFallbackIcon defaultIcon={<ShieldCheck size={24} className="text-[#0072CE]" />} />
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-[#0072CE] uppercase tracking-wider block">
+                Restricted Access
+              </span>
+              <h1 className="text-2xl font-serif font-bold text-[#0B2545] tracking-tight">
+                Staff &amp; Facilitator Portal
+              </h1>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-semibold text-text-main tracking-tight font-sans">
-              Staff portal
-            </h1>
-            <p className="text-text-muted text-sm leading-relaxed">
-              Sign in with your facilitator login. New colleagues create an account first — roster emails get facilitator access automatically.
-            </p>
-          </div>
+          <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
+            Authorized facilitators, faculty, and operational personnel sign in to access curriculum handbooks, register cohorts, and issue certificates.
+          </p>
 
-          <div className="flex flex-col gap-3 w-full pt-2">
+          <div className="space-y-3 pt-2">
             <Link
               href="/portal/login"
-              className="group w-full py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-teal-600/15 hover:shadow-xl hover:shadow-teal-600/20 active:scale-[0.99]"
+              className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white font-semibold text-xs rounded transition-colors flex items-center justify-center gap-2 shadow-xs"
             >
-              <span>Sign in</span>
-              <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" aria-hidden />
-            </Link>
-            <Link
-              href="/portal/register"
-              className="text-sm text-teal-700 font-semibold hover:text-teal-800 underline underline-offset-4 transition-colors"
-            >
-              Create facilitator login
+              <span>Sign In to Portal</span>
+              <ArrowRight size={14} />
             </Link>
           </div>
-        </motion.div>
+
+          <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-400">
+            Facilitator access is restricted to verified institutional faculty and coordinators. Accounts are provisioned directly by the Secretariat.
+          </div>
+        </div>
       </AuthBackground>
     );
   }
 
-  // Waiting for Core Team Access
+  // Waiting for Staff Verification
   if (!auth.isStaff) {
     return (
       <AuthBackground>
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="w-full max-w-lg bg-white/75 backdrop-blur-xl border border-amber-100/60 shadow-[0_32px_64px_-16px_rgba(245,158,11,0.06)] rounded-[2.5rem] p-8 sm:p-10 text-center space-y-6"
-        >
-          <div className="relative group mx-auto w-20">
-            <div className="absolute inset-0 bg-amber-500/10 rounded-3xl blur-xl group-hover:scale-110 transition-transform duration-500" />
-            <div className="relative w-20 h-20 bg-white/95 rounded-[1.6rem] border border-amber-100/60 shadow-sm flex items-center justify-center p-4 transition-all duration-300">
-              <LogoFallbackIcon defaultIcon={<ShieldCheck size={32} className="text-amber-500" />} />
-            </div>
+        <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-xs text-center space-y-5">
+          <div className="w-12 h-12 bg-amber-50 text-amber-700 border border-amber-200 rounded-full flex items-center justify-center mx-auto">
+            <Lock size={22} />
           </div>
 
-          <div className="space-y-3">
-            <h1 className="text-2xl font-bold text-text-main font-sans">Access Pending Activation</h1>
-            <p className="text-text-muted text-sm leading-relaxed">
-              You are signed in as a <strong className="text-text-main font-semibold">{auth.role ?? "participant"}</strong>.
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">
+              Verification in Progress
+            </span>
+            <h2 className="text-xl font-serif font-bold text-[#0B2545]">
+              Account Pending Facilitator Verification
+            </h2>
+            <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
+              You are signed in as <strong className="text-slate-800">{auth.email}</strong>. Facilitator permissions are granted once your institutional credentials are verified against our authorized roster.
             </p>
-            <div className="text-text-muted text-sm leading-relaxed space-y-3 max-w-md mx-auto pt-2 text-left bg-amber-50/45 border border-amber-100/40 p-5 rounded-2xl">
-              <p className="font-semibold text-teal-800 text-xs uppercase tracking-wider">How to enable access:</p>
-              <ul className="list-disc list-inside space-y-1.5 text-xs text-text-muted">
-                <li>Make sure you registered using the <strong className="text-text-main font-semibold">same email address</strong> submitted in your facilitator application.</li>
-                <li>Our global coordination team reviews accounts periodically to ensure security and activate access.</li>
-              </ul>
-              <p className="text-[11px] pt-1">
-                If you are a new facilitator or need immediate activation, please contact your local interACT coordinator or drop an email to <a href="mailto:global@interact.org" className="text-teal-700 font-bold hover:underline">global@interact.org</a>.
-              </p>
-            </div>
           </div>
-          
-          <div className="pt-2">
+
+          <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            <a
+              href="mailto:support@theinteract.org?subject=Facilitator%20Verification%20Followup"
+              className="py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs font-semibold rounded transition-colors shadow-xs"
+            >
+              Contact Secretariat to Confirm Status
+            </a>
             <button
               type="button"
               onClick={handleSignOut}
-              className="px-6 py-2.5 text-sm font-semibold text-red-600 hover:text-red-700 hover:bg-red-50/80 rounded-xl transition-all border border-transparent hover:border-red-100 active:scale-[0.98]"
+              className="py-2 text-xs font-semibold text-slate-600 hover:text-red-600 transition-colors"
             >
-              Sign out
+              Sign Out
             </button>
           </div>
-        </motion.div>
+        </div>
       </AuthBackground>
     );
   }
 
-  // Dashboard Hub Menu Items Design
+  // Dashboard Hub Menu Items
   const menuItems = [
     {
-      title: "Event Management",
-      description: "Create, edit, and manage upcoming and past interACT events.",
-      icon: <LayoutDashboard size={24} />,
+      title: "Event Registry & Management",
+      description: "Schedule, coordinate, and review active and completed interACT gatherings.",
+      icon: <LayoutDashboard size={20} className="text-[#0072CE]" />,
       link: "/events-dashboard",
-      colorClass: "bg-blue-50/70 text-blue-600 border-blue-100/60",
-      hoverClass: "hover:border-blue-300 hover:shadow-blue-900/5 group-hover:bg-blue-100/60",
-      glowColor: "group-hover:shadow-[0_20px_50px_rgba(59,130,246,0.08)]",
+      code: "ACT-EV-MGR",
     },
     {
-      title: "Facilitator Intake",
-      description: "Open the public application page for new facilitators.",
-      icon: <UserPlus size={24} />,
+      title: "Facilitator Accreditation Policy",
+      description: "Review institutional closed intake and Centre In-Charge nomination directives.",
+      icon: <UserPlus size={20} className="text-[#4C9F38]" />,
       link: "/facilitators",
-      colorClass: "bg-teal-50/70 text-teal-600 border-teal-100/60",
-      hoverClass: "hover:border-teal-300 hover:shadow-teal-900/5 group-hover:bg-teal-100/60",
-      glowColor: "group-hover:shadow-[0_20px_50px_rgba(20,184,166,0.08)]",
+      code: "ACT-FAC-POL",
     },
     {
-      title: "Certificate Generator",
-      description: "Generate participation and appreciation certificates.",
-      icon: <Award size={24} />,
+      title: "Certificate Issuance Engine",
+      description: "Generate and deliver verified digital certificates of completion for attendees.",
+      icon: <Award size={20} className="text-[#19486A]" />,
       link: "/portal/certificates",
-      colorClass: "bg-amber-50/70 text-amber-600 border-amber-100/60",
-      hoverClass: "hover:border-amber-300 hover:shadow-amber-900/5 group-hover:bg-amber-100/60",
-      glowColor: "group-hover:shadow-[0_20px_50px_rgba(245,158,11,0.08)]",
+      code: "ACT-CERT-GEN",
     },
     {
-      title: "Facilitator Guide",
-      description: "Manuals and the 3-hour combined facilitator script.",
-      icon: <FileText size={24} />,
+      title: "Master Facilitator Handbook",
+      description: "Access official scripts, timing considerations, and youth safety protocols.",
+      icon: <FileText size={20} className="text-[#00689D]" />,
       link: "/facilitator-guide",
-      colorClass: "bg-purple-50/70 text-purple-600 border-purple-100/60",
-      hoverClass: "hover:border-purple-300 hover:shadow-purple-900/5 group-hover:bg-purple-100/60",
-      glowColor: "group-hover:shadow-[0_20px_50px_rgba(168,85,247,0.08)]",
+      code: "DOC-IA-01",
     },
     {
-      title: "Public Join Page",
-      description: "View where participants browse and register for events.",
-      icon: <Calendar size={24} />,
+      title: "Public Workshop Directory",
+      description: "View the external event calendar where participants browse upcoming cohorts.",
+      icon: <Calendar size={20} className="text-slate-700" />,
       link: "/join",
-      colorClass: "bg-orange-50/70 text-orange-600 border-orange-100/60",
-      hoverClass: "hover:border-orange-300 hover:shadow-orange-900/5 group-hover:bg-orange-100/60",
-      glowColor: "group-hover:shadow-[0_20px_50px_rgba(249,115,22,0.08)]",
+      code: "REG-PUB-JOIN",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#fcfbf7] via-[#f7fbf9] to-[#f5faf8] flex flex-col">
-      {/* Sticky Header with Glassmorphism */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-teal-50 sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4 text-teal-600">
-              <div className="relative w-11 h-11 bg-white/95 rounded-[0.8rem] border border-teal-100/50 shadow-sm flex items-center justify-center p-2">
-                <LogoFallbackIcon defaultIcon={<ShieldCheck size={20} className="text-teal-600" />} />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-text-main leading-none font-sans">interACT Hub</h1>
-                <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold">
-                  {auth.isAdmin ? "Core team (admin)" : "Facilitator"}
-                </p>
-              </div>
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col font-sans text-slate-800">
+      
+      {/* Universal 3-Color Ribbon */}
+      <div className="h-1 w-full flex" aria-hidden="true">
+        <span className="flex-1 bg-[#4C9F38]" />
+        <span className="flex-1 bg-[#00AED9]" />
+        <span className="flex-1 bg-[#19486A]" />
+      </div>
+
+      {/* Institutional Top App Bar */}
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+          
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-slate-50 border border-slate-200 rounded p-1 flex items-center justify-center shrink-0">
+              <LogoFallbackIcon defaultIcon={<ShieldCheck size={18} className="text-[#0072CE]" />} />
             </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-serif font-bold text-base text-[#0B2545] leading-none">
+                  interACT Portal
+                </span>
+                <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-blue-50 text-[#0058A3] border border-blue-200 rounded">
+                  {auth.isAdmin ? "ADMIN" : "FACILITATOR"}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Authenticated as <strong className="text-slate-700">{auth.email}</strong>
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-xs font-semibold text-slate-600 hover:text-[#0072CE] transition-colors hidden sm:inline"
+            >
+              Public Site
+            </Link>
             <button
               type="button"
               onClick={handleSignOut}
-              className="px-4 py-2 text-xs font-semibold text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all active:scale-[0.98]"
+              className="px-3 py-1.5 border border-slate-300 hover:border-red-300 hover:bg-red-50 text-slate-700 hover:text-red-700 rounded text-xs font-semibold transition-colors flex items-center gap-1.5"
             >
-              Sign out
+              <LogOut size={13} />
+              <span>Sign Out</span>
             </button>
           </div>
+
         </div>
-      </div>
+      </header>
 
       {/* Main Hub Dashboard */}
-      <main className="max-w-5xl w-full mx-auto px-6 py-12 flex-1 flex flex-col justify-center">
-        <div className="grid md:grid-cols-2 gap-6">
-          {menuItems.map((item, idx) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.07, duration: 0.5, ease: "easeOut" }}
-              onClick={() => router.push(item.link)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  router.push(item.link);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              aria-label={item.title}
-              className={`group cursor-pointer p-8 bg-white/80 border border-teal-100/20 shadow-[0_8px_30px_rgb(0,0,0,0.015)] backdrop-blur-sm rounded-[2rem] transition-all duration-300 ${item.hoverClass} ${item.glowColor} hover:-translate-y-1 hover:bg-white`}
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div className={`p-4 rounded-2xl ${item.colorClass} border transition-colors duration-300`}>
-                  {item.icon}
+      <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
+        
+        <div className="mb-8">
+          <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
+            Operational Dashboard
+          </span>
+          <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+            Curriculum Delivery &amp; Event Administration
+          </h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Select an administrative service below to manage sessions, materials, and certificates.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {menuItems.map((item) => (
+            <Link key={item.title} href={item.link} className="block group">
+              <div className="border border-slate-200 rounded-lg p-5 bg-white hover:border-[#0072CE] hover:shadow-xs transition-all flex flex-col justify-between h-full space-y-4">
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded border border-slate-200 bg-slate-50 flex items-center justify-center">
+                      {item.icon}
+                    </div>
+                    <span className="text-[10px] font-mono font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+                      {item.code}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-base font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-1.5">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-                <div className="p-2 rounded-full opacity-0 group-hover:opacity-100 group-hover:text-text-main translate-x-[-4px] group-hover:translate-x-0 transition-all duration-300">
-                  <ArrowRight size={20} aria-hidden />
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#0072CE] font-semibold">
+                  <span>Access Module</span>
+                  <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                 </div>
+
               </div>
-              <h3 className="text-lg font-bold text-text-main mb-2 font-sans">{item.title}</h3>
-              <p className="text-text-muted leading-relaxed text-sm">{item.description}</p>
-            </motion.div>
+            </Link>
           ))}
         </div>
 
-        <footer className="mt-16 text-center text-text-muted opacity-40 text-xs">
-          © {new Date().getFullYear()} interACT Global Portal. Authorized access only.
-        </footer>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400">
+        interACT Global Operations &amp; Secretariat Portal · Authorized Personnel Only
+      </footer>
+
     </div>
   );
 }

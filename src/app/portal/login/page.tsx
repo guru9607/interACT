@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { ArrowRight, Loader2, Lock, Eye, EyeOff } from 'lucide-react';
+import { ArrowRight, Loader2, Lock, Eye, EyeOff, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AuthBackground from '@/components/AuthBackground';
 
@@ -37,119 +37,111 @@ const PortalLoginForm = () => {
 
   return (
     <AuthBackground>
-      <motion.div
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="w-full max-w-md bg-white/75 backdrop-blur-xl border border-white/60 shadow-[0_32px_64px_-16px_rgba(27,67,61,0.08)] rounded-[2.5rem] p-8 sm:p-10 text-center"
-      >
-        <div className="flex flex-col items-center space-y-6">
-          {/* Decorative Logo / Icon Container */}
-          <div className="relative group">
-            <div className="absolute inset-0 bg-teal-500/10 rounded-3xl blur-xl group-hover:scale-110 transition-transform duration-500" />
-            <div className="relative w-20 h-20 bg-white/95 rounded-[1.6rem] border border-teal-100/60 shadow-sm flex items-center justify-center p-4 transition-all duration-300 hover:scale-[1.03]">
-              {logoLoaded ? (
-                <img
-                  src="/logo.png"
-                  alt="interACT Logo"
-                  className="w-full h-full object-contain"
-                  onError={() => setLogoLoaded(false)}
-                />
-              ) : (
-                <Lock size={32} className="text-teal-600" aria-hidden />
-              )}
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-semibold text-text-main tracking-tight font-sans">
-              Staff login
-            </h1>
-            <p className="text-text-muted text-sm leading-relaxed">
-              Facilitators and core team use email and password. First time?{' '}
-              <Link href="/portal/register" className="text-teal-700 font-semibold underline underline-offset-4 hover:text-teal-800 transition-colors">
-                Create an account
-              </Link>
-              , then ask an admin to enable access.
-            </p>
-          </div>
-
-          {(queryError === 'auth' || error) && (
-            <motion.p
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="w-full text-sm text-red-700 bg-red-50/80 border border-red-100 rounded-2xl px-4 py-3 text-left"
-            >
-              {error ?? 'Sign-in link expired or invalid. Try again or reset your password.'}
-            </motion.p>
-          )}
-
-          <form onSubmit={handleSubmit} className="w-full space-y-5 text-left">
-            <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="mt-2 w-full px-4 py-3.5 text-text-main bg-white border border-teal-100/90 rounded-2xl shadow-sm focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none transition-all duration-200 placeholder:text-text-muted/40"
+      <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-xs text-center space-y-6">
+        
+        {/* Institutional Stamp / Logo */}
+        <div className="flex flex-col items-center space-y-2">
+          <div className="w-14 h-14 bg-slate-50 border border-slate-200 rounded p-2 flex items-center justify-center">
+            {logoLoaded ? (
+              <img
+                src="/logo.png"
+                alt="interACT Logo"
+                className="w-full h-full object-contain"
+                onError={() => setLogoLoaded(false)}
               />
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center px-1">
-                <label htmlFor="password" className="block text-xs font-semibold text-text-muted uppercase tracking-wider">
-                  Password
-                </label>
-              </div>
-              <div className="relative mt-2">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-4 pr-11 py-3.5 text-text-main bg-white border border-teal-100/90 rounded-2xl shadow-sm focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none transition-all duration-200 placeholder:text-text-muted/40"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted/60 hover:text-teal-600 transition-colors p-1"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="group w-full py-4 mt-2 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-teal-600/15 hover:shadow-xl hover:shadow-teal-600/20 active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
-            >
-              {loading ? <Loader2 className="animate-spin" size={20} /> : null}
-              <span>Sign in</span>
-              {!loading ? <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" aria-hidden /> : null}
-            </button>
-          </form>
-
-          <div className="w-full pt-2 flex flex-col items-center space-y-3 border-t border-teal-50/60 text-sm">
-            <Link href="/portal/forgot-password" className="text-teal-700 font-semibold hover:text-teal-800 underline underline-offset-4 transition-colors">
-              Forgot password?
-            </Link>
-            <Link href="/portal" className="text-xs text-text-muted hover:text-teal-700 flex items-center gap-1 font-medium transition-colors">
-              ← Back to portal home
-            </Link>
+            ) : (
+              <Lock size={24} className="text-[#0072CE]" aria-hidden />
+            )}
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-[#0072CE] uppercase tracking-wider block">
+              Staff &amp; Facilitator Access
+            </span>
+            <h1 className="text-2xl font-serif font-bold text-[#0B2545] tracking-tight">
+              Portal Authentication
+            </h1>
           </div>
         </div>
-      </motion.div>
+
+        <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
+          Authorized facilitators, faculty, and operational personnel sign in to access curriculum handbooks, register cohorts, and issue certificates.
+        </p>
+
+        {(queryError === 'auth' || error) && (
+          <div className="text-xs text-red-700 bg-red-50 border border-red-200 rounded p-3 text-left">
+            {error ?? 'Sign-in link expired or invalid. Please try again or reset your password.'}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4 text-left">
+          <div>
+            <label htmlFor="email" className="block text-xs font-semibold text-slate-700 mb-1">
+              Official Email Address
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="facilitator@theinteract.org"
+              className="w-full px-3 py-2 text-xs text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center mb-1">
+              <label htmlFor="password" className="block text-xs font-semibold text-slate-700">
+                Password
+              </label>
+              <Link href="/portal/forgot-password" className="text-[11px] text-[#0072CE] hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full pl-3 pr-10 py-2 text-xs text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white font-semibold text-xs rounded transition-colors flex items-center justify-center gap-2 shadow-xs disabled:opacity-60 cursor-pointer"
+          >
+            {loading ? <Loader2 className="animate-spin" size={14} /> : null}
+            <span>{loading ? 'Authenticating...' : 'Sign In to Portal'}</span>
+            {!loading && <ArrowRight size={14} />}
+          </button>
+        </form>
+
+        <div className="pt-2 border-t border-slate-100 flex flex-col items-center space-y-2 text-xs">
+          <p className="text-slate-500 text-center text-[11px] leading-relaxed">
+            Facilitator accounts are provisioned directly by the Secretariat following institutional partner appointment. Public self-registration is closed.
+          </p>
+          <Link href="/" className="text-[11px] text-slate-400 hover:text-slate-600">
+            ← Return to Public Website
+          </Link>
+        </div>
+
+      </div>
     </AuthBackground>
   );
 };
@@ -158,8 +150,8 @@ export default function PortalLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#fcfbf7] flex items-center justify-center">
-          <Loader2 className="animate-spin text-teal-600" size={36} aria-hidden />
+        <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
+          <Loader2 className="animate-spin text-[#0072CE]" size={32} aria-hidden />
         </div>
       }
     >

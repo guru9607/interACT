@@ -1,215 +1,307 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Clock, Sparkles, Target } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Clock,
+  Heart,
+  Target,
+  CheckCircle2,
+  BookOpen,
+  FileText,
+  ShieldCheck,
+  Compass,
+} from "lucide-react";
 
 const whatYouLearn = [
-  "Notice thoughts, emotions, and bodily sensations as they show up—without having to fix everything at once.",
-  "Tell the difference between having a thought and letting that thought define who you are.",
-  "Get more comfortable pausing before you react, so your response can be chosen—not automatic.",
-  "See awareness as the first step toward acting with more intention in everyday life.",
+  "Notice thoughts, emotions, and bodily sensations as they emerge—without immediate reactive judgment or rumination.",
+  "Differentiate between experiencing an autonomic thought and identifying that thought as your essential identity.",
+  "Establish a cognitive pause between stimulus and response, enabling deliberate ethical action rather than emotional reaction.",
+  "Ground self-awareness as the empirical baseline for emotional regulation, directly supporting UN SDG Target 3.4.",
 ];
 
 const coreIdeas = [
   {
-    title: "Observation, not judgment",
-    text: "Awareness is about noticing what is happening inside you, not scoring yourself as good or bad.",
+    title: "Observation, Not Judgment",
+    text: "Awareness is about observing cognitive and somatic phenomena clearly, rather than scoring oneself as flawed or inadequate.",
   },
   {
-    title: "Experience keeps moving",
-    text: "Thoughts, emotions, and sensations shift—they are not fixed facts about you.",
+    title: "Dynamic Cognitive Flow",
+    text: "Thoughts, emotions, and physical sensations are fluid physiological states—they are not permanent, immutable facts about character.",
   },
   {
-    title: "Space before you respond",
-    text: "There can be a gap between what happens and what you do next. Awareness helps you find that space.",
+    title: "The Reflective Pause",
+    text: "Cultivating the critical temporal space between external stimulus and human choice, unlocking agency in high-stress situations.",
   },
   {
-    title: "Notice, then choose",
-    text: "When you can see your inner state clearly, you have more freedom to choose your next step.",
+    title: "Discerning Choice",
+    text: "When internal states are identified with lucidity, individuals regain the autonomy to select constructive, peaceful responses.",
   },
 ];
 
 const experienceThemes = [
   {
-    title: "Guided awareness",
+    title: "Guided Somatic Presence",
     description:
-      "A short, gentle practice: settle in, notice breath and body, and let thoughts come and go without chasing them.",
+      "A structured contemplation protocol: stabilizing breath, grounding physical awareness, and observing cognitive patterns without pursuing them.",
   },
   {
-    title: "Sensory grounding",
+    title: "Sensory Anchoring Protocol",
     description:
-      "A structured way to come back to the present—using what you see, feel, hear, and what you notice inwardly (similar to a 5-4-3-2-1 style exercise, adapted for the group).",
+      "An adapted sensory grounding exercise (sensory presence) to re-establish nervous system equilibrium during acute cognitive or academic stress.",
   },
   {
-    title: "Reflection with others",
+    title: "Dyadic & Small-Group Reflection",
     description:
-      "Time to share what you noticed—in pairs or small groups if you are comfortable. Sharing is always optional.",
+      "Structured, voluntary debriefing in pairs or small cohorts to normalize psychological observations without pressure to self-disclose.",
   },
   {
-    title: "A simple takeaway",
+    title: "Somatic Thought Tracker Integration",
     description:
-      "One practical idea to try after the session: take a brief pause during the day to notice thoughts and feelings.",
+      "Instruction on utilizing the daily interACT thought tracker instrument to log emotional triggers and practice mindful pauses between sessions.",
   },
 ];
 
 export default function AwarenessModule() {
   return (
-    <div className="bg-white min-h-screen">
-      <section className="bg-gradient-to-r from-teal-50 to-blue-50 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/modules"
-            className="inline-flex items-center text-primary hover:text-primary-hover mb-6"
-          >
-            <ArrowLeft size={20} className="mr-2" />
-            Back to Modules
-          </Link>
+    <div className="bg-white min-h-screen font-sans text-slate-800">
+      
+      {/* ─────────────────────────────────────────────────────────────
+          1. INSTITUTIONAL SYLLABUS HEADER (SDG 3 GREEN)
+      ───────────────────────────────────────────────────────────── */}
+      <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
+        {/* Top SDG 3 Green Banner Line */}
+        <div className="h-1.5 w-full bg-[#4C9F38]" aria-hidden="true" />
 
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="inline-block px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium mb-4">
-                Module 1 · Awareness (A)
-              </div>
-              <h1 className="text-4xl md:text-5xl font-semibold text-text-main mb-4">
-                Awareness
-              </h1>
-              <p className="text-xl text-text-muted max-w-3xl">
-                Build the foundational skill of recognizing your inner
-                world—thoughts, emotions, and sensations—with curiosity instead of
-                immediate judgment. This session is experiential: we focus on
-                observing and being present, not on fixing or analyzing problems.
-              </p>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+          
+          <div className="flex items-center justify-between gap-4 mb-6">
+            <Link
+              href="/modules"
+              className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-[#0072CE] transition-colors"
+            >
+              <ArrowLeft size={14} className="mr-1.5" /> Back to Curriculum Directory
+            </Link>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-bold">
+                ACT-101
+              </span>
+              <span className="text-[11px] font-bold text-[#4C9F38] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded flex items-center gap-1">
+                <Heart size={11} /> UN SDG 3.4
+              </span>
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-4 mt-8">
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-teal-100/50">
-              <div className="flex items-center text-text-muted mb-1">
-                <Clock size={16} className="mr-2" />
-                <span className="text-sm">Typical session</span>
+          <div className="space-y-4">
+            <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider block">
+              Module 01 · Foundational Competency
+            </span>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight">
+              Awareness (A): Somatic &amp; Cognitive Discernment
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal max-w-3xl">
+              Build the foundational capacity to observe your internal environment—thoughts, autonomic stress sensations, and emotional surges—with lucidity instead of immediate reactive judgment. Aligned with World Health Organization guidelines for adolescent non-communicable resilience and mental health promotion.
+            </p>
+
+            {/* Course Specifications Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-200 text-xs">
+              <div className="bg-white p-3 rounded border border-slate-200">
+                <span className="text-slate-400 block font-medium">Session Duration:</span>
+                <span className="font-semibold text-slate-800">~45 minutes</span>
               </div>
-              <div className="text-2xl font-semibold text-text-main">~45 minutes</div>
+              <div className="bg-white p-3 rounded border border-slate-200">
+                <span className="text-slate-400 block font-medium">Target Demographics:</span>
+                <span className="font-semibold text-slate-800">Ages 15–29</span>
+              </div>
+              <div className="bg-white p-3 rounded border border-slate-200">
+                <span className="text-slate-400 block font-medium">Delivery Mode:</span>
+                <span className="font-semibold text-slate-800">Facilitated Workshop</span>
+              </div>
+              <div className="bg-white p-3 rounded border border-slate-200">
+                <span className="text-slate-400 block font-medium">Evidence Anchor:</span>
+                <span className="font-semibold text-[#4C9F38]">WHO &amp; MBSR Protocols</span>
+              </div>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-teal-100/50">
-              <div className="flex items-center text-text-muted mb-1">
-                <Target size={16} className="mr-2" />
-                <span className="text-sm">Who it&apos;s for</span>
-              </div>
-              <div className="text-lg font-semibold text-text-main leading-snug">
-                Ages 18–22 &amp; 23–35
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-teal-100/50">
-              <div className="flex items-center text-text-muted mb-1">
-                <Sparkles size={16} className="mr-2" />
-                <span className="text-sm">Format</span>
-              </div>
-              <div className="text-lg font-semibold text-text-main leading-snug">
-                Live, guided workshop
-              </div>
-            </div>
+
           </div>
+
         </div>
       </section>
 
-      <section className="py-12 border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold text-text-main mb-4">What you&apos;ll learn</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <ul className="space-y-3 text-text-muted">
-                {whatYouLearn.map((item) => (
-                  <li key={item} className="flex items-start">
-                    <span className="text-primary mr-2 mt-0.5">✓</span>
-                    <span className="leading-relaxed">{item}</span>
-                  </li>
+      {/* ─────────────────────────────────────────────────────────────
+          2. LEARNING OUTCOMES & STRATEGIC RATIONALE
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-12 md:py-16 bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid md:grid-cols-12 gap-10">
+            
+            {/* Left 7 Cols: Specific Objectives */}
+            <div className="md:col-span-7 space-y-4">
+              <h2 className="text-xl font-serif font-bold text-[#0B2545]">
+                Curriculum Learning Outcomes
+              </h2>
+              <p className="text-xs text-slate-500">
+                Measurable behavioral competencies developed through Module ACT-101:
+              </p>
+
+              <div className="space-y-3 pt-2">
+                {whatYouLearn.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded">
+                    <CheckCircle2 size={16} className="text-[#4C9F38] shrink-0 mt-0.5" />
+                    <span className="text-xs text-slate-700 leading-relaxed font-medium">
+                      {item}
+                    </span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-text-main mb-3">Why it matters</h3>
-              <p className="text-text-muted leading-relaxed mb-4">
-                This module helps you create a baseline of self-awareness so later
-                stages of interACT—reflection and action—can build on something
-                real you have already felt, not just ideas you have read about.
-              </p>
-              <p className="text-text-muted leading-relaxed">
-                You leave with a clearer sense of what awareness feels like in your
-                own body and mind, and a simple way to practice noticing during a
-                normal day.
-              </p>
+
+            {/* Right 5 Cols: Strategic Rationale */}
+            <div className="md:col-span-5 bg-[#F8F9FA] border border-slate-200 rounded-lg p-6 space-y-4">
+              <div className="border-b border-slate-200 pb-3">
+                <span className="text-[10px] font-bold text-[#4C9F38] uppercase tracking-wider block mb-0.5">
+                  Pedagogical Rationale
+                </span>
+                <h3 className="text-base font-semibold text-slate-900">
+                  Why Somatic Awareness Precedes Action
+                </h3>
+              </div>
+
+              <div className="text-xs text-slate-600 leading-relaxed space-y-3">
+                <p>
+                  Youth cannot act with sustained peace or ethical discernment if their autonomic nervous systems are chronically trapped in threat reactivity.
+                </p>
+                <p>
+                  By creating a reliable baseline of inner observation, participants develop the physical and cognitive stamina required for higher-order deliberation in Module C (Contemplation) and Module T (Transformative Silence).
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-200 text-xs">
+                <Link
+                  href="/modules/contemplation"
+                  className="text-xs font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1"
+                >
+                  <ArrowRight size={13} /> Continue to Module 02: Contemplation →
+                </Link>
+              </div>
             </div>
+
           </div>
+
         </div>
       </section>
 
-      <section className="py-12 border-b bg-gray-50/50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold text-text-main mb-2">Ideas you&apos;ll explore</h2>
-          <p className="text-text-muted mb-8 max-w-3xl">
-            These themes sit underneath the exercises—they are what the session is
-            trying to make real for you, not abstract theory.
-          </p>
+      {/* ─────────────────────────────────────────────────────────────
+          3. PSYCHOLOGICAL FOUNDATIONS & PRINCIPLES
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-12 md:py-16 bg-[#F8F9FA] border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="mb-8">
+            <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider block mb-1">
+              Theoretical Foundation
+            </span>
+            <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+              Core Cognitive Principles
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Scientific and philosophical frameworks operationalized within the lesson
+            </p>
+          </div>
+
           <div className="grid sm:grid-cols-2 gap-4">
-            {coreIdeas.map((idea) => (
+            {coreIdeas.map((idea, idx) => (
               <div
-                key={idea.title}
-                className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm"
+                key={idx}
+                className="bg-white border border-slate-200 rounded p-5 shadow-xs space-y-2"
               >
-                <h3 className="font-semibold text-text-main mb-2">{idea.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed">{idea.text}</p>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#4C9F38]" />
+                  <h3 className="text-sm font-semibold text-slate-900">{idea.title}</h3>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed pl-3.5">
+                  {idea.text}
+                </p>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
-      <section className="py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold text-text-main mb-2">
-            What the session is like
-          </h2>
-          <p className="text-text-muted mb-8 max-w-3xl">
-            Every event is hosted live; exactly how it feels depends on your group and
-            facilitator. In general, you can expect:
-          </p>
-          <div className="space-y-4">
-            {experienceThemes.map((block) => (
+      {/* ─────────────────────────────────────────────────────────────
+          4. EXPERIENTIAL SESSION ARC
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-12 md:py-16 bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="mb-8">
+            <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider block mb-1">
+              Session Architecture
+            </span>
+            <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+              Standard 45-Minute Lesson Arc
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Experiential sequence utilized by certified facilitators
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {experienceThemes.map((block, idx) => (
               <div
-                key={block.title}
-                className="flex gap-4 rounded-2xl border border-teal-100 bg-teal-50/30 p-6"
+                key={idx}
+                className="border border-slate-200 rounded p-4 bg-white hover:border-[#4C9F38] transition-colors flex items-start gap-4"
               >
-                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Sparkles size={18} />
+                <div className="w-7 h-7 rounded bg-emerald-50 text-[#4C9F38] border border-emerald-200 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                  {idx + 1}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-text-main mb-1">{block.title}</h3>
-                  <p className="text-text-muted text-sm leading-relaxed">
+                  <h3 className="text-sm font-semibold text-slate-900 mb-1">{block.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {block.description}
                   </p>
                 </div>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
-      <section className="py-12 bg-gradient-to-r from-primary to-teal-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-semibold text-white mb-4">
-            Ready for the next module?
-          </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Continue with Contemplation: Strengthening Your Inner Core
-          </p>
-          <Link
-            href="/modules/contemplation"
-            className="inline-flex items-center px-8 py-4 bg-white text-primary font-semibold rounded-full hover:bg-cream transition-all shadow-xl"
-          >
-            Continue to Module 2
-          </Link>
+      {/* ─────────────────────────────────────────────────────────────
+          5. NEXT SYLLABUS CONTINUATION
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-12 bg-[#0B2545] text-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider block">
+              Curriculum Sequence
+            </span>
+            <h3 className="text-xl font-serif font-bold text-white">
+              Proceed to Module 02: Contemplation (ACT-102)
+            </h3>
+            <p className="text-xs text-slate-300">
+              Deepen self-worth, ethical discernment, and inner resilience under UN SDG 16.
+            </p>
+          </div>
+
+          <div className="shrink-0">
+            <Link
+              href="/modules/contemplation"
+              className="inline-flex items-center justify-center px-6 py-3 rounded text-xs font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
+            >
+              Access Module ACT-102
+              <ArrowRight size={14} className="ml-2" />
+            </Link>
+          </div>
         </div>
       </section>
+
     </div>
   );
 }

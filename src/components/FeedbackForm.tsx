@@ -12,14 +12,13 @@ import {
   Phone, 
   ArrowRight, 
   ArrowLeft,
-  Heart,
-  Sparkles,
-  MessageSquare,
-  Award
+  Award,
+  ShieldCheck,
+  FileText
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
 import { FEEDBACK_QUESTIONS, MODULE_LABELS, type ACTModule } from "@/lib/constants";
+import { countries } from "@/lib/countries";
 
 interface FeedbackFormProps {
   eventId: number;
@@ -30,8 +29,6 @@ interface FeedbackFormProps {
   shouldGenerateCertificate?: boolean;
   onClose: () => void;
 }
-
-import { countries } from "@/lib/countries";
 
 export default function FeedbackForm({ 
   eventId, 
@@ -60,7 +57,6 @@ export default function FeedbackForm({
     setLoading(true);
 
     try {
-      // Sanitize phone: ensure single space between code and number
       const fullPhoneNumber = `${country.code} ${phone.trim()}`.replace(/\s+/g, ' ');
       
       const { error } = await supabase.from("event_feedback").insert([
@@ -76,11 +72,10 @@ export default function FeedbackForm({
       ]);
 
       if (error) throw error;
-      
       setSubmitted(true);
     } catch (err) {
       const error = err as Error;
-      alert("Error: " + error.message);
+      alert("Error submitting feedback: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -91,51 +86,62 @@ export default function FeedbackForm({
 
   if (submitted) {
     return (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
         <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-[2.5rem] p-12 max-w-md w-full text-center shadow-2xl relative"
+          className="bg-white rounded-lg border border-slate-200 p-8 sm:p-10 max-w-md w-full text-center shadow-lg relative space-y-6"
         >
-          {/* Close Icon for Success Screen */}
+          {/* Top SDG Ribbon */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4C9F38] via-[#00AED9] to-[#19486A]" />
+
           <button 
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 bg-gray-50 hover:bg-gray-100 text-text-muted rounded-full transition-all group hover:rotate-90 cursor-pointer"
+            className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Close dialog"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
 
-          <div className="w-24 h-24 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-8">
-            <CheckCircle2 size={48} className="text-teal-500" />
+          <div className="w-14 h-14 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-700">
+            <CheckCircle2 size={32} />
           </div>
-          <h2 className="text-3xl font-semibold text-text-main mb-4 italic">Thank You!</h2>
-          <p className="text-lg text-text-muted leading-relaxed mb-8">
-            Your heart-felt feedback has been received. It helps us grow together.
-          </p>
+
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#0072CE]">
+              DOC-IA-FB-SUBMITTED
+            </span>
+            <h2 className="text-xl font-serif font-bold text-[#0B2545]">
+              Evaluation Successfully Recorded
+            </h2>
+            <p className="text-xs text-slate-600 leading-relaxed pt-1">
+              Your reflection has been submitted to the interACT impact measurement repository, supporting our programmatic alignment with UN SDG Targets 3.4, 16.1, and 17.17.
+            </p>
+          </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3 pt-2">
             {shouldGenerateCertificate && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <button
+                type="button"
                 onClick={() => generateCertificate(
                   fullName.trim(),
                   eventTitle,
                   new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
                   `CERT-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
                 )}
-                className="w-full py-4 bg-teal-600 text-white font-semibold rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-teal-600/20 hover:bg-teal-700 transition-all cursor-pointer"
+                className="w-full py-2.5 px-4 bg-[#0B2545] hover:bg-[#0072CE] text-white text-xs font-semibold rounded flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
               >
-                <Award size={24} />
-                Download Certificate
-              </motion.button>
+                <Award size={16} />
+                Download Serialized Certificate (PDF)
+              </button>
             )}
 
             <button
+              type="button"
               onClick={onClose}
-              className="w-full py-4 bg-gray-50 text-text-muted font-semibold rounded-2xl hover:bg-gray-100 transition-all cursor-pointer"
+              className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded border border-slate-200 transition-colors cursor-pointer"
             >
-              Close
+              Close Window
             </button>
           </div>
         </motion.div>
@@ -144,106 +150,96 @@ export default function FeedbackForm({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6 overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
       <motion.div 
-        initial={{ y: 50, opacity: 0 }}
+        initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white rounded-[3rem] max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative"
+        className="bg-white rounded-lg border border-slate-200 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden relative"
       >
-        {/* Progress Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gray-100 flex">
-          <motion.div 
-            initial={{ width: "0%" }}
-            animate={{ width: step === 1 ? "50%" : "100%" }}
-            className="h-full bg-linear-to-r from-primary to-teal-400"
-          />
-        </div>
+        {/* Top 3px SDG Ribbon */}
+        <div className="h-1 w-full bg-gradient-to-r from-[#4C9F38] via-[#00AED9] to-[#19486A]" />
 
         {/* Header */}
-        <div className="p-8 pt-10 flex items-start justify-between border-b border-gray-50 bg-linear-to-b from-teal-50/20 to-transparent">
+        <div className="p-6 border-b border-slate-200 bg-white flex items-start justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] uppercase tracking-widest font-semibold rounded-full">
-                Step {step} of 2
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#0072CE]">
+                EVALUATION PROTOCOL · STEP {step} OF 2
               </span>
-              <span className="text-text-muted text-[10px] uppercase tracking-widest font-medium">
-                • {MODULE_LABELS[actModule]}
+              <span className="text-slate-300">·</span>
+              <span className="text-[10px] font-semibold text-slate-600 uppercase">
+                {MODULE_LABELS[actModule]}
               </span>
             </div>
-            <h2 className="text-2xl font-semibold text-text-main tracking-tight italic">
-              {step === 1 ? "Start your journey" : "Share your experience"}
+            <h2 className="text-lg font-serif font-bold text-[#0B2545]">
+              {step === 1 ? "Participant Credential Verification" : "Experiential Reflection Survey"}
             </h2>
           </div>
           <button 
+            type="button"
             onClick={onClose}
-            className="p-3 bg-gray-50 hover:bg-gray-100 text-text-muted rounded-full transition-all group hover:rotate-90 cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Close modal"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <AnimatePresence mode="wait">
             {step === 1 ? (
               <motion.div
                 key="step1"
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 20, opacity: 0 }}
-                className="space-y-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-5"
               >
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 text-text-main font-semibold">
-                    <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
-                      <User size={18} />
-                    </div>
-                    <h3>Personal Details</h3>
-                  </div>
-                  
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
-                      Full Name <span className="text-red-500">*</span>
+                <div className="space-y-4">
+                  {/* Full Name */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-700 flex items-center justify-between">
+                      <span>Full Legal Name <span className="text-red-500">*</span></span>
                       {shouldGenerateCertificate && (
-                        <span className="ml-2 lowercase font-normal opacity-60">(as you want it on your certificate)</span>
+                        <span className="text-[10px] text-slate-400 font-normal">Printed on official certificate</span>
                       )}
                     </label>
                     <input
                       required
                       type="text"
-                      placeholder="e.g. Sarah Elizabeth Johnson"
+                      placeholder="e.g. Maria Gonzalez"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full px-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
+                      className="w-full px-3.5 py-2 text-xs sm:text-sm text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
                     />
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
-                      Email Address <span className="text-red-500">*</span>
+                  {/* Email */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-700">
+                      Official Email Address <span className="text-red-500">*</span>
                     </label>
-                    <div className="relative">
-                      <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                      <input
-                        required
-                        type="email"
-                        placeholder="sarah@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-12 pr-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
-                      />
-                    </div>
+                    <input
+                      required
+                      type="email"
+                      placeholder="name@example.org"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3.5 py-2 text-xs sm:text-sm text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
+                    />
                   </div>
 
-                  <div className="grid sm:grid-cols-3 gap-4">
-                    <div className="sm:col-span-1 space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
+                  {/* Country & Phone */}
+                  <div className="grid sm:grid-cols-3 gap-3">
+                    <div className="sm:col-span-1 space-y-1">
+                      <label className="text-xs font-semibold text-slate-700">
                         Country <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={country.name}
                         onChange={(e) => setCountry(countries.find(c => c.name === e.target.value) || countries[0])}
-                        className="w-full px-4 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium appearance-none"
+                        className="w-full px-3 py-2 text-xs text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
                       >
                         {countries.map(c => (
                           <option key={c.name} value={c.name}>{c.name}</option>
@@ -251,81 +247,84 @@ export default function FeedbackForm({
                       </select>
                     </div>
 
-                    <div className="sm:col-span-2 space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-wider font-semibold text-text-muted ml-1">
+                    <div className="sm:col-span-2 space-y-1">
+                      <label className="text-xs font-semibold text-slate-700">
                         Phone Number <span className="text-red-500">*</span>
                       </label>
-                      <div className="relative">
-                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-semibold text-sm pointer-events-none">
+                      <div className="flex gap-2">
+                        <span className="inline-flex items-center px-3 bg-slate-100 border border-slate-300 rounded text-xs font-mono text-slate-600">
                           {country.code}
-                        </div>
+                        </span>
                         <input
                           required
                           type="tel"
-                          placeholder="98765 43210"
+                          placeholder="Phone number"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value.replace(/[^0-9\s-]/g, ""))}
-                          className="w-full pl-16 pr-5 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm font-medium"
+                          className="flex-1 px-3.5 py-2 text-xs sm:text-sm text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6 bg-teal-50/30 rounded-4xl border border-teal-50">
-                  <p className="text-xs text-teal-700 leading-relaxed font-medium">
-                    ✨ Your details are safe with us. We use this information only to keep you updated about future workshops and your participation history.
+                <div className="p-3.5 bg-slate-50 border border-slate-200 rounded text-xs text-slate-600 flex items-start gap-2.5">
+                  <ShieldCheck size={16} className="text-[#0072CE] shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong>Confidentiality Notice:</strong> Contact details are utilized solely for attendance validation, certificate verification, and aggregate educational reporting aligned with UN SDG Targets 3.4, 16.1, and 17.17.
                   </p>
                 </div>
               </motion.div>
             ) : (
               <motion.div
                 key="step2"
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
-                className="space-y-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-6"
               >
                 {questions.map((q, idx) => (
-                  <div key={q.id} className="space-y-5">
-                    <div className="flex gap-4">
-                      <span className="shrink-0 w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-semibold border border-primary/10">
+                  <div key={q.id} className="space-y-2 border-b border-slate-100 pb-5 last:border-0 last:pb-0">
+                    <div className="flex gap-2.5 items-start">
+                      <span className="shrink-0 w-5 h-5 rounded bg-slate-100 border border-slate-200 text-[#0B2545] flex items-center justify-center text-[10px] font-mono font-bold mt-0.5">
                         {idx + 1}
                       </span>
-                      <label className="text-base font-semibold text-text-main leading-snug pt-1">
+                      <label className="text-xs sm:text-sm font-semibold text-[#0B2545] leading-snug">
                         {q.question} <span className="text-red-500">*</span>
                       </label>
                     </div>
 
                     {q.type === "textarea" ? (
-                      <div className="relative">
-                        <MessageSquare className="absolute left-5 top-5 text-gray-300" size={20} />
-                        <textarea
-                          required
-                          rows={4}
-                          value={responses[q.id] || ""}
-                          onChange={(e) => setResponses({ ...responses, [q.id]: e.target.value })}
-                          className="w-full pl-14 pr-5 py-5 bg-gray-50/50 border border-gray-100 rounded-4xl focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all text-sm leading-relaxed"
-                          placeholder="Type your reflection here..."
-                        />
-                      </div>
+                      <textarea
+                        required
+                        rows={3}
+                        value={responses[q.id] || ""}
+                        onChange={(e) => setResponses({ ...responses, [q.id]: e.target.value })}
+                        className="w-full px-3 py-2 text-xs text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none leading-relaxed"
+                        placeholder="Provide your specific reflection or behavioral takeaway…"
+                      />
                     ) : (
-                      <div className="flex gap-3 justify-between max-w-sm mx-auto sm:mx-0">
-                        {[1, 2, 3, 4, 5].map((num) => (
-                          <button
-                            key={num}
-                            type="button"
-                            onClick={() => setResponses({ ...responses, [q.id]: num.toString() })}
-                            className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all group border-2 cursor-pointer ${
-                              responses[q.id] === num.toString()
-                                ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-105"
-                                : "bg-white text-text-muted border-gray-100 hover:border-primary/50 hover:bg-teal-50/30"
-                            }`}
-                          >
-                            <span className="text-lg font-semibold">{num}</span>
-                            {num === 5 && <Sparkles size={10} className={responses[q.id] === '5' ? "text-white" : "text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity"} />}
-                          </button>
-                        ))}
+                      <div className="pt-1">
+                        <div className="flex items-center gap-2 max-w-sm">
+                          {[1, 2, 3, 4, 5].map((num) => (
+                            <button
+                              key={num}
+                              type="button"
+                              onClick={() => setResponses({ ...responses, [q.id]: num.toString() })}
+                              className={`flex-1 h-9 rounded border text-xs font-bold font-mono transition-all cursor-pointer ${
+                                responses[q.id] === num.toString()
+                                  ? "bg-[#0B2545] text-white border-[#0B2545] shadow-xs"
+                                  : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50 hover:border-slate-400"
+                              }`}
+                            >
+                              {num}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="flex justify-between max-w-sm text-[10px] text-slate-400 pt-1 font-mono">
+                          <span>1 = Developing</span>
+                          <span>5 = Highly Effective</span>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -336,52 +335,49 @@ export default function FeedbackForm({
         </div>
 
         {/* Footer */}
-        <div className="p-8 border-t border-gray-50 flex gap-4 bg-gray-50/30">
-          {step === 2 && (
+        <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
+          {step === 2 ? (
             <button
+              type="button"
               onClick={() => setStep(1)}
-              className="flex-1 py-4 bg-white text-text-main font-semibold rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="py-2 px-3.5 bg-white text-slate-700 text-xs font-semibold rounded border border-slate-300 hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <ArrowLeft size={18} />
-              Back
+              <ArrowLeft size={14} />
+              Previous Step
             </button>
+          ) : (
+            <span className="text-[11px] text-slate-400 font-mono">Step 1 of 2</span>
           )}
           
           <button
+            type="button"
             onClick={step === 1 ? () => setStep(2) : handleSubmit}
             disabled={loading || (step === 1 ? !isStep1Complete : !isStep2Complete)}
-            className="flex-2 py-4 bg-primary text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale cursor-pointer"
+            className="py-2 px-4 bg-[#0B2545] hover:bg-[#0072CE] text-white text-xs font-semibold rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-xs ml-auto"
           >
             {loading ? (
-              <Loader2 className="animate-spin" size={20} />
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                Submitting Evaluation…
+              </>
             ) : (
               <>
                 {step === 1 ? (
-                  <>Continue <ArrowRight size={18} /></>
+                  <>
+                    Proceed to Reflection Survey
+                    <ArrowRight size={14} />
+                  </>
                 ) : (
-                  <>Submit My Journey <Heart size={18} className="fill-white" /></>
+                  <>
+                    Submit Reflection &amp; Complete Session
+                    <CheckCircle2 size={14} />
+                  </>
                 )}
               </>
             )}
           </button>
         </div>
       </motion.div>
-
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 5px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0,0,0,0.05);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(0,0,0,0.1);
-        }
-      `}</style>
     </div>
   );
 }

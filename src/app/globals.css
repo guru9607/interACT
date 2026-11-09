@@ -1,40 +1,77 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1f7a72;
-  --color-primary-hover: #1a655f;
-  --color-secondary: #f7f5ee;
-  --color-accent: #E9C46A;
-  --color-text-main: #243947;
-  --color-text-muted: #5f6f7e;
-  --color-cream: #fcfbf7;
-  --color-teal-50: #f4faf8;
-  --color-teal-100: #ddeee9;
-  --color-teal-500: #2d9a90;
-  --color-teal-600: #217d74;
-  --color-teal-700: #1a655f;
+  /* Official UN DGC Color Palette */
+  --color-un-blue: #0072ce;
+  --color-un-blue-hover: #0058a3;
+  --color-un-blue-subtle: #ebf5ff;
+  --color-un-navy: #0b2545;
+  --color-un-navy-deep: #06152b;
+  --color-un-navy-soft: #14335a;
 
-  /* Body sets --font-sans via next/font (Outfit); fallback for utilities */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji";
+  /* Official UN Sustainable Development Goals (SDG) Tokens */
+  --color-sdg-3-green: #4c9f38;
+  --color-sdg-3-light: #f0fdf4;
+  --color-sdg-16-blue: #00689d;
+  --color-sdg-16-light: #f0f9ff;
+  --color-sdg-17-navy: #19486a;
+  --color-sdg-17-light: #f1f5f9;
+
+  /* Institutional Canvas & Ground Tokens */
+  --color-canvas-white: #ffffff;
+  --color-canvas-civic: #f8f9fa;
+  --color-canvas-subtle: #f1f5f9;
+
+  /* Text & Ink Tokens (WCAG 2.1 AAA Compliant) */
+  --color-ink-primary: #0f172a;
+  --color-ink-secondary: #334155;
+  --color-ink-muted: #475569;
+  --color-ink-faint: #64748b;
+
+  /* Structural Hairline Borders */
+  --color-border-hairline: #e2e8f0;
+  --color-border-medium: #cbd5e1;
+
+  /* Primary Brand Overrides */
+  --color-primary: #0072ce;
+  --color-primary-hover: #0058a3;
+  --color-secondary: #f8f9fa;
+  --color-accent: #4c9f38;
+  --color-text-main: #0f172a;
+  --color-text-muted: #475569;
+  --color-cream: #ffffff;
+
+  /* Fallback mapped utilities */
+  --color-teal-50: #ebf5ff;
+  --color-teal-100: #d0e7ff;
+  --color-teal-500: #0284c7;
+  --color-teal-600: #0072ce;
+  --color-teal-700: #0b2545;
+
+  /* Typography */
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 :root {
-  --background: #fcfbf7;
-  /* Creamy white */
-  --foreground: #243947;
-  /* Dark Blue-Green */
+  --background: #ffffff;
+  --foreground: #0f172a;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-synthesis-weight: none;
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
 }
 
 strong,
@@ -44,57 +81,18 @@ b {
 
 @layer components {
   .auth-card-shell {
-    @apply max-w-md w-full bg-white rounded-3xl border border-teal-100/80 shadow-lg shadow-teal-900/5;
+    @apply max-w-md w-full bg-white rounded-lg border border-slate-200 shadow-sm;
   }
 
   .auth-page-bg {
-    @apply min-h-screen bg-teal-50/40 flex items-center justify-center p-6;
+    @apply min-h-screen bg-slate-50 flex items-center justify-center p-6;
   }
 
   .auth-primary-btn {
-    @apply w-full py-3.5 bg-teal-600 text-white font-semibold rounded-2xl hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 shadow-md shadow-teal-600/15 disabled:opacity-60;
+    @apply w-full py-3 bg-[#0072ce] text-white font-semibold rounded-md hover:bg-[#0058a3] transition-colors flex items-center justify-center gap-2 shadow-sm disabled:opacity-60;
   }
 
   .field-label-muted {
-    @apply block text-left text-xs font-medium text-text-muted uppercase tracking-wider;
+    @apply block text-left text-xs font-semibold text-slate-700 uppercase tracking-wider;
   }
-}
-
-::selection {
-  background: color-mix(in srgb, var(--color-primary) 22%, white);
-  color: var(--color-text-main);
-}
-
-main {
-  background:
-    radial-gradient(circle at 10% 12%, rgba(33, 125, 116, 0.045), transparent 34%),
-    radial-gradient(circle at 88% 18%, rgba(36, 57, 71, 0.03), transparent 30%);
-}
-
-button,
-a,
-[role='button'],
-summary,
-label[for],
-input[type='button'],
-input[type='submit'],
-input[type='reset'] {
-  cursor: pointer;
-}
-
-button:disabled,
-input:disabled,
-textarea:disabled,
-select:disabled {
-  cursor: not-allowed;
-}
-
-.surface-card {
-  border: 1px solid rgba(33, 125, 116, 0.12);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.06),
-    0 10px 28px rgba(33, 125, 116, 0.07);
-  backdrop-filter: blur(8px);
 }

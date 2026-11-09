@@ -12,10 +12,13 @@ import {
   CheckCircle2,
   FileText,
   ShieldCheck,
+  ChevronRight,
+  Info
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { generateCertificate } from "@/lib/certificate";
 import { useStaffAuth } from "@/hooks/useStaffAuth";
+import Link from "next/link";
 
 interface CertificateFormData {
   name: string;
@@ -89,236 +92,317 @@ export default function CertificatesPortal() {
 
   if (auth.loading || !auth.userId) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="animate-spin text-teal-600" size={40} />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F9FA] text-slate-500 font-sans">
+        <div className="w-8 h-8 border-2 border-slate-300 border-t-[#0072CE] rounded-full animate-spin mb-3" />
+        <span className="text-xs uppercase tracking-widest font-semibold text-slate-400">
+          Loading Staff Credentials…
+        </span>
       </div>
     );
   }
 
   if (!auth.isStaff) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
-        <p className="text-text-muted text-sm">
-          Certificates require facilitator or admin access.{" "}
-          <button type="button" onClick={() => router.push("/portal")} className="text-teal-700 underline font-medium">
-            Back to portal
+      <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-6 text-slate-800 font-sans">
+        <div className="max-w-md w-full bg-white border border-slate-200 rounded-lg p-8 text-center space-y-4 shadow-xs">
+          <Award className="mx-auto text-slate-400" size={32} />
+          <h1 className="text-lg font-serif font-bold text-[#0B2545]">
+            Facilitator Accreditation Required
+          </h1>
+          <p className="text-slate-600 text-xs leading-relaxed">
+            Generating serialized certificates requires verified facilitator or core-team access.
+          </p>
+          <button
+            type="button"
+            onClick={() => router.push("/portal")}
+            className="px-4 py-2 bg-[#0B2545] hover:bg-[#0072CE] text-white text-xs font-semibold rounded transition-colors"
+          >
+            Return to Operational Portal
           </button>
-        </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-teal-50/20 pb-20">
-      {/* Header */}
-      <div className="bg-white border-b border-teal-100 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-[#F8F9FA] text-slate-800 font-sans flex flex-col justify-between">
+      <div>
+        {/* Top 3px SDG Tri-Color Ribbon */}
+        <div className="h-1 w-full bg-gradient-to-r from-[#4C9F38] via-[#00AED9] to-[#19486A]" />
+
+        {/* Institutional Header */}
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => router.push("/portal")}
-                className="p-2 hover:bg-teal-50 text-teal-600 rounded-xl transition-all"
+                className="p-1.5 hover:bg-slate-100 text-slate-600 rounded transition-colors"
                 aria-label="Back to portal"
               >
-                <ArrowLeft size={24} />
+                <ArrowLeft size={18} />
               </button>
               <div>
-                <h1 className="text-xl font-semibold text-text-main flex items-center gap-2">
-                  <Award className="text-teal-600" size={24} />
-                  Certificate Generator
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <Link href="/portal" className="text-[#0072CE] hover:underline font-medium">
+                    Portal
+                  </Link>
+                  <ChevronRight size={12} className="text-slate-300" />
+                  <span className="font-semibold text-slate-700">Certificates</span>
+                </div>
+                <h1 className="text-lg font-serif font-bold text-[#0B2545] flex items-center gap-2">
+                  <Award className="text-[#0072CE]" size={18} />
+                  Official Certificate Generation Console
                 </h1>
-                <p className="text-xs text-text-muted mt-0.5">Generate and download official interACT certifications</p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Form Side */}
-          <div className="space-y-8">
-            <div className="bg-white rounded-[2.5rem] p-8 border border-teal-100 shadow-xl shadow-teal-900/5 space-y-6">
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
-                    <User size={16} className="text-teal-600" />
-                    {formData.type === 'participation' ? "Recipient Full Name" : "Keynote Speaker Name"}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder={formData.type === 'participation' ? "Enter student's full name" : "Enter speaker's full name"}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none text-lg font-medium"
-                  />
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 rounded font-semibold">
+                DOC-IA-CERT-SVC
+              </span>
+              <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                Verified Facilitator
+              </span>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
+            {/* Form Side (7 cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-xs space-y-6">
+                <div className="border-b border-slate-100 pb-4">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#0072CE] block">
+                    Credential Parameters
+                  </span>
+                  <h2 className="text-base font-serif font-bold text-[#0B2545]">
+                    Issue Authenticated Certificate
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Enter the participant or keynote speaker information to generate an official PDF credential.
+                  </p>
                 </div>
 
-
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
-                    <FileText size={16} className="text-teal-600" />
-                    Event / Program Title
-                  </label>
-                  <div className="relative group">
+                <div className="space-y-5">
+                  {/* Recipient Full Name */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                      <User size={14} className="text-[#0072CE]" />
+                      {formData.type === 'participation' ? "Recipient Full Name (Student / Participant)" : "Keynote Speaker Full Name"}
+                    </label>
                     <input
                       type="text"
-                      value={formData.eventName}
-                      onChange={(e) => {
-                        setFormData({ ...formData, eventName: e.target.value });
-                        setSearchTerm(e.target.value);
-                      }}
-                      placeholder="e.g. Awareness Workshop"
-                      className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder={formData.type === 'participation' ? "e.g. Maria Gonzalez" : "e.g. Dr. Ayako Ichimaru"}
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
                     />
-                    {searchTerm && events.length > 0 && !events.find(e => e.title === formData.eventName) && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-teal-100 shadow-2xl z-20 overflow-hidden max-h-48 overflow-y-auto">
-                        {events
-                          .filter(e => e.title.toLowerCase().includes(searchTerm.toLowerCase()))
-                          .map(event => (
-                            <button
-                              key={event.id}
-                              onClick={() => {
-                                setFormData({ ...formData, eventName: event.title, date: event.date });
-                                setSearchTerm("");
-                              }}
-                              className="w-full text-left px-6 py-3 hover:bg-teal-50 transition-colors text-sm border-b border-gray-50 last:border-0"
-                            >
-                              <div className="font-semibold text-text-main">{event.title}</div>
-                              <div className="text-[10px] text-text-muted">{event.date}</div>
-                            </button>
-                          ))}
-                      </div>
-                    )}
+                  </div>
+
+                  {/* Program / Event Title */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                      <FileText size={14} className="text-[#0072CE]" />
+                      Associated Program / Gathering Title
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={formData.eventName}
+                        onChange={(e) => {
+                          setFormData({ ...formData, eventName: e.target.value });
+                          setSearchTerm(e.target.value);
+                        }}
+                        placeholder="e.g. Youth Leadership & Mindfulness Intensive"
+                        className="w-full px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
+                      />
+                      {searchTerm && events.length > 0 && !events.find(e => e.title === formData.eventName) && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded border border-slate-200 shadow-md z-20 overflow-hidden max-h-48 overflow-y-auto divide-y divide-slate-100">
+                          {events
+                            .filter(e => e.title.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .map(event => (
+                              <button
+                                key={event.id}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({ ...formData, eventName: event.title, date: event.date });
+                                  setSearchTerm("");
+                                }}
+                                className="w-full text-left px-4 py-2.5 hover:bg-slate-50 transition-colors text-xs"
+                              >
+                                <div className="font-semibold text-[#0B2545]">{event.title}</div>
+                                <div className="text-[10px] font-mono text-slate-400">{event.date}</div>
+                              </button>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Certificate Type */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                      <ShieldCheck size={14} className="text-[#0072CE]" />
+                      Certification Classification
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, type: 'participation' })}
+                        className={`px-3.5 py-2.5 rounded border text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
+                          formData.type === 'participation'
+                            ? "bg-[#0B2545] text-white border-[#0B2545] shadow-xs"
+                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:border-slate-300"
+                        }`}
+                      >
+                        <CheckCircle2 size={14} className={formData.type === 'participation' ? "opacity-100" : "opacity-0"} />
+                        Participation
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, type: 'appreciation' })}
+                        className={`px-3.5 py-2.5 rounded border text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
+                          formData.type === 'appreciation'
+                            ? "bg-[#0B2545] text-white border-[#0B2545] shadow-xs"
+                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-white hover:border-slate-300"
+                        }`}
+                      >
+                        <Award size={14} className={formData.type === 'appreciation' ? "opacity-100" : "opacity-0"} />
+                        Keynote Appreciation
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Presentation Date */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                      <CalendarIcon size={14} className="text-[#0072CE]" />
+                      Official Date of Issuance
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none"
+                    />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
-                    <ShieldCheck size={16} className="text-teal-600" />
-                    Certificate Type
-                  </label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => setFormData({ ...formData, type: 'participation' })}
-                      className={`px-4 py-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                        formData.type === 'participation'
-                        ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/20"
-                        : "bg-gray-50 text-text-muted border-gray-100 hover:bg-white hover:border-teal-200"
-                      }`}
-                    >
-                      <CheckCircle2 size={16} className={formData.type === 'participation' ? "opacity-100" : "opacity-0"} />
-                      Participation
-                    </button>
-                    <button
-                      onClick={() => setFormData({ ...formData, type: 'appreciation' })}
-                      className={`px-4 py-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                        formData.type === 'appreciation'
-                        ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/20"
-                        : "bg-gray-50 text-text-muted border-gray-100 hover:bg-white hover:border-teal-200"
-                      }`}
-                    >
-                      <Award size={16} className={formData.type === 'appreciation' ? "opacity-100" : "opacity-0"} />
-                      Appreciation
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-text-main flex items-center gap-2">
-                    <CalendarIcon size={16} className="text-teal-600" />
-                    Presentation Date
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none"
-                  />
-                </div>
+                {/* Submit / Generate Button */}
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  disabled={loading || !formData.name || !formData.eventName}
+                  className={`w-full py-3 rounded font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors ${
+                    loading || !formData.name || !formData.eventName
+                      ? "bg-slate-200 text-slate-400 cursor-not-allowed" 
+                      : "bg-[#0B2545] hover:bg-[#0072CE] text-white shadow-xs"
+                  }`}
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <Download size={16} />
+                  )}
+                  {loading ? "Generating Encrypted PDF..." : "Generate & Download Official Certificate"}
+                </button>
               </div>
 
-              <button
-                onClick={handleDownload}
-                disabled={loading || !formData.name || !formData.eventName}
-                className={`w-full py-5 rounded-[2rem] font-semibold text-lg flex items-center justify-center gap-3 transition-all shadow-xl ${
-                  loading 
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
-                  : "bg-teal-600 text-white hover:bg-teal-700 shadow-teal-600/20 hover:scale-[1.02] active:scale-95"
-                }`}
-              >
-                {loading ? (
-                  <Loader2 className="animate-spin" size={24} />
-                ) : (
-                  <Download size={24} />
-                )}
-                {loading ? "Generating Certificate..." : "Generate & Download"}
-              </button>
-            </div>
-
-            <div className="p-6 bg-teal-900/5 rounded-3xl border border-teal-900/10">
-              <h3 className="font-semibold text-teal-800 text-sm mb-2">Pro Tip</h3>
-              <p className="text-xs text-teal-700/70 leading-relaxed">
-                Start typing the event name to see suggestions from recent events. Selecting a suggested event will automatically fill in the correct title and event date.
-              </p>
-            </div>
-          </div>
-
-          {/* Preview Side */}
-          <div className="hidden lg:block space-y-4">
-            <h2 className="text-sm font-semibold text-text-main uppercase tracking-widest opacity-50 px-2">Live Preview</h2>
-            <div className="bg-white rounded-[2rem] border border-teal-100 shadow-2xl overflow-hidden sticky top-32">
-              <div className="aspect-[1.414/1] bg-[#fffef9] relative group">
-                {/* Visual Placeholder for the SVG Preview */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-center items-center text-center transition-all bg-[#fffef9]">
-                  <div className={`w-full h-full border-4 rounded-lg flex flex-col p-8 transition-colors border-teal-600/20 bg-teal-50/10`}>
-                    <div className="flex justify-center mb-4">
-                      <div className="w-16 h-8 rounded animate-pulse bg-gray-200" />
-                    </div>
-                    <div className="text-[1.5vw] font-serif tracking-[1vw] uppercase mb-2 text-gray-400">Certificate</div>
-                    <div className={`text-[0.8vw] font-serif tracking-[0.4vw] mb-8 font-semibold text-teal-500`}>
-                      OF {formData.type.toUpperCase()}
-                    </div>
-                    
-                    <div className="text-[0.6vw] italic mb-4 text-gray-400">
-                      {formData.type === 'participation' ? "This recognition is proudly presented to" : "This honorary distinction is bestowed upon the Keynote Speaker"}
-                    </div>
-                    <div className="text-[2.5vw] font-serif font-semibold mb-1 h-[4vw] text-gray-800">
-                      {formData.name || (formData.type === 'participation' ? "Recipient Name" : "Speaker Name")}
-                    </div>
-                    <div className={`w-1/2 h-0.5 mx-auto mb-6 bg-teal-600/30`} />
-                    <div className="text-[0.6vw] mb-4 text-gray-400">
-                      {formData.type === 'participation' ? "for completion of the program" : "In profound recognition of contribution as Keynote Speaker at"}
-                    </div>
-                    <div className={`text-[1.5vw] font-serif font-semibold mb-8 text-teal-700`}>
-                      {formData.eventName || "Program Title"}
-                    </div>
-                    <div className="flex justify-around mt-auto pt-8">
-                      <div className="w-24 border-t border-gray-300 pt-2">
-                        <div className="h-4 w-12 mx-auto rounded mb-1 bg-gray-100" />
-                        <div className="text-[0.4vw] text-gray-300">Co-Founder</div>
-                      </div>
-                      <div className="w-24 border-t border-gray-300 pt-2">
-                        <div className="h-4 w-12 mx-auto rounded mb-1 bg-gray-100" />
-                        <div className="text-[0.4vw] text-gray-300">Co-Founder</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Overlay for "Preview Only" */}
-                <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                   <div className="px-4 py-2 bg-text-main text-white text-xs font-semibold rounded-full">Visual Reference Only</div>
+              {/* Informational Guidance Callout */}
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 flex items-start gap-3 text-xs text-slate-600">
+                <Info size={16} className="text-[#0072CE] shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <span className="font-semibold text-[#0B2545] block">Facilitator Best Practice</span>
+                  <p className="leading-relaxed">
+                    Typing an event title reveals recent events created in your dashboard. Selecting a suggested record automatically populates the title and date, ensuring certification records link to event metrics.
+                  </p>
                 </div>
               </div>
             </div>
-            <p className="text-[10px] text-center text-text-muted mt-4">
-              * The final high-quality certificate will include official signatures and seals.
-            </p>
+
+            {/* Preview Side (5 cols) */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Live Certificate Rendering Preview
+                </h3>
+                <span className="text-[10px] font-mono text-slate-400">Standard A4 Ratio</span>
+              </div>
+
+              <div className="bg-white rounded-lg border border-slate-200 shadow-xs overflow-hidden sticky top-20">
+                <div className="aspect-[1.414/1] bg-[#FAF8F5] relative p-6 flex flex-col justify-between border-8 border-white">
+                  {/* Inner Certificate Framing */}
+                  <div className="w-full h-full border border-slate-300 p-5 flex flex-col justify-between text-center relative bg-white">
+                    {/* Top Tri-Color Accent */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4C9F38] via-[#00AED9] to-[#19486A]" />
+
+                    {/* Header Seal */}
+                    <div className="pt-2">
+                      <div className="w-8 h-8 mx-auto rounded border border-slate-200 flex items-center justify-center p-1 bg-slate-50 mb-1">
+                        <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+                      </div>
+                      <div className="text-[9px] font-mono tracking-[0.2em] uppercase text-slate-400">
+                        interACT Educational Initiative
+                      </div>
+                      <div className="text-xs font-serif font-bold tracking-wider uppercase text-[#0B2545] mt-0.5">
+                        Certificate of {formData.type.toUpperCase()}
+                      </div>
+                    </div>
+
+                    {/* Presentation Body */}
+                    <div className="my-auto py-2 space-y-1">
+                      <div className="text-[9px] italic text-slate-400">
+                        {formData.type === 'participation' 
+                          ? "This certificate is formally presented to" 
+                          : "This honorary recognition is conferred upon"}
+                      </div>
+                      <div className="text-sm sm:text-base font-serif font-bold text-[#0B2545] truncate px-2">
+                        {formData.name || (formData.type === 'participation' ? "Recipient Full Name" : "Keynote Speaker Name")}
+                      </div>
+                      <div className="w-24 h-px bg-slate-200 mx-auto my-1" />
+                      <div className="text-[9px] text-slate-400">
+                        {formData.type === 'participation' ? "for completion of the youth empowerment workshop" : "for distinguished keynote contributions to"}
+                      </div>
+                      <div className="text-xs font-serif font-semibold text-[#0072CE] truncate px-2">
+                        {formData.eventName || "Program / Workshop Title"}
+                      </div>
+                    </div>
+
+                    {/* Bottom Signature Line */}
+                    <div className="border-t border-slate-100 pt-3 flex items-center justify-between text-[8px] text-slate-400 px-2">
+                      <div>
+                        <div className="font-mono text-slate-600 font-semibold">{formData.date}</div>
+                        <div>Date of Issuance</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-mono text-slate-600 font-semibold">INT-{new Date().getFullYear()}-XXXX</div>
+                        <div>Official Credential ID</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-50 border-t border-slate-200 text-center text-[10px] text-slate-400">
+                  Preview renders illustrative layout. Downloaded PDF includes official vectorized executive seal.
+                </div>
+              </div>
+            </div>
           </div>
+        </main>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p>interACT Global Educational Initiative · Certification Verification Authority</p>
+          <p className="text-[11px] text-slate-400">
+            Compliant with UN DGC Web Design &amp; SDG Alignment Guidelines
+          </p>
         </div>
-      </main>
+      </footer>
     </div>
   );
 }

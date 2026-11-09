@@ -309,56 +309,52 @@ export default function FacilitatorForm() {
 
   // Submission Success Card Redesign
   if (submitted) {
-    const portalHref = `/portal/register?email=${encodeURIComponent(formData.email)}&full_name=${encodeURIComponent(formData.full_name)}`;
+    const portalHref = `/portal/login`;
 
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="p-10 md:p-12 bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-[0_32px_64px_-16px_rgba(27,67,61,0.06)] max-w-xl mx-auto text-center space-y-6"
+        transition={{ duration: 0.3 }}
+        className="p-8 sm:p-10 bg-white rounded-lg border border-slate-200 shadow-xs max-w-xl mx-auto text-center space-y-5"
       >
-        <div className="relative group mx-auto w-20">
-          <div className="absolute inset-0 bg-teal-500/10 rounded-full blur-xl group-hover:scale-110 transition-transform duration-500" />
-          <div className="relative w-20 h-20 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center mx-auto shadow-xs">
-            <CheckCircle2 size={40} aria-hidden />
-          </div>
+        <div className="w-14 h-14 bg-emerald-50 text-[#4C9F38] border border-emerald-200 rounded-full flex items-center justify-center mx-auto shadow-xs">
+          <CheckCircle2 size={28} aria-hidden />
         </div>
         
-        <div className="space-y-3">
-          <h2 className="text-2xl md:text-3xl font-bold text-text-main font-sans">
-            Application Received
+        <div className="space-y-2">
+          <span className="text-[10px] font-bold text-[#0072CE] uppercase tracking-wider block">
+            Accreditation Intake Logged
+          </span>
+          <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+            Application Registered Successfully
           </h2>
-          <p className="text-text-muted text-sm leading-relaxed">
-            Your facilitator details have been successfully saved. As a final step, please{" "}
-            <strong className="text-text-main font-semibold">
-              create your facilitator login with the same email
-            </strong>{" "}
-            so you can sign in to the portal and manage events.
+          <p className="text-xs text-slate-600 leading-relaxed max-w-md mx-auto">
+            Your institutional facilitator application has been saved to the registry. To access curriculum slide decks, thought trackers, and session management, please create your facilitator login with the same email.
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 justify-center items-stretch pt-2">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch pt-2">
           <Link
             href={portalHref}
-            className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold py-4 px-6 shadow-lg shadow-teal-600/15 hover:shadow-xl hover:shadow-teal-600/20 transition-all duration-300 active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 rounded bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs font-semibold py-3 px-5 transition-colors shadow-xs"
           >
-            <span>Create facilitator login</span>
-            <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" aria-hidden />
+            <span>Create Facilitator Credentials</span>
+            <ArrowRight size={14} aria-hidden />
           </Link>
           <Link
             href="/portal/login"
-            className="inline-flex items-center justify-center rounded-2xl border border-teal-100 bg-teal-50/50 hover:bg-teal-50 px-6 py-4 text-sm font-semibold text-teal-800 transition-colors"
+            className="inline-flex items-center justify-center rounded border border-slate-300 bg-white hover:bg-slate-50 px-5 py-3 text-xs font-semibold text-slate-700 transition-colors shadow-xs"
           >
-            Already have a login? Sign in
+            Sign in to Portal
           </Link>
         </div>
 
-        <p className="text-[11px] text-text-muted/70 leading-relaxed max-w-sm mx-auto">
-          If your email is already registered in our core-team roster, you will get access automatically.
+        <p className="text-[11px] text-slate-400 leading-relaxed max-w-sm mx-auto">
+          If your email is already registered in the core roster, your permissions will activate automatically.
         </p>
 
-        <div className="pt-2">
+        <div className="pt-2 border-t border-slate-100">
           <button
             type="button"
             onClick={() => {
@@ -375,9 +371,9 @@ export default function FacilitatorForm() {
               setStep(1);
               setSubmitted(false);
             }}
-            className="text-sm text-teal-700 font-bold hover:text-teal-800 hover:underline transition-colors"
+            className="text-xs text-[#0072CE] font-semibold hover:underline transition-colors"
           >
-            Submit another application
+            Submit Another Application
           </button>
         </div>
       </motion.div>
@@ -385,20 +381,20 @@ export default function FacilitatorForm() {
   }
 
   return (
-    <div className="bg-white/70 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-white/60 shadow-[0_32px_64px_-16px_rgba(27,67,61,0.05)]">
+    <div className="bg-white p-6 sm:p-10 rounded-lg border border-slate-200 shadow-xs">
       
       {/* Dynamic Progress Bar */}
       <div className="mb-8">
-        <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-teal-800 mb-2 px-1">
-          <span>{step === 1 ? "Step 1: Contact Details" : "Step 2: Spiritual & Center Profile"}</span>
-          <span className="text-text-muted">{step} of 2</span>
+        <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[#0B2545] mb-2 px-0.5">
+          <span>{step === 1 ? "Step 1: Contact Details & Identification" : "Step 2: Institutional Affiliation & Experience"}</span>
+          <span className="text-slate-500 font-mono">{step} of 2</span>
         </div>
-        <div className="w-full h-2 bg-teal-50/70 border border-teal-100/30 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-slate-100 border border-slate-200 rounded-full overflow-hidden">
           <motion.div
             initial={{ width: "50%" }}
             animate={{ width: step === 1 ? "50%" : "100%" }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="h-full bg-gradient-to-r from-teal-600 to-teal-500 rounded-full"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="h-full bg-[#0072CE] rounded-full"
           />
         </div>
       </div>
@@ -415,8 +411,8 @@ export default function FacilitatorForm() {
               className="grid md:grid-cols-2 gap-6"
             >
               {/* Full Name */}
-              <div className="space-y-2">
-                <label htmlFor="full_name" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
+              <div className="space-y-1.5">
+                <label htmlFor="full_name" className="block text-xs font-semibold text-slate-700">
                   Full Name <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
@@ -427,14 +423,14 @@ export default function FacilitatorForm() {
                   placeholder="Enter your full name"
                   value={formData.full_name}
                   onChange={handleChange}
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none placeholder:text-text-muted/30 text-text-main"
+                  className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none placeholder:text-slate-400 text-slate-800"
                 />
               </div>
 
               {/* Email */}
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Email Address <span className="text-red-500 font-bold">*</span>
+              <div className="space-y-1.5">
+                <label htmlFor="email" className="block text-xs font-semibold text-slate-700">
+                  Official Email Address <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
                   id="email"
@@ -444,14 +440,14 @@ export default function FacilitatorForm() {
                   placeholder="you@example.com"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none placeholder:text-text-muted/30 text-text-main"
+                  className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none placeholder:text-slate-400 text-slate-800"
                 />
               </div>
 
               {/* Country (Moved to Step 1 for country-code autopopulate) */}
-              <div className="space-y-2">
-                <label htmlFor="country" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Country <span className="text-red-500 font-bold">*</span>
+              <div className="space-y-1.5">
+                <label htmlFor="country" className="block text-xs font-semibold text-slate-700">
+                  Country of Residence <span className="text-red-500 font-bold">*</span>
                 </label>
                 <div className="relative">
                   <select
@@ -460,7 +456,7 @@ export default function FacilitatorForm() {
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none appearance-none cursor-pointer text-text-main pr-10"
+                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none appearance-none cursor-pointer text-slate-800 pr-10"
                   >
                     <option value="">Select a country</option>
                     <option value="Afghanistan">Afghanistan</option>
@@ -659,16 +655,16 @@ export default function FacilitatorForm() {
                     <option value="Zambia">Zambia</option>
                     <option value="Zimbabwe">Zimbabwe</option>
                   </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40 text-teal-800">
-                    <ChevronDown size={18} />
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    <ChevronDown size={14} />
                   </div>
                 </div>
               </div>
 
               {/* Phone No */}
-              <div className="space-y-2">
-                <label htmlFor="phone_no" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Phone Number <span className="text-red-500 font-bold">*</span>
+              <div className="space-y-1.5">
+                <label htmlFor="phone_no" className="block text-xs font-semibold text-slate-700">
+                  Mobile / WhatsApp Number <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
                   id="phone_no"
@@ -684,7 +680,7 @@ export default function FacilitatorForm() {
                     target.value = target.value.replace(/[^0-9+\s-]/g, '');
                   }}
                   pattern="[\+]?[0-9\s-]{8,}"
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 outline-none placeholder:text-text-muted/30 text-text-main font-semibold tracking-wide"
+                  className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] outline-none placeholder:text-slate-400 text-slate-800 font-medium tracking-wide"
                 />
               </div>
             </motion.div>
@@ -695,73 +691,84 @@ export default function FacilitatorForm() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.3 }}
-              className="grid md:grid-cols-2 gap-6"
+              className="space-y-5"
             >
-              {/* Profession */}
-              <div className="space-y-2">
-                <label htmlFor="profession" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Profession / Occupation <span className="text-red-500 font-bold">*</span>
-                </label>
-                <input
-                  id="profession"
-                  required
-                  type="text"
-                  name="profession"
-                  placeholder="e.g., Designer, Student, Teacher"
-                  value={formData.profession}
-                  onChange={handleChange}
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none placeholder:text-text-muted/30 text-text-main"
-                />
+              {/* Notice Banner */}
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded text-[11px] text-slate-700 leading-relaxed">
+                <strong className="text-[#0B2545] font-semibold block mb-0.5">Institutional Affiliation Verification:</strong>
+                Facilitator accreditation requires partner institution nomination and regional coordinator verification. Please provide your educational experience and coordinating official details.
               </div>
 
-              {/* Gyan Age */}
-              <div className="space-y-2">
-                <label htmlFor="gyan_age" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Gyan Age (Years) <span className="text-red-500 font-bold">*</span>
-                </label>
-                <input
-                  id="gyan_age"
-                  required
-                  type="text"
-                  name="gyan_age"
-                  placeholder="e.g., 5 years"
-                  value={formData.gyan_age}
-                  onChange={handleChange}
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none placeholder:text-text-muted/30 text-text-main"
-                />
-              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Profession */}
+                <div className="space-y-1.5">
+                  <label htmlFor="profession" className="block text-xs font-semibold text-slate-700">
+                    Profession / Occupation <span className="text-red-500 font-bold">*</span>
+                  </label>
+                  <input
+                    id="profession"
+                    required
+                    type="text"
+                    name="profession"
+                    placeholder="e.g. Educator, Physician, Student, Engineer"
+                    value={formData.profession}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none placeholder:text-slate-400 text-slate-800"
+                  />
+                </div>
 
-              {/* Centre Incharge Name */}
-              <div className="space-y-2">
-                <label htmlFor="centre_incharge_name" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Local Centre Incharge <span className="text-red-500 font-bold">*</span>
-                </label>
-                <input
-                  id="centre_incharge_name"
-                  required
-                  type="text"
-                  name="centre_incharge_name"
-                  placeholder="e.g., Sister BK Jayanti"
-                  value={formData.centre_incharge_name}
-                  onChange={handleChange}
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none placeholder:text-text-muted/30 text-text-main"
-                />
-              </div>
+                {/* Experience Duration */}
+                <div className="space-y-1.5">
+                  <label htmlFor="gyan_age" className="block text-xs font-semibold text-slate-700">
+                    Contemplative Practice / Teaching Experience <span className="text-red-500 font-bold">*</span>
+                  </label>
+                  <input
+                    id="gyan_age"
+                    required
+                    type="text"
+                    name="gyan_age"
+                    placeholder="e.g. 5 years"
+                    value={formData.gyan_age}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none placeholder:text-slate-400 text-slate-800"
+                  />
+                  <p className="text-[10px] text-slate-500">Duration of regular contemplative and pedagogical experience.</p>
+                </div>
 
-              {/* Centre Email */}
-              <div className="space-y-2">
-                <label htmlFor="centre_email" className="block text-xs font-semibold text-text-muted uppercase tracking-wider pl-1">
-                  Centre Email Address
-                </label>
-                <input
-                  id="centre_email"
-                  type="email"
-                  name="centre_email"
-                  placeholder="centre@brahmakumaris.org"
-                  value={formData.centre_email}
-                  onChange={handleChange}
-                  className="w-full px-5 py-3.5 bg-white border border-teal-100/90 rounded-2xl focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all duration-200 outline-none placeholder:text-text-muted/30 text-text-main"
-                />
+                {/* Coordinating Official */}
+                <div className="space-y-1.5">
+                  <label htmlFor="centre_incharge_name" className="block text-xs font-semibold text-slate-700">
+                    Coordinating Centre / Institutional In-Charge <span className="text-red-500 font-bold">*</span>
+                  </label>
+                  <input
+                    id="centre_incharge_name"
+                    required
+                    type="text"
+                    name="centre_incharge_name"
+                    placeholder="e.g. Regional Coordinator / Director Name"
+                    value={formData.centre_incharge_name}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none placeholder:text-slate-400 text-slate-800"
+                  />
+                  <p className="text-[10px] text-slate-500">Institutional head or coordinator verifying your role.</p>
+                </div>
+
+                {/* Centre Email */}
+                <div className="space-y-1.5">
+                  <label htmlFor="centre_email" className="block text-xs font-semibold text-slate-700">
+                    Coordinating Centre / Institution Email
+                  </label>
+                  <input
+                    id="centre_email"
+                    type="email"
+                    name="centre_email"
+                    placeholder="coordinator@theinteract.org"
+                    value={formData.centre_email}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE] transition-all outline-none placeholder:text-slate-400 text-slate-800"
+                  />
+                  <p className="text-[10px] text-slate-500">Official email for endorsement verification.</p>
+                </div>
               </div>
             </motion.div>
           )}
@@ -772,12 +779,12 @@ export default function FacilitatorForm() {
           <AnimatePresence mode="wait">
             {error && (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="p-4 bg-red-50/80 text-red-700 rounded-2xl flex items-center gap-3 border border-red-100 text-sm text-left leading-relaxed animate-pulse"
+                exit={{ opacity: 0, y: -5 }}
+                className="p-3 bg-red-50 text-red-700 rounded border border-red-200 text-xs flex items-center gap-2"
               >
-                <AlertCircle size={20} className="shrink-0" />
+                <AlertCircle size={16} className="shrink-0" />
                 <span>{error}</span>
               </motion.div>
             )}
@@ -785,34 +792,33 @@ export default function FacilitatorForm() {
         </div>
 
         {/* Navigations Buttons */}
-        <div className="pt-4 flex gap-4">
+        <div className="pt-2 flex gap-3">
           {step === 1 ? (
             <button
               type="button"
               onClick={handleNext}
-              className="group w-full py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-teal-600/15 hover:shadow-xl hover:shadow-teal-600/20 active:scale-[0.99] cursor-pointer"
+              className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white font-semibold text-xs rounded transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer"
             >
-              <span>Next Step</span>
-              <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
+              <span>Continue to Affiliation &amp; Practice Details</span>
+              <ArrowRight size={14} />
             </button>
           ) : (
             <>
               <button
                 type="button"
                 onClick={handleBack}
-                className="w-1/3 py-4 border border-teal-100 bg-teal-50/30 hover:bg-teal-50 text-teal-800 font-semibold rounded-2xl transition-all active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer text-sm"
+                className="w-1/3 py-2.5 border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs rounded transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <ArrowLeft size={16} />
+                <ArrowLeft size={14} />
                 <span>Back</span>
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="group w-2/3 py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-teal-600/15 hover:shadow-xl hover:shadow-teal-600/20 active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none cursor-pointer"
+                className="w-2/3 py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white font-semibold text-xs rounded transition-colors flex items-center justify-center gap-2 shadow-xs disabled:opacity-60 cursor-pointer"
               >
-                {loading ? <Loader2 className="animate-spin" size={20} /> : null}
-                <span>{loading ? "Submitting..." : "Join the Journey"}</span>
-                {!loading ? <Sparkles size={18} className="group-hover:scale-110 transition-transform" /> : null}
+                {loading ? <Loader2 className="animate-spin" size={14} /> : null}
+                <span>{loading ? "Registering Application..." : "Submit Facilitator Application"}</span>
               </button>
             </>
           )}

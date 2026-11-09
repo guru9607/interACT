@@ -2,7 +2,19 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Calendar, MapPin, Clock, Globe, ChevronRight, Image as ImageIcon } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Globe,
+  MapPin,
+  ArrowRight,
+  Image as ImageIcon,
+  CheckCircle2,
+  Filter,
+  ShieldCheck,
+  ChevronRight,
+  Info,
+} from "lucide-react";
 import { getSupabaseAnonRead } from "@/lib/supabase/anon-read";
 
 // Event Data Type
@@ -21,7 +33,7 @@ type Event = {
   image_url?: string;
 };
 
-const regions = ["Americas", "Europe", "Africa", "Asia", "Oceania"] as const;
+const regions = ["Asia", "Americas", "Europe", "Africa", "Oceania"] as const;
 
 export default function JoinPage() {
   const [activeRegion, setActiveRegion] = useState<typeof regions[number]>("Asia");
@@ -42,17 +54,17 @@ export default function JoinPage() {
 
         // Fetch all active events (Upcoming or Ongoing)
         const { data: allActive, error: activeError } = await ro
-          .from('events')
-          .select('*')
-          .in('status', ['upcoming', 'ongoing'])
-          .order('date', { ascending: true });
-        
+          .from("events")
+          .select("*")
+          .in("status", ["upcoming", "ongoing"])
+          .order("date", { ascending: true });
+
         if (activeError) throw activeError;
 
         const upcoming: Event[] = [];
         const pastFromActive: Event[] = [];
 
-        (allActive || []).forEach(event => {
+        (allActive || []).forEach((event) => {
           const sessions = (event as any).sessions || [];
           const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
           const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
@@ -69,21 +81,20 @@ export default function JoinPage() {
 
         // Fetch manual past/completed events
         const { data: completedData, error: completedError } = await ro
-          .from('events')
-          .select('*')
-          .eq('status', 'completed')
-          .order('date', { ascending: false })
+          .from("events")
+          .select("*")
+          .eq("status", "completed")
+          .order("date", { ascending: false })
           .range(0, pastBatchSize - 1);
-        
+
         if (completedError) throw completedError;
 
         // Combine auto-completed active events with explicitly completed events
         const combinedPast = [...pastFromActive, ...(completedData || [])];
         setPastEvents(combinedPast.slice(0, pastBatchSize));
         setHasMorePast(combinedPast.length >= pastBatchSize);
-
       } catch (err) {
-        console.error('Error fetching events:', err);
+        console.error("Error fetching events:", err);
       } finally {
         setLoading(false);
       }
@@ -98,16 +109,16 @@ export default function JoinPage() {
       setLoadingMore(true);
       const ro = getSupabaseAnonRead();
       const { data, error } = await ro
-        .from('events')
-        .select('*')
-        .eq('status', 'completed')
-        .order('date', { ascending: false })
+        .from("events")
+        .select("*")
+        .eq("status", "completed")
+        .order("date", { ascending: false })
         .range(pastEvents.length, pastEvents.length + pastBatchSize - 1);
 
       if (error) throw error;
-      if (data) setPastEvents(prev => [...prev, ...data]);
+      if (data) setPastEvents((prev) => [...prev, ...data]);
     } catch (err) {
-      console.error('Error loading more past events:', err);
+      console.error("Error loading more past events:", err);
     } finally {
       setLoadingMore(false);
     }
@@ -118,187 +129,403 @@ export default function JoinPage() {
   // Helper to format 24h time to 12h
   const formatTime = (time: string) => {
     if (!time) return "";
-    const [hours, minutes] = time.split(':');
-    const h = parseInt(hours);
-    const ampm = h >= 12 ? 'PM' : 'AM';
+    const [hours, minutes] = time.split(":");
+    const h = parseInt(hours, 10);
+    const ampm = h >= 12 ? "PM" : "AM";
     const h12 = h % 12 || 12;
     return `${h12}:${minutes} ${ampm}`;
   };
 
+  // Helper to format event date
+  const formatEventDate = (dateStr: string) => {
+    const d = new Date(dateStr);
+    return {
+      month: d.toLocaleDateString("en-US", { month: "short" }).toUpperCase(),
+      day: d.getDate(),
+      year: d.getFullYear(),
+      full: d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
+    };
+  };
+
   return (
-    <div className="bg-white min-h-screen">
-      {/* Header Section */}
-      <section className="py-20 bg-gradient-to-b from-teal-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white border border-teal-100 text-primary text-sm font-medium mb-6 shadow-sm">
-            <Globe size={16} className="mr-2" />
-            Global Events
+    <div className="bg-white min-h-screen font-sans text-slate-800">
+      
+      {/* ─────────────────────────────────────────────────────────────
+          1. INSTITUTIONAL HEADER & REGISTRY CLASSIFICATION
+          UN DGC Standard Event Registry Banner
+      ───────────────────────────────────────────────────────────── */}
+      <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
+        {/* Tri-color SDG Ribbon */}
+        <div className="h-1 w-full flex" aria-hidden="true">
+          <span className="flex-1 bg-[#4C9F38]" />
+          <span className="flex-1 bg-[#00AED9]" />
+          <span className="flex-1 bg-[#19486A]" />
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-14 md:pt-16 md:pb-16">
+          
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-4">
+            <Globe size={14} className="shrink-0" />
+            <span>Global Youth Registry · International Assemblies &amp; Workshops</span>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-main mb-6 tracking-tight">
-            Be the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-600">Change</span>
+
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#0B2545] tracking-tight leading-tight mb-5">
+            Global Workshops &amp; Community Assemblies
           </h1>
-          <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed">
-            Connect with like-minded youth, discover your inner strength, and make a difference. 
-            Click on an event to learn more and register.
+
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal max-w-3xl mb-8">
+            interACT convenes structured cognitive reflection circles and youth workshops worldwide. All events are open-access, non-sectarian, and conducted under the United Nations 2030 Agenda framework for mental wellbeing (SDG 3), peace from within (SDG 16), and cross-cultural partnership (SDG 17).
           </p>
+
+          {/* Quick Registration Highlights */}
+          <div className="grid sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200 text-xs text-slate-700">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={16} className="text-[#4C9F38] shrink-0" />
+              <span>Free Public Participation (No Fees)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={16} className="text-[#00AED9] shrink-0" />
+              <span>Standardized 3-Hour &amp; Modular Tracks</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={16} className="text-[#19486A] shrink-0" />
+              <span>Verifiable Certificate of Completion</span>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <div className="space-y-8">
+
+      {/* ─────────────────────────────────────────────────────────────
+          2. REGIONAL SELECTION & ACTIVE WORKSHOPS
+          Clean Institutional Tab Bar & Structured Event Cards
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-12 md:py-16 bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          {/* Region Tabs */}
-          <div className="max-w-5xl mx-auto flex flex-wrap gap-2 p-1 bg-gray-100/50 rounded-xl">
-            {regions.map((region) => (
-              <button
-                key={region}
-                onClick={() => setActiveRegion(region)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  activeRegion === region
-                    ? "bg-white text-primary shadow-sm"
-                    : "text-text-muted hover:text-text-main hover:bg-gray-200/50"
-                }`}
-              >
-                {region}
-              </button>
-            ))}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
+            <div>
+              <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
+                Regional Navigation
+              </span>
+              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+                Upcoming Scheduled Gatherings
+              </h2>
+            </div>
+            
+            <div className="text-xs text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded">
+              <Filter size={13} className="text-slate-400" />
+              <span>Showing: <strong className="text-slate-800">{activeRegion}</strong> Region</span>
+            </div>
           </div>
 
-          {/* Event Cards */}
-          <div className="max-w-5xl mx-auto space-y-4">
+          {/* Regional Grouping Tabs */}
+          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100 rounded border border-slate-200 mb-8 max-w-2xl">
+            {regions.map((region) => {
+              const count = events.filter((e) => e.region === region).length;
+              const isActive = activeRegion === region;
+              return (
+                <button
+                  key={region}
+                  type="button"
+                  onClick={() => setActiveRegion(region)}
+                  className={`px-4 py-2 rounded text-xs font-semibold tracking-wide transition-colors flex items-center gap-2 ${
+                    isActive
+                      ? "bg-white text-[#0B2545] shadow-xs border border-slate-200 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                  }`}
+                >
+                  <span>{region === "Asia" ? "Asia-Pacific" : region}</span>
+                  {count > 0 && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                        isActive
+                          ? "bg-blue-50 text-[#0072CE] font-bold"
+                          : "bg-slate-200 text-slate-600"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Event Registry Rows */}
+          <div className="space-y-4">
             {loading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-text-muted">Loading events...</p>
+              <div className="text-center py-16 border border-dashed border-slate-200 rounded-lg">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0072CE] border-t-transparent mx-auto mb-3" />
+                <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">
+                  Loading Event Registry...
+                </p>
               </div>
             ) : filteredEvents.length > 0 ? (
-              filteredEvents.map((event) => (
-                <Link key={event.id} href={`/events/${event.id}`}>
-                  <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-teal-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className={`px-2 py-1 rounded-md text-xs font-medium ${
-                            event.type === "Online" ? "bg-blue-50 text-blue-600" :
-                            event.type === "In-Person" ? "bg-green-50 text-green-600" :
-                            "bg-purple-50 text-purple-600"
-                          }`}>
-                            {event.type}
+              filteredEvents.map((event) => {
+                const dateObj = formatEventDate(event.date);
+                
+                // Determine ongoing vs upcoming status
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                const sessions = (event as any).sessions || [];
+                const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
+                let isOngoing = false;
+                if (sessionDates.length > 0) {
+                  const firstDate = new Date(Math.min(...sessionDates));
+                  const lastDate = new Date(Math.max(...sessionDates));
+                  firstDate.setHours(0, 0, 0, 0);
+                  lastDate.setHours(0, 0, 0, 0);
+                  if (firstDate <= now && lastDate >= now) {
+                    isOngoing = true;
+                  }
+                }
+
+                return (
+                  <Link key={event.id} href={`/events/${event.id}`} className="block group">
+                    <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-white hover:border-[#0072CE] hover:shadow-xs transition-all flex flex-col md:flex-row md:items-center justify-between gap-5">
+                      
+                      {/* Left: Tabular Date Badge + Core Information */}
+                      <div className="flex items-start gap-4 sm:gap-5">
+                        
+                        {/* Tabular Calendar Block */}
+                        <div className="w-16 h-16 sm:w-18 sm:h-18 rounded border border-slate-200 bg-slate-50 flex flex-col items-center justify-center shrink-0 text-center">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#0072CE]">
+                            {dateObj.month}
                           </span>
-                          {(() => {
-                            const now = new Date();
-                            now.setHours(0, 0, 0, 0);
-                            const sessions = (event as any).sessions || [];
-                            const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
-                            if (sessionDates.length > 0) {
-                              const firstDate = new Date(Math.min(...sessionDates));
-                              const lastDate = new Date(Math.max(...sessionDates));
-                              firstDate.setHours(0, 0, 0, 0);
-                              lastDate.setHours(0, 0, 0, 0);
-                              
-                              if (firstDate <= now && lastDate >= now) {
-                                return <span className="px-2 py-1 rounded-md text-xs font-semibold bg-amber-100 text-amber-700 animate-pulse">ONGOING</span>;
-                              }
-                              if (firstDate > now) {
-                                return <span className="px-2 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-600">UPCOMING</span>;
-                              }
-                            }
-                            return null;
-                          })()}
-                          <span className="text-xs text-text-muted flex items-center ml-auto sm:ml-0">
-                            <MapPin size={12} className="mr-1" />
+                          <span className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545] leading-none my-0.5">
+                            {dateObj.day}
+                          </span>
+                          <span className="text-[10px] text-slate-500 font-mono">
+                            {dateObj.year}
+                          </span>
+                        </div>
+
+                        {/* Event Details */}
+                        <div className="space-y-1.5">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {isOngoing ? (
+                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                Ongoing Session
+                              </span>
+                            ) : (
+                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0058A3] border border-blue-200">
+                                Upcoming Workshop
+                              </span>
+                            )}
+
+                            <span
+                              className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
+                                event.type === "Online"
+                                  ? "bg-sky-50 text-sky-800 border-sky-200"
+                                  : event.type === "In-Person"
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                  : "bg-purple-50 text-purple-800 border-purple-200"
+                              }`}
+                            >
+                              {event.type}
+                            </span>
+
+                            <span className="text-xs text-slate-500 flex items-center gap-1">
+                              <MapPin size={12} className="text-slate-400" />
+                              {event.location}, {event.country}
+                            </span>
+                          </div>
+
+                          <h3 className="text-lg sm:text-xl font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
+                            {event.title}
+                          </h3>
+
+                          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600 pt-0.5">
+                            <span className="flex items-center gap-1.5">
+                              <Calendar size={13} className="text-slate-400" />
+                              {dateObj.full}
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <Clock size={13} className="text-slate-400" />
+                              {formatTime(event.start_time)} ({event.timezone})
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Right: Institutional Action Button */}
+                      <div className="shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 flex items-center justify-between md:justify-end gap-3">
+                        <span className="text-xs font-semibold text-[#0072CE] group-hover:text-[#0058A3] flex items-center gap-1">
+                          View Program &amp; Register <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                        </span>
+                      </div>
+
+                    </div>
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="text-center py-16 bg-[#F8F9FA] rounded-lg border border-slate-200 p-8 space-y-3">
+                <Info size={24} className="text-slate-400 mx-auto" />
+                <h4 className="text-sm font-semibold text-slate-800">
+                  No Public Gatherings Scheduled in {activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}
+                </h4>
+                <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+                  Upcoming workshop dates for this regional grouping are currently being finalized with institutional facilitators. You may also propose a session in your community.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    href="/modules"
+                    className="inline-flex items-center px-4 py-2 rounded text-xs font-semibold bg-[#0072CE] text-white hover:bg-[#0058A3] transition-colors"
+                  >
+                    Explore Self-Paced Modules
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ─────────────────────────────────────────────────────────────
+          3. FIELD ARCHIVE & HISTORICAL MILESTONES
+          Visual Documentation of Completed Gatherings
+      ───────────────────────────────────────────────────────────── */}
+      {!loading && pastEvents.length > 0 && (
+        <section className="py-14 md:py-20 bg-[#F8F9FA] border-b border-slate-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-10">
+              <div>
+                <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
+                  Historical Records
+                </span>
+                <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+                  Completed Field Deployments &amp; Assemblies
+                </h2>
+              </div>
+              <span className="text-xs text-slate-500">
+                Official records of community and school cohorts
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pastEvents.map((event) => (
+                <Link key={event.id} href={`/events/${event.id}`} className="group block">
+                  <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all flex flex-col h-full">
+                    
+                    {/* Documentary Photo Container */}
+                    <div className="aspect-16/10 relative overflow-hidden bg-slate-100 border-b border-slate-200">
+                      {event.image_url ? (
+                        <img
+                          src={event.image_url}
+                          alt={event.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-300">
+                          <ImageIcon size={40} />
+                        </div>
+                      )}
+                      <div className="absolute top-3 left-3">
+                        <span className="px-2 py-0.5 rounded bg-white/90 backdrop-blur-xs text-[10px] font-bold text-slate-700 uppercase tracking-wider border border-slate-200 shadow-xs">
+                          Completed Field Session
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Metadata & Title */}
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                      <div>
+                        <div className="flex items-center gap-3 text-[11px] text-slate-500 mb-1.5">
+                          <span className="flex items-center gap-1">
+                            <Calendar size={12} className="text-slate-400" />
+                            {new Date(event.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <MapPin size={12} className="text-slate-400" />
                             {event.location}, {event.country}
                           </span>
                         </div>
-                        <h3 className="text-xl font-semibold text-text-main mb-1 group-hover:text-primary transition-colors">
+                        <h3 className="text-base font-semibold text-slate-900 group-hover:text-[#0072CE] transition-colors line-clamp-2 leading-snug">
                           {event.title}
                         </h3>
-                        <div className="flex items-center gap-4 text-sm text-text-muted">
-                          <span className="flex items-center">
-                            <Calendar size={14} className="mr-1.5" />
-                            {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </span>
-                          <span className="flex items-center">
-                            <Clock size={14} className="mr-1.5" />
-                            {formatTime(event.start_time)} ({event.timezone})
-                          </span>
-                        </div>
                       </div>
-                      <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-teal-50 text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                        <ChevronRight size={20} />
+
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#0072CE] font-semibold">
+                        <span>View Documentation &amp; Artifacts</span>
+                        <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
+
                   </div>
                 </Link>
-              ))
-            ) : (
-              <div className="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <p className="text-text-muted">No upcoming events scheduled for this region yet.</p>
-              </div>
-            ) }
-          </div>
-
-          {/* Past Events Gallery */}
-          {!loading && pastEvents.length > 0 && (
-            <div className="pt-20">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-semibold text-text-main mb-4">Glimpse of Events</h2>
-                <p className="text-text-muted">Glimpses into our previous gatherings and milestones</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {pastEvents.map((event) => (
-                  <Link key={event.id} href={`/events/${event.id}`}>
-                    <div className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:border-teal-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                      <div className="aspect-[4/3] relative overflow-hidden bg-gray-100">
-                        {event.image_url ? (
-                          <img 
-                            src={event.image_url} 
-                            alt={event.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-300">
-                            <ImageIcon size={48} />
-                          </div>
-                        )}
-                        <div className="absolute top-4 left-4">
-                           <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold text-teal-600 shadow-sm">
-                             IMPACT
-                           </span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-lg font-semibold text-text-main line-clamp-1 group-hover:text-primary transition-colors">
-                            {event.title}
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-3 text-xs text-text-muted">
-                          <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-                          <span className="flex items-center gap-1"><MapPin size={12} /> {event.country || "India"}</span>
-                          <span className="px-2 py-0.5 rounded-full bg-teal-50 text-teal-600 font-semibold ml-auto">IMPACT</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-
-              {hasMorePast && (
-                <div className="mt-16 text-center">
-                  <button 
-                    onClick={loadMorePast}
-                    disabled={loadingMore}
-                    className="px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-2xl hover:bg-primary hover:text-white transition-all disabled:opacity-50 flex items-center gap-2 mx-auto"
-                  >
-                    {loadingMore ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div> : "View More Impacts"}
-                  </button>
-                </div>
-              )}
+              ))}
             </div>
-          )}
+
+            {hasMorePast && (
+              <div className="mt-12 text-center">
+                <button
+                  type="button"
+                  onClick={loadMorePast}
+                  disabled={loadingMore}
+                  className="px-6 py-2.5 bg-white border border-slate-300 text-sm font-semibold text-[#0B2545] rounded hover:bg-slate-50 transition-colors disabled:opacity-50 inline-flex items-center gap-2 shadow-xs"
+                >
+                  {loadingMore ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-slate-600 border-t-transparent" />
+                      Loading Archives...
+                    </>
+                  ) : (
+                    "Load Historical Archives"
+                  )}
+                </button>
+              </div>
+            )}
+
+          </div>
+        </section>
+      )}
+
+
+      {/* ─────────────────────────────────────────────────────────────
+          4. INSTITUTIONAL ACCREDITATION & FACILITATOR CALLOUT
+          Civic Partnership & Hosting Information
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-14 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="border border-slate-200 rounded-lg p-6 sm:p-8 bg-[#F8F9FA] flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-2xl">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#0072CE] uppercase tracking-wider">
+                <ShieldCheck size={16} />
+                <span>Hosting Institutional Gatherings</span>
+              </div>
+              <h3 className="text-xl font-serif font-bold text-[#0B2545]">
+                Bring an interACT Gathering to Your University or Community
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Certified facilitators can host official workshops with full access to accredited curriculum slide decks, thought trackers, and automatic participant certification under our UN 2030 Agenda alignment.
+              </p>
+            </div>
+            <div className="shrink-0 flex flex-col sm:flex-row gap-3">
+              <a
+                href="mailto:support@theinteract.org?subject=Inquiry:%20Host%20an%20interACT%20Gathering"
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-[#0072CE] text-white text-xs font-semibold rounded hover:bg-[#0058A3] transition-colors shadow-xs"
+              >
+                Inquire to Host a Gathering
+              </a>
+              <Link
+                href="/modules"
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded hover:bg-slate-50 transition-colors shadow-xs"
+              >
+                View Educational Modules
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
     </div>
   );
 }

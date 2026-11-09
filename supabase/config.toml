@@ -2,7 +2,7 @@
 # Full reference: https://supabase.com/docs/guides/cli/config
 # Set project_id to match your Supabase project if you use the CLI with this repo.
 
-project_id = "interact-website"
+project_id = "soxoovfassgdnsgqtfvi"
 
 [api]
 enabled = true

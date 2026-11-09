@@ -9,6 +9,7 @@ export type StaffAuthReady =
   | {
       loading: true;
       userId: null;
+      email: null;
       role: null;
       isStaff: false;
       isAdmin: false;
@@ -16,6 +17,7 @@ export type StaffAuthReady =
   | {
       loading: false;
       userId: string | null;
+      email: string | null;
       role: AppRole | null;
       isStaff: boolean;
       isAdmin: boolean;
@@ -25,6 +27,7 @@ export const useStaffAuth = (): StaffAuthReady => {
   const [state, setState] = useState<StaffAuthReady>({
     loading: true,
     userId: null,
+    email: null,
     role: null,
     isStaff: false,
     isAdmin: false,
@@ -44,6 +47,7 @@ export const useStaffAuth = (): StaffAuthReady => {
           setState({
             loading: false,
             userId: null,
+            email: null,
             role: null,
             isStaff: false,
             isAdmin: false,
@@ -66,6 +70,7 @@ export const useStaffAuth = (): StaffAuthReady => {
         setState({
           loading: false,
           userId: user.id,
+          email: user.email ?? null,
           role,
           isStaff,
           isAdmin,

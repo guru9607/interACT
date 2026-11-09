@@ -5,11 +5,12 @@ import { AwarenessManual } from "@/components/facilitator-guide/manuals/Awarenes
 
 export default function FacilitatorAwarenessPage() {
   return (
-    <GuideChrome title="Awareness (A)">
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold text-text-main mb-6 sr-only">
-          Facilitator manual · Awareness
-        </h1>
+    <GuideChrome 
+      title="Module Awareness (A) Manual" 
+      docCode="DOC-ACT-101" 
+      sdgColor="#4C9F38"
+    >
+      <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-xs">
         <AwarenessManual />
       </div>
     </GuideChrome>

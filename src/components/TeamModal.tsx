@@ -1,12 +1,13 @@
+"use client";
+
 import { X, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ITeamMember } from "@/types/team";
 
 // Fallback for missing images
-const getInitialsAvatar = (name: string) => 
-  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2A9D8F&color=fff&size=400`;
-
-import { ITeamMember } from "@/types/team";
+const getInitialsAvatar = (name: string) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0B2545&color=fff&size=400`;
 
 interface TeamModalProps {
   member: ITeamMember | null;
@@ -15,7 +16,7 @@ interface TeamModalProps {
 }
 
 export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -33,74 +34,84 @@ export default function TeamModal({ member, isOpen, onClose }: TeamModalProps) {
   if (!member && !isOpen) return null;
 
   return (
-    <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center px-4 transition-all duration-300 ${
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center px-4 transition-all duration-200 ${
         isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
       }`}
     >
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+      <div
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Content */}
-      <div 
-        className={`bg-white w-full max-w-2xl rounded-2xl shadow-2xl relative z-10 overflow-hidden transform transition-all duration-300 ${
-          isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
+      <div
+        className={`bg-white w-full max-w-2xl rounded-lg border border-slate-200 shadow-2xl relative z-10 overflow-hidden transform transition-all duration-200 ${
+          isOpen ? "scale-100 translate-y-0" : "scale-98 translate-y-2"
         }`}
       >
-        <button 
+        <button
+          type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-white/80 hover:bg-white rounded-full text-text-muted hover:text-red-500 transition-colors z-20 backdrop-blur-sm shadow-sm"
+          className="absolute top-4 right-4 p-1.5 bg-slate-100 hover:bg-slate-200 rounded text-slate-600 hover:text-slate-900 transition-colors z-20"
+          aria-label="Close modal"
         >
-          <X size={24} />
+          <X size={18} />
         </button>
 
         <div className="flex flex-col md:flex-row">
-          {/* Image Section */}
-          <div className="w-full md:w-2/5 aspect-[4/5] md:aspect-auto relative bg-gray-100">
-             {member && (
-               <Image
-                 src={member.image_url || getInitialsAvatar(member.name)}
-                 alt={member.name}
-                 fill
-                 className="object-cover object-[center_20%]"
-               />
-             )}
+          {/* Portrait Photo */}
+          <div className="w-full md:w-2/5 aspect-4/5 md:aspect-auto relative bg-slate-100 border-b md:border-b-0 md:border-r border-slate-200 min-h-[260px]">
+            {member && (
+              <Image
+                src={member.image_url || getInitialsAvatar(member.name)}
+                alt={member.name}
+                fill
+                className="object-cover object-[center_20%]"
+              />
+            )}
           </div>
 
-          {/* Details Section */}
-          <div className="w-full md:w-3/5 p-8 flex flex-col justify-center">
+          {/* Institutional Details */}
+          <div className="w-full md:w-3/5 p-6 sm:p-8 flex flex-col justify-center space-y-4">
             {member && (
               <>
-                {member.category && (
-                  <div className="mb-2">
-                    <span className="inline-block px-3 py-1 bg-teal-50 text-primary text-xs font-semibold uppercase tracking-wider rounded-full mb-3">
+                <div>
+                  {member.category && (
+                    <span className="inline-block px-2.5 py-0.5 bg-blue-50 text-[#0058A3] border border-blue-200 text-[10px] font-bold uppercase tracking-wider rounded mb-2.5">
                       {member.category}
                     </span>
-                  </div>
-                )}
-                <h2 className="text-3xl font-semibold text-text-main mb-1">{member.name}</h2>
-                <p className="text-lg text-primary font-medium">{member.role}</p>
-
-                {/* {member.country && member.category?.toLowerCase() !== 'global ambassadors' && (
-                  <div className="flex items-center text-text-muted text-sm font-medium mb-6">
-                    <MapPin size={16} className="mr-1.5 text-teal-400" />
-                    {member.country}
-                  </div>
-                )} */}
-
-                <div className="prose prose-sm text-text-muted leading-relaxed">
-                  <p>{member.bio || "Dedicated member of the interACT team working towards youth empowerment and global change."}</p>
+                  )}
+                  <h2 className="text-2xl font-serif font-bold text-[#0B2545] leading-snug">
+                    {member.name}
+                  </h2>
+                  <p className="text-xs font-semibold text-[#0072CE] uppercase tracking-wide mt-1">
+                    {member.role}
+                  </p>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-gray-100">
-                  <button 
+                {member.country && (
+                  <div className="flex items-center text-xs text-slate-500 font-medium">
+                    <MapPin size={13} className="mr-1 text-slate-400" />
+                    <span>{member.country}</span>
+                  </div>
+                )}
+
+                <div className="text-xs text-slate-600 leading-relaxed max-h-48 overflow-y-auto pr-1">
+                  <p>
+                    {member.bio ||
+                      "Dedicated member of the interACT leadership structure advancing youth cognitive resilience and peaceful cooperation under the UN 2030 Agenda."}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
+                  <button
+                    type="button"
                     onClick={onClose}
-                    className="text-sm font-semibold text-text-main hover:text-primary transition-colors"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded transition-colors"
                   >
-                    Close Details
+                    Close Dossier
                   </button>
                 </div>
               </>

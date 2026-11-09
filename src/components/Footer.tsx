@@ -3,83 +3,141 @@
 import Link from "next/link";
 import Image from "next/image";
 import { InstagramIcon, XIcon, FacebookIcon } from "./SocialIcons";
-import { Mail } from "lucide-react";
+import { Mail, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <motion.footer
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="bg-white/95 border-t border-teal-100 py-12"
-    >
+    <footer className="bg-[#0F2624] text-slate-300 border-t border-[#1A3835] py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-8 md:mb-0 flex flex-col items-center md:items-start">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-12 border-b border-[#1A3835]">
+          {/* Col 1: Identity & Mission */}
+          <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative">
                 <Image 
                   src="/logo.png" 
-                  alt="InterACT Logo" 
-                  width={40} 
-                  height={40} 
-                  className="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
+                  alt="interACT Logo" 
+                  width={36} 
+                  height={36} 
+                  className="w-9 h-9 object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
                 />
               </div>
-              <span className="text-2xl font-semibold text-primary tracking-tight">
+              <span className="text-2xl font-bold text-white tracking-tight font-serif">
                 interACT
               </span>
             </Link>
-            <p className="mt-4 text-text-muted text-sm max-w-xs text-center md:text-left">
-              Rediscover your core goodness.
-              <br />
-              A global initiative.
+            <p className="text-sm text-slate-300 leading-relaxed max-w-md font-normal">
+              An international youth initiative dedicated to personal awareness, inner resilience, and transformative silence.
             </p>
+            <div className="inline-flex items-center gap-2 text-xs text-[#E9C46A] font-semibold pt-1">
+              <Globe size={14} className="shrink-0" />
+              <span>Aligned with UN 2030 Agenda (SDG 3 · SDG 16 · SDG 17)</span>
+            </div>
           </div>
 
-          <div className="flex space-x-6">
-            <a 
-              href="https://www.instagram.com/theinteract/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-text-muted hover:text-primary transition-colors hover:-translate-y-0.5"
-            >
-              <span className="sr-only">Instagram</span>
-              <InstagramIcon className="w-6 h-6" />
-            </a>
-            <a 
-              href="#" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-text-muted hover:text-primary transition-colors hover:-translate-y-0.5"
-            >
-              <span className="sr-only">X (formerly Twitter)</span>
-              <XIcon className="w-5 h-5 mt-0.5" />
-            </a>
-            <a 
-              href="#" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-text-muted hover:text-primary transition-colors hover:-translate-y-0.5"
-            >
-              <span className="sr-only">Facebook</span>
-              <FacebookIcon className="w-6 h-6" />
-            </a>
-            <a 
-              href="mailto:support@theinteract.org" 
-              className="text-text-muted hover:text-primary transition-colors hover:-translate-y-0.5"
-            >
-              <span className="sr-only">Email</span>
-              <Mail size={24} />
-            </a>
+          {/* Col 2: Public Navigation */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 font-sans">
+              Initiative
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <Link href="/about" className="text-slate-300 hover:text-[#E9C46A] transition-colors">
+                  UN SDG Alignment & Evidence
+                </Link>
+              </li>
+              <li>
+                <Link href="/modules" className="text-slate-300 hover:text-[#E9C46A] transition-colors">
+                  ACT Curriculum Framework
+                </Link>
+              </li>
+              <li>
+                <Link href="/join" className="text-slate-300 hover:text-[#E9C46A] transition-colors">
+                  Upcoming Events & Workshops
+                </Link>
+              </li>
+              <li>
+                <Link href="/team" className="text-slate-300 hover:text-[#E9C46A] transition-colors">
+                  Secretariat & Leadership
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Institutional Inquiries & Secretariat */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 font-sans">
+              Secretariat & Inquiries
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <a 
+                  href="mailto:support@theinteract.org?subject=Inquiry:%20Host%20an%20interACT%20Workshop" 
+                  className="text-slate-300 hover:text-[#E9C46A] transition-colors"
+                >
+                  Campus Workshop Inquiries
+                </a>
+              </li>
+              <li>
+                <Link href="/about" className="text-slate-300 hover:text-[#E9C46A] transition-colors">
+                  UN 2030 Agenda Alignment
+                </Link>
+              </li>
+              <li>
+                <a 
+                  href="mailto:support@theinteract.org" 
+                  className="inline-flex items-center gap-2 text-slate-300 hover:text-[#E9C46A] transition-colors pt-2"
+                >
+                  <Mail size={16} />
+                  <span>support@theinteract.org</span>
+                </a>
+              </li>
+            </ul>
+
+            {/* Social Channels */}
+            <div className="flex space-x-4 pt-6">
+              <a 
+                href="https://www.instagram.com/theinteract/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-slate-400 hover:text-[#E9C46A] transition-colors"
+                aria-label="Instagram"
+              >
+                <InstagramIcon className="w-5 h-5" />
+              </a>
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-slate-400 hover:text-[#E9C46A] transition-colors"
+                aria-label="X (formerly Twitter)"
+              >
+                <XIcon className="w-5 h-5" />
+              </a>
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-slate-400 hover:text-[#E9C46A] transition-colors"
+                aria-label="Facebook"
+              >
+                <FacebookIcon className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
-        <div className="mt-8 border-t border-teal-50 pt-8 text-center text-sm text-text-muted">
-          &copy; {new Date().getFullYear()} interACT. All rights reserved.
+
+        {/* Bottom Disclaimer & Copyright */}
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+          <p>
+            &copy; {new Date().getFullYear()} interACT Global Youth Initiative. All rights reserved.
+          </p>
+          <p className="text-slate-400 text-center sm:text-right">
+            Non-profit educational initiative for personal awareness and transformative silence.
+          </p>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

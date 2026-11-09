@@ -2,7 +2,24 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Calendar, MapPin, Clock, Users, ArrowLeft, CheckCircle2, Globe, Image as ImageIcon, Send, Star, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  Users,
+  ArrowLeft,
+  CheckCircle2,
+  Globe,
+  Image as ImageIcon,
+  Send,
+  Star,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck,
+  FileText,
+  Info,
+} from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { getSupabaseAnonRead } from "@/lib/supabase/anon-read";
@@ -57,13 +74,13 @@ export default function EventDetailPage() {
   const [activeSession, setActiveSession] = useState<Session | null>(null);
   const [testimonials, setTestimonials] = useState<Record<string, unknown>[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const [, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [showCalendarMenu, setShowCalendarMenu] = useState(false);
   const [regCountry, setRegCountry] = useState("");
   const [regPhone, setRegPhone] = useState("");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  
-  const eventId = parseInt(params.id as string);
+
+  const eventId = parseInt(params.id as string, 10);
 
   // Fetch event data from Supabase
   useEffect(() => {
@@ -71,9 +88,9 @@ export default function EventDetailPage() {
       try {
         const ro = getSupabaseAnonRead();
         const { data: eventData, error: eventError } = await ro
-          .from('events')
-          .select('*')
-          .eq('id', eventId)
+          .from("events")
+          .select("*")
+          .eq("id", eventId)
           .single();
 
         if (eventError) throw eventError;
@@ -86,35 +103,41 @@ export default function EventDetailPage() {
         let facilitators: Facilitator[] = [];
         if (eventData.conductor_id && eventData.conductor_type) {
           try {
-            if (eventData.conductor_type === 'team') {
+            if (eventData.conductor_type === "team") {
               const { data: teamConductor } = await ro
-                .from('teams')
-                .select('name, role, bio, image_url')
-                .eq('id', eventData.conductor_id.toString())
+                .from("teams")
+                .select("name, role, bio, image_url")
+                .eq("id", eventData.conductor_id.toString())
                 .single();
-              
+
               if (teamConductor) {
-                facilitators = [{
-                  name: teamConductor.name,
-                  role: teamConductor.role || "Core Team Member",
-                  bio: teamConductor.bio || "Dedicated member of the interACT core team.",
-                  image_url: teamConductor.image_url || ""
-                }];
+                facilitators = [
+                  {
+                    name: teamConductor.name,
+                    role: teamConductor.role || "Core Team Member",
+                    bio: teamConductor.bio || "Dedicated member of the interACT core team.",
+                    image_url: teamConductor.image_url || "",
+                  },
+                ];
               }
-            } else if (eventData.conductor_type === 'facilitator') {
+            } else if (eventData.conductor_type === "facilitator") {
               const { data: facConductor } = await ro
-                .from('facilitators')
-                .select('full_name, profession, country')
-                .eq('id', eventData.conductor_id.toString())
+                .from("facilitators")
+                .select("full_name, profession, country")
+                .eq("id", eventData.conductor_id.toString())
                 .single();
-              
+
               if (facConductor) {
-                facilitators = [{
-                  name: facConductor.full_name,
-                  role: facConductor.profession || "Certified Facilitator",
-                  bio: facConductor.country ? `Certified interACT Facilitator sharing the journey from ${facConductor.country}.` : "Certified interACT Facilitator.",
-                  image_url: "" 
-                }];
+                facilitators = [
+                  {
+                    name: facConductor.full_name,
+                    role: facConductor.profession || "Certified Facilitator",
+                    bio: facConductor.country
+                      ? `Certified interACT Facilitator sharing the journey from ${facConductor.country}.`
+                      : "Certified interACT Facilitator.",
+                    image_url: "",
+                  },
+                ];
               }
             }
           } catch (fetchErr) {
@@ -125,10 +148,10 @@ export default function EventDetailPage() {
         setEvent({
           ...eventData,
           facilitators: facilitators,
-          sessions: Array.isArray(eventData.sessions) ? eventData.sessions : []
+          sessions: Array.isArray(eventData.sessions) ? eventData.sessions : [],
         });
 
-        // Testimonials (Global for this event)
+        // Testimonials
         const { data: globalFeedback, error: testimonialError } = await ro.rpc(
           "get_event_public_testimonials",
           { p_event_id: eventId }
@@ -142,8 +165,7 @@ export default function EventDetailPage() {
           const feedbackToShow = globalFeedback.filter((feedback) => {
             const responses = (feedback.responses as Record<string, unknown>) || {};
             return Object.values(responses).some(
-              (val) =>
-                val == 5 || val == 4 || val === "5" || val === "4"
+              (val) => val == 5 || val == 4 || val === "5" || val === "4"
             );
           });
           setTestimonials(feedbackToShow.slice(0, 4));
@@ -151,10 +173,9 @@ export default function EventDetailPage() {
         if (eventData.country) {
           setRegCountry(eventData.country);
         }
-
       } catch (err) {
-        console.error('Error fetching event:', err);
-        setError('Failed to load event');
+        console.error("Error fetching event:", err);
+        setError("Failed to load event");
       } finally {
         setLoading(false);
       }
@@ -167,22 +188,23 @@ export default function EventDetailPage() {
     if (!event || !event.sessions || event.sessions.length === 0) return;
     const firstSession = event.sessions[0];
     const eventDate = new Date(firstSession.date);
-    const [startH, startM] = (firstSession.start_time || "10:00").split(':').map(Number);
-    eventDate.setHours(startH, startM, 0); 
-    const [endH, endM] = (firstSession.end_time || "12:00").split(':').map(Number);
+    const [startH, startM] = (firstSession.start_time || "10:00").split(":").map(Number);
+    eventDate.setHours(startH, startM, 0);
+    const [endH, endM] = (firstSession.end_time || "12:00").split(":").map(Number);
     const endDate = new Date(firstSession.date);
     endDate.setHours(endH, endM, 0);
-    const formatICalDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const formatICalDate = (date: Date) =>
+      date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
     const sTime = formatICalDate(eventDate);
     const eTime = formatICalDate(endDate);
 
-    const icalContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//interACT Program//EN\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nUID:interact-event-${event.id}-${Date.now()}@brahmakumaris.org\nDTSTAMP:${formatICalDate(new Date())}\nDTSTART:${sTime}\nDTEND:${eTime}\nSUMMARY:${event.title}\nDESCRIPTION:${event.description || 'Join us for this transformative interACT event'}\nLOCATION:${event.location}${event.country ? ', ' + event.country : ''}\nSTATUS:CONFIRMED\nSEQUENCE:0\nEND:VEVENT\nEND:VCALENDAR`;
+    const icalContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//interACT Program//EN\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nUID:interact-event-${event.id}-${Date.now()}@theinteract.org\nDTSTAMP:${formatICalDate(new Date())}\nDTSTART:${sTime}\nDTEND:${eTime}\nSUMMARY:${event.title}\nDESCRIPTION:${event.description || "Join us for this transformative interACT event"}\nLOCATION:${event.location}${event.country ? ", " + event.country : ""}\nSTATUS:CONFIRMED\nSEQUENCE:0\nEND:VEVENT\nEND:VCALENDAR`;
 
-    const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
+    const blob = new Blob([icalContent], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `interACT-${event.title.replace(/\s+/g, '-')}.ics`;
+    link.download = `interACT-${event.title.replace(/\s+/g, "-")}.ics`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -191,477 +213,648 @@ export default function EventDetailPage() {
     if (!event || !event.sessions || event.sessions.length === 0) return;
     const firstSession = event.sessions[0];
     const eventDate = new Date(firstSession.date);
-    const [startH, startM] = (firstSession.start_time || "10:00").split(':').map(Number);
+    const [startH, startM] = (firstSession.start_time || "10:00").split(":").map(Number);
     eventDate.setHours(startH, startM, 0);
-    const [endH, endM] = (firstSession.end_time || "12:00").split(':').map(Number);
+    const [endH, endM] = (firstSession.end_time || "12:00").split(":").map(Number);
     const endDate = new Date(firstSession.date);
     endDate.setHours(endH, endM, 0);
-    const formatGoogleDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0];
+    const formatGoogleDate = (date: Date) => date.toISOString().replace(/[-:]/g, "").split(".")[0];
     const sTime = formatGoogleDate(eventDate);
     const eTime = formatGoogleDate(endDate);
-    window.open(`https://calendar.google.com/calendar/u/0/r/eventedit?text=${encodeURIComponent(event.title)}&dates=${sTime}/${eTime}&location=${encodeURIComponent(event.location)}&details=${encodeURIComponent(event.description || '')}`, '_blank');
+    window.open(
+      `https://calendar.google.com/calendar/u/0/r/eventedit?text=${encodeURIComponent(event.title)}&dates=${sTime}/${eTime}&location=${encodeURIComponent(event.location)}&details=${encodeURIComponent(event.description || "")}`,
+      "_blank"
+    );
   };
 
   const addToOutlookCalendar = () => {
     if (!event || !event.sessions || event.sessions.length === 0) return;
     const firstSession = event.sessions[0];
     const eventDate = new Date(firstSession.date);
-    const [startH, startM] = (firstSession.start_time || "10:00").split(':').map(Number);
+    const [startH, startM] = (firstSession.start_time || "10:00").split(":").map(Number);
     eventDate.setHours(startH, startM, 0);
-    const [endH, endM] = (firstSession.end_time || "12:00").split(':').map(Number);
+    const [endH, endM] = (firstSession.end_time || "12:00").split(":").map(Number);
     const endDate = new Date(firstSession.date);
     endDate.setHours(endH, endM, 0);
-    window.open(`https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(event.title)}&startdt=${eventDate.toISOString()}&enddt=${endDate.toISOString()}&location=${encodeURIComponent(event.location)}&body=${encodeURIComponent(event.description || '')}`, '_blank');
+    window.open(
+      `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(event.title)}&startdt=${eventDate.toISOString()}&enddt=${endDate.toISOString()}&location=${encodeURIComponent(event.location)}&body=${encodeURIComponent(event.description || "")}`,
+      "_blank"
+    );
   };
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   const formatTime = (time: string) => {
     if (!time) return "10:00 AM";
-    const [hours, minutes] = time.split(':').map(Number);
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const [hours, minutes] = time.split(":").map(Number);
+    const ampm = hours >= 12 ? "PM" : "AM";
     const hours12 = hours % 12 || 12;
-    return `${hours12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    return `${hours12}:${minutes.toString().padStart(2, "0")} ${ampm}`;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     const formData = new FormData(e.currentTarget);
-    const countryMatch = countries.find(c => c.name === regCountry);
+    const countryMatch = countries.find((c) => c.name === regCountry);
     const fullPhone = countryMatch ? `${countryMatch.code} ${regPhone}`.trim() : regPhone;
 
     const registrationData = {
       event_id: eventId,
-      full_name: formData.get('name') as string,
-      email: formData.get('email') as string,
+      full_name: formData.get("name") as string,
+      email: formData.get("email") as string,
       phone: fullPhone || null,
       country: regCountry,
     };
 
     try {
-      const { error: supabaseError } = await supabase.from('registrations').insert([registrationData]);
+      const { error: supabaseError } = await supabase.from("registrations").insert([registrationData]);
       if (supabaseError) throw supabaseError;
       setSubmitted(true);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit registration.');
+      setError(err instanceof Error ? err.message : "Failed to submit registration.");
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div></div>;
-  if (!event) return <div className="min-h-screen flex items-center justify-center text-center"><h1 className="text-2xl font-semibold mb-4">Event Not Found</h1><Link href="/join" className="text-primary hover:underline">← Back to Events</Link></div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0072CE] border-t-transparent mx-auto" />
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Loading Event Dossier...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!event) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center text-center px-4">
+        <div className="max-w-md space-y-4">
+          <Info size={32} className="text-slate-400 mx-auto" />
+          <h1 className="text-2xl font-serif font-bold text-[#0B2545]">Event Record Not Found</h1>
+          <p className="text-sm text-slate-600">The requested event dossier could not be located in the registry.</p>
+          <Link
+            href="/join"
+            className="inline-flex items-center text-xs font-semibold text-[#0072CE] hover:underline"
+          >
+            ← Return to Event Registry
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate status
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const sessions = event.sessions || [];
+  const sessionDates = sessions.map((s) => new Date(s.date).getTime());
+  const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
+  const firstDate = sessions.length > 0 ? new Date(Math.min(...sessionDates)) : new Date(event.date);
+  lastDate.setHours(0, 0, 0, 0);
+  firstDate.setHours(0, 0, 0, 0);
+
+  const isCompleted = event.status === "completed" || lastDate < now;
+  const isOngoing = !isCompleted && firstDate <= now && lastDate >= now;
+
+  const images = Array.isArray(event.image_urls)
+    ? event.image_urls
+    : event.image_url
+    ? [event.image_url]
+    : [];
 
   return (
-    <div className="bg-white min-h-screen ">
-      {/* Hero Section */}
-      <section className="relative py-8 bg-linear-to-br from-teal-50 via-cream to-blue-50 overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle at 2px 2px, #2A9D8F 1px, transparent 0)`, backgroundSize: '40px 40px' }}></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <Link href="/join" className="inline-flex items-center text-primary hover:text-primary-hover mb-6 font-medium">
-                <ArrowLeft size={20} className="mr-2" /> Back to Events
-              </Link>
-              
-              <div className="flex items-center gap-3 mb-4">
-                {(() => {
-                  const now = new Date();
-                  now.setHours(0, 0, 0, 0);
-                  const sessions = event.sessions || [];
-                  const sessionDates = sessions.map(s => new Date(s.date).getTime());
-                  const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
-                  const firstDate = sessions.length > 0 ? new Date(Math.min(...sessionDates)) : new Date(event.date);
-                  
-                  lastDate.setHours(0, 0, 0, 0);
-                  firstDate.setHours(0, 0, 0, 0);
+    <div className="bg-white min-h-screen font-sans text-slate-800">
+      
+      {/* ─────────────────────────────────────────────────────────────
+          1. INSTITUTIONAL HEADER & EVENT CLASSIFICATION
+      ───────────────────────────────────────────────────────────── */}
+      <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
+        <div className="h-1 w-full flex" aria-hidden="true">
+          <span className="flex-1 bg-[#4C9F38]" />
+          <span className="flex-1 bg-[#00AED9]" />
+          <span className="flex-1 bg-[#19486A]" />
+        </div>
 
-                  if (event.status === "completed" || lastDate < now) {
-                    return <span className="px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-700">Completed</span>;
-                  }
-                  if (firstDate <= now && lastDate >= now) {
-                    return <span className="px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-700">Ongoing</span>;
-                  }
-                  return <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">{event.type}</span>;
-                })()}
-                <span className="text-text-muted flex items-center"><Globe size={16} className="mr-1.5" />{event.region}</span>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10">
+          
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <Link
+              href="/join"
+              className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-[#0072CE] transition-colors"
+            >
+              <ArrowLeft size={14} className="mr-1.5" /> Back to Gatherings Registry
+            </Link>
+            <span className="text-[11px] font-mono text-slate-500 bg-slate-200/60 px-2 py-0.5 rounded">
+              DOSSIER: IA-EV-{event.id}
+            </span>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
+            
+            <div className="lg:col-span-7 space-y-4">
+              
+              <div className="flex flex-wrap items-center gap-2">
+                {isCompleted ? (
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-300">
+                    Concluded Gathering
+                  </span>
+                ) : isOngoing ? (
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                    Ongoing Session
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0058A3] border border-blue-200">
+                    Upcoming Workshop
+                  </span>
+                )}
+
+                <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                  {event.type}
+                </span>
+
+                <span className="text-xs text-slate-500 flex items-center gap-1">
+                  <Globe size={13} className="text-slate-400" />
+                  {event.region} Region
+                </span>
               </div>
 
-              <h1 className="text-2xl md:text-3xl font-semibold text-text-main mb-4 leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-[#0B2545] tracking-tight leading-snug">
                 {event.title}
               </h1>
-              
-              <div className="flex flex-wrap gap-3 mt-4 mb-6">
-                <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-teal-100/50 shadow-sm">
-                  <Calendar size={16} className="text-primary" />
-                  <span className="text-xs font-semibold">
-                    {event.sessions && event.sessions.length > 1 
-                      ? `${formatDate(event.sessions[0].date)} — ${formatDate(event.sessions[event.sessions.length-1].date)}`
+
+              <div className="flex flex-wrap gap-4 text-xs text-slate-600 pt-1">
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={14} className="text-[#0072CE]" />
+                  <span className="font-semibold text-slate-800">
+                    {event.sessions && event.sessions.length > 1
+                      ? `${formatDate(event.sessions[0].date)} — ${formatDate(event.sessions[event.sessions.length - 1].date)}`
                       : formatDate(event.sessions[0]?.date || event.date)}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-text-muted bg-white/50 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-teal-100/50 shadow-sm">
-                  <MapPin size={16} className="text-primary" />
-                  <span className="text-xs font-semibold">{event.location}, {event.country}</span>
+
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={14} className="text-[#0072CE]" />
+                  <span>{event.location}, {event.country}</span>
                 </div>
               </div>
 
               {event.facilitators && event.facilitators.length > 0 && (
-                <div className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl border border-white/60 w-fit mb-6">
-                  <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-primary overflow-hidden">
-                    {event.facilitators[0].image_url ? <img src={event.facilitators[0].image_url} alt="" className="w-full h-full object-cover" /> : <Users size={20} />}
+                <div className="pt-2 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded border border-slate-300 bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+                    {event.facilitators[0].image_url ? (
+                      <img
+                        src={event.facilitators[0].image_url}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Users size={18} className="text-slate-500" />
+                    )}
                   </div>
                   <div>
-                    <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">Conducted by</p>
-                    <p className="text-base font-semibold text-text-main leading-tight">{event.facilitators[0].name}</p>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">
+                      Facilitator / Lead
+                    </span>
+                    <span className="text-sm font-semibold text-slate-900 leading-tight block">
+                      {event.facilitators[0].name}
+                    </span>
+                    <span className="text-xs text-slate-500 block">
+                      {event.facilitators[0].role}
+                    </span>
                   </div>
                 </div>
               )}
-            </div>
-            
-            <div className="space-y-4">
-              <div className="relative aspect-video rounded-[1.5rem] overflow-hidden shadow-2xl border-4 border-white group bg-white flex items-center justify-center">
-                {(() => {
-                  const images = Array.isArray(event.image_urls) ? event.image_urls : (event.image_url ? [event.image_url] : []);
-                  if (images.length === 0) return <div className="text-teal-100"><ImageIcon size={48} /></div>;
-                  
-                  return (
-                   <>
-                     <AnimatePresence mode="wait">
-                       <motion.img 
-                         key={activeImageIndex}
-                         src={images[activeImageIndex % images.length]} 
-                         alt={event.title} 
-                         initial={{ opacity: 0 }}
-                         animate={{ opacity: 1 }}
-                         exit={{ opacity: 0 }}
-                         drag={images.length > 1 ? "x" : false}
-                         dragConstraints={{ left: 0, right: 0 }}
-                         dragElastic={0.3}
-                         onDragEnd={(_, info) => {
-                           if (info.offset.x < -50) setActiveImageIndex((prev) => (prev + 1) % images.length);
-                           else if (info.offset.x > 50) setActiveImageIndex((prev) => (prev - 1 + images.length) % images.length);
-                         }}
-                         className="absolute inset-0 w-full h-full object-cover cursor-grab active:cursor-grabbing" 
-                       />
-                     </AnimatePresence>
-                      
-                      {images.length > 1 && (
-                        <>
-                          <button
-                            onClick={() => setActiveImageIndex((prev) => (prev - 1 + images.length) % images.length)}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-                          >
-                            <ChevronLeft size={18} />
-                          </button>
-                          <button
-                            onClick={() => setActiveImageIndex((prev) => (prev + 1) % images.length)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-                          >
-                            <ChevronRight size={18} />
-                          </button>
-                          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-20">
-                            {images.map((_, i) => (
-                              <button
-                                key={i}
-                                onClick={() => setActiveImageIndex(i)}
-                                className={`w-1.5 h-1.5 rounded-full transition-all ${
-                                  i === activeImageIndex ? "bg-white w-4" : "bg-white/40 hover:bg-white/60"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </>
-                  );
-                })()}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-10">
-            <section>
-              <h2 className="text-xl font-semibold text-text-main mb-4 flex items-center gap-3">
-                <div className="w-1.5 h-6 bg-primary rounded-full" />
-                Your Transformative Journey
-              </h2>
-              <p className="text-base text-text-muted leading-relaxed font-medium">{event.description}</p>
-            </section>
+            </div>
 
-            {/* Sessions Roadmap */}
-            <section>
-              <div className="flex justify-between items-end mb-8">
-                <div>
-                  <h2 className="text-3xl font-semibold text-text-main mb-2">Event Roadmap</h2>
-                  <p className="text-text-muted font-medium">Follow the journey through each module.</p>
-                </div>
-                {event.sessions.length > 0 && (
-                  <div className="bg-teal-50 text-teal-700 px-4 py-2 rounded-xl text-sm font-semibold border border-teal-100">
-                    {event.sessions.length} Session{event.sessions.length > 1 ? 's' : ''}
+            {/* Right: Photographic Document Frame */}
+            <div className="lg:col-span-5">
+              <div className="relative aspect-16/10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-xs">
+                {images.length > 0 ? (
+                  <>
+                    <AnimatePresence mode="wait">
+                      <motion.img
+                        key={activeImageIndex}
+                        src={images[activeImageIndex % images.length]}
+                        alt={event.title}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="w-full h-full object-cover"
+                      />
+                    </AnimatePresence>
+
+                    {images.length > 1 && (
+                      <div className="absolute inset-0 flex items-center justify-between p-2 pointer-events-none">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setActiveImageIndex(
+                              (prev) => (prev - 1 + images.length) % images.length
+                            )
+                          }
+                          className="w-7 h-7 rounded bg-black/60 text-white flex items-center justify-center pointer-events-auto hover:bg-black/80 transition-colors"
+                        >
+                          <ChevronLeft size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setActiveImageIndex((prev) => (prev + 1) % images.length)
+                          }
+                          className="w-7 h-7 rounded bg-black/60 text-white flex items-center justify-center pointer-events-auto hover:bg-black/80 transition-colors"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-400">
+                    <ImageIcon size={40} />
                   </div>
                 )}
               </div>
+            </div>
 
-              <div className="relative space-y-4">
-                {/* Vertical Line */}
-                <div className="absolute left-[27px] top-8 bottom-8 w-1 bg-linear-to-b from-teal-200 via-teal-100 to-transparent rounded-full" />
-                
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ─────────────────────────────────────────────────────────────
+          2. WORKSHOP CURRICULUM & REGISTRATION ASIDE
+      ───────────────────────────────────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid lg:grid-cols-12 gap-10 items-start">
+          
+          {/* Main Column (8 cols): Description & Session Arc */}
+          <div className="lg:col-span-7 space-y-10">
+            
+            {/* Description */}
+            <section className="space-y-3">
+              <div className="text-xs font-bold text-[#0072CE] uppercase tracking-wider">
+                Workshop Overview
+              </div>
+              <h2 className="text-xl font-serif font-bold text-[#0B2545]">
+                Curriculum Scope &amp; Pedagogical Intent
+              </h2>
+              <p className="text-sm text-slate-700 leading-relaxed font-normal">
+                {event.description}
+              </p>
+            </section>
+
+            {/* Sessions Roadmap */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                  <h3 className="text-lg font-serif font-bold text-[#0B2545]">
+                    Scheduled Session Arc
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Progressive modules deployed across this gathering
+                  </p>
+                </div>
+                {event.sessions.length > 0 && (
+                  <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded">
+                    {event.sessions.length} Session{event.sessions.length > 1 ? "s" : ""}
+                  </span>
+                )}
+              </div>
+
+              <div className="space-y-3">
                 {event.sessions.map((session, idx) => {
                   const sessionDate = new Date(session.date);
                   const today = new Date();
                   today.setHours(0, 0, 0, 0);
                   sessionDate.setHours(0, 0, 0, 0);
-                  
+
                   const isSessionInPastOrToday = sessionDate <= today;
                   const canFeedback = session.collect_feedback && isSessionInPastOrToday;
 
-                  return (
-                    <motion.div 
-                      key={session.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="relative pl-16 pr-6 py-5 rounded-2xl border transition-all bg-gray-50/30 border-gray-100 hover:bg-white hover:shadow-md"
-                    >
-                      {/* Step Circle */}
-                      <div className={`absolute left-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border-2 border-white shadow-sm flex items-center justify-center z-10 bg-white text-gray-400`}>
-                        <span className="text-[10px] font-semibold">{idx + 1}</span>
-                      </div>
+                  // Determine SDG cue for the module
+                  const modKey = (session.module || "").toLowerCase();
+                  const isModA = modKey.includes("awareness");
+                  const isModC = modKey.includes("contemplation");
+                  const isModT = modKey.includes("silence");
 
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                          <p className="text-[10px] font-semibold text-primary uppercase tracking-widest mb-0.5">{formatDate(session.date)}</p>
-                          <p className="text-lg font-semibold text-text-main leading-tight">
-                            {MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
-                          </p>
-                          <div className="flex flex-wrap gap-4 mt-1">
-                            {(session.start_time || session.end_time) && (
-                              <p className="text-xs font-semibold text-text-muted flex items-center gap-1.5">
-                                <Clock size={12} /> {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
-                              </p>
-                            )}
-                          </div>
+                  return (
+                    <div
+                      key={session.id}
+                      className="border border-slate-200 rounded-lg p-4 bg-white shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={`w-8 h-8 rounded text-white font-bold text-xs flex items-center justify-center shrink-0 ${
+                            isModA
+                              ? "bg-[#4C9F38]"
+                              : isModC
+                              ? "bg-[#00AED9]"
+                              : isModT
+                              ? "bg-[#19486A]"
+                              : "bg-[#0072CE]"
+                          }`}
+                        >
+                          {idx + 1}
                         </div>
 
-                        <div className="flex flex-wrap gap-3">
-                          {canFeedback ? (
-                            <button 
-                              onClick={() => { setActiveSession(session); setShowFeedbackForm(true); }}
-                              className="px-5 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition-all text-xs font-semibold shadow-lg shadow-primary/20 flex items-center gap-2"
-                            >
-                              <Send size={14} className="fill-white/20" /> Feedback
-                            </button>
-                          ) : !session.collect_feedback ? (
-                            <div className="px-3 py-1.5 bg-white text-gray-400 rounded-lg border border-gray-100 text-[10px] font-medium">
-                              No feedback
-                            </div>
-                          ) : (
-                            <div className="px-3 py-1.5 bg-white text-gray-400 rounded-lg border border-gray-100 text-[10px] font-medium">
-                              Available soon
+                        <div>
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                              {formatDate(session.date)}
+                            </span>
+                            {isModA && (
+                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-[#4C9F38] border border-emerald-200">
+                                SDG 3.4
+                              </span>
+                            )}
+                            {isModC && (
+                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-50 text-[#00689D] border border-sky-200">
+                                SDG 16.1
+                              </span>
+                            )}
+                            {isModT && (
+                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-[#19486A] border border-slate-300">
+                                SDG 17.17
+                              </span>
+                            )}
+                          </div>
+
+                          <h4 className="text-base font-semibold text-slate-900 leading-snug">
+                            {MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
+                          </h4>
+
+                          {(session.start_time || session.end_time) && (
+                            <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
+                              <Clock size={12} className="text-slate-400" />
+                              <span>
+                                {formatTime(session.start_time || "10:00")} — {formatTime(session.end_time || "12:00")}
+                              </span>
                             </div>
                           )}
                         </div>
                       </div>
-                    </motion.div>
+
+                      <div className="shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex items-center justify-end">
+                        {canFeedback ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveSession(session);
+                              setShowFeedbackForm(true);
+                            }}
+                            className="px-3.5 py-1.5 bg-[#0072CE] hover:bg-[#0058A3] text-white rounded text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+                          >
+                            <Send size={12} /> Submit Feedback
+                          </button>
+                        ) : !session.collect_feedback ? (
+                          <span className="text-[11px] text-slate-400 font-medium">
+                            No feedback required
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 font-medium">
+                            Feedback opens after session
+                          </span>
+                        )}
+                      </div>
+
+                    </div>
                   );
                 })}
               </div>
             </section>
 
-            {/* Testimonials Section */}
+            {/* Testimonials */}
             {testimonials && testimonials.length > 0 && (
-              <section className="bg-linear-to-r from-teal-50 to-blue-50 rounded-[2.5rem] p-8 border border-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-teal-200/20 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
-                
-                <div className="flex items-center justify-between mb-8 relative">
-                  <div>
-                    <h2 className="text-xl font-semibold text-text-main italic mb-1">Impact Echoes</h2>
-                    <p className="text-[10px] text-text-muted font-semibold uppercase tracking-widest opacity-60">Real stories from real participants</p>
-                  </div>
-                  <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-sm border border-teal-100">
-                    <Star className="text-amber-400 fill-amber-400" size={12} />
-                    <span className="text-xs font-semibold text-text-main tracking-tight">Community Love</span>
-                  </div>
+              <section className="space-y-4 pt-4 border-t border-slate-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-serif font-bold text-[#0B2545]">
+                    Participant Evidence &amp; Reflections
+                  </h3>
+                  <span className="text-xs text-slate-500">Verified participant submissions</span>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-6 relative">
+                <div className="grid sm:grid-cols-2 gap-4">
                   {testimonials.map((t, i) => {
                     const responses = (t.responses as Record<string, string>) || {};
-                    const feedbackText = Object.values(responses).find(v => v && v.length > 10 && isNaN(Number(v)));
+                    const feedbackText = Object.values(responses).find(
+                      (v) => v && v.length > 10 && isNaN(Number(v))
+                    );
                     return (
-                      <motion.div 
+                      <div
                         key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white/90 backdrop-blur-md p-6 rounded-[2rem] border border-white shadow-sm flex flex-col justify-between hover:shadow-xl hover:shadow-teal-900/5 transition-all group"
+                        className="bg-[#F8F9FA] border border-slate-200 rounded p-4 flex flex-col justify-between space-y-3"
                       >
                         <div>
-                          <div className="flex gap-1 mb-4">
+                          <div className="flex items-center gap-1 text-amber-500 mb-2">
                             {[...Array(5)].map((_, j) => (
-                              <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
+                              <Star key={j} size={12} className="fill-amber-400 text-amber-400" />
                             ))}
                           </div>
-                          <p className="text-base text-text-main italic font-medium leading-relaxed mb-6 group-hover:text-primary transition-colors">
-                            &ldquo;{feedbackText || "A deeply moving and transformative session that brought immense peace and clarity to my day."}&rdquo;
+                          <p className="text-xs text-slate-700 italic leading-relaxed">
+                            &ldquo;{feedbackText || "A deeply grounding cognitive session providing clear tools for personal resilience and peace."}&rdquo;
                           </p>
                         </div>
-                        <div className="flex items-center gap-4 border-t border-gray-50 pt-4">
-                          <div className="w-9 h-9 rounded-xl bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-semibold text-xs shadow-lg shadow-teal-500/20">
-                            {(t.full_name as string || t.first_name as string)?.[0]?.toUpperCase() || 'P'}
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-sm font-semibold text-text-main tracking-tight">
-                              {t.full_name as string || t.first_name as string || 'Anonymous Participant'}
-                            </span>
-                            <span className="text-[9px] font-semibold text-text-muted uppercase tracking-widest opacity-60">Verified Feedback</span>
-                          </div>
+
+                        <div className="pt-2 border-t border-slate-200/60 text-[11px] text-slate-500">
+                          <strong className="text-slate-800 font-semibold block">
+                            {t.full_name as string || t.first_name as string || "Anonymous Participant"}
+                          </strong>
+                          <span>Verified Cohort Participant</span>
                         </div>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </div>
               </section>
             )}
+
           </div>
 
-          <aside>
-            <div className="bg-white rounded-[2.5rem] p-8 sticky top-32 shadow-2xl shadow-teal-900/5 border border-gray-100 relative">
-              {/* Decorative background element clipped to panel bounds */}
-              <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden pointer-events-none">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 opacity-50" />
+          {/* Right Column (5 cols): Official Registration Box */}
+          <aside className="lg:col-span-5">
+            <div className="border border-slate-200 rounded-lg p-6 bg-[#F8F9FA] shadow-xs space-y-5 sticky top-24">
+              
+              <div className="border-b border-slate-200 pb-3">
+                <span className="text-[10px] font-bold text-[#0072CE] uppercase tracking-wider block mb-0.5">
+                  Institutional Participation
+                </span>
+                <h3 className="text-lg font-serif font-bold text-[#0B2545]">
+                  {isCompleted
+                    ? "Gathering Concluded"
+                    : isOngoing
+                    ? "Gathering in Progress"
+                    : "Register for Gathering"}
+                </h3>
               </div>
 
-              <h3 className="text-2xl font-semibold text-text-main mb-4 relative">
-                {(() => {
-                  const now = new Date();
-                  now.setHours(0, 0, 0, 0);
-                  const sessions = event.sessions || [];
-                  const sessionDates = sessions.map(s => new Date(s.date).getTime());
-                  const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
-                  lastDate.setHours(0, 0, 0, 0);
+              {isCompleted ? (
+                <div className="space-y-4 text-xs text-slate-600">
+                  <p className="leading-relaxed">
+                    This gathering has completed its scheduled curriculum delivery. Materials and certificates have been issued to verified attendees.
+                  </p>
+                  <Link
+                    href="/join"
+                    className="block w-full text-center py-2.5 bg-[#0B2545] hover:bg-slate-800 text-white font-semibold rounded text-xs transition-colors"
+                  >
+                    Explore Other Upcoming Gatherings
+                  </Link>
+                </div>
+              ) : submitted ? (
+                <div className="text-center py-6 space-y-4">
+                  <div className="w-12 h-12 bg-emerald-50 text-[#4C9F38] border border-emerald-200 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle2 size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-semibold text-slate-900">
+                      Registration Confirmed
+                    </h4>
+                    <p className="text-xs text-slate-600 mt-1">
+                      Your participation is logged. Program instructions will be delivered to your email.
+                    </p>
+                  </div>
 
-                  if (event.status === "completed" || lastDate < now) return "Event Concluded";
-                  const firstDate = sessions.length > 0 ? new Date(Math.min(...sessionDates)) : new Date(event.date);
-                  firstDate.setHours(0, 0, 0, 0);
-                  if (firstDate <= now) return "Event Ongoing";
-                  return "Join the Journey";
-                })()}
-              </h3>
-              
-              {(() => {
-                const now = new Date();
-                now.setHours(0, 0, 0, 0);
-                const sessions = event.sessions || [];
-                const sessionDates = sessions.map(s => new Date(s.date).getTime());
-                const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
-                lastDate.setHours(0, 0, 0, 0);
-                
-                const isConcluded = event.status === "completed" || lastDate < now;
+                  <div className="space-y-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowCalendarMenu(!showCalendarMenu)}
+                      className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs font-semibold rounded flex items-center justify-center gap-2 transition-colors shadow-xs"
+                    >
+                      <Calendar size={14} /> Add to Calendar <ChevronDown size={14} />
+                    </button>
 
-                if (isConcluded) {
-                  return (
-                    <div className="space-y-6 relative">
-                      <p className="text-text-muted text-sm italic mb-4">
-                        This event has concluded. Thank you to everyone who participated!
-                      </p>
-                      <Link href="/join" className="block w-full py-4 bg-gray-900 text-white text-center font-semibold rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-900/20">Explore More Events</Link>
-                    </div>
-                  );
-                }
-
-                if (submitted) {
-                  return (
-                    <div className="text-center py-8 relative">
-                      <div className="w-20 h-20 bg-teal-100 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-teal-600 shadow-inner">
-                        <CheckCircle2 size={40} />
-                      </div>
-                      <h4 className="text-2xl font-semibold text-text-main mb-2 tracking-tight">You&apos;re Registered!</h4>
-                      <p className="text-text-muted font-medium mb-8">Ready to start your journey? Check your email for details.</p>
-                      
-                      <div className="space-y-4">
-                        <div className="relative">
-                          <button onClick={() => setShowCalendarMenu(!showCalendarMenu)} className="w-full px-6 py-4 bg-primary text-white font-semibold rounded-2xl hover:bg-primary-hover transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/30">
-                            <Calendar size={20} /> Add to Calendar <ChevronDown size={18} className={`transition-transform ${showCalendarMenu ? 'rotate-180' : ''}`} />
-                          </button>
-                          <AnimatePresence>
-                            {showCalendarMenu && (
-                              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="absolute top-full left-0 right-0 mt-4 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2">
-                                <button onClick={addToGoogleCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-semibold text-gray-700 text-sm">Google Calendar</button>
-                                <button onClick={addToOutlookCalendar} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-semibold text-gray-700 text-sm">Outlook Calendar</button>
-                                <button onClick={generateEventCalendarFile} className="w-full px-4 py-3 text-left hover:bg-teal-50 rounded-2xl flex items-center gap-4 transition-all font-semibold text-gray-700 text-sm text-primary">Download .ics</button>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <form onSubmit={handleSubmit} className="space-y-5 relative">
-                    <div>
-                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Full Name</label>
-                      <input type="text" name="name" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="Your Name" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Email Address</label>
-                      <input type="email" name="email" required className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none" placeholder="hello@example.com" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Country</label>
-                      <div className="relative group">
-                        <select 
-                          name="country" 
-                          required 
-                          value={regCountry}
-                          onChange={(e) => {
-                            setRegCountry(e.target.value);
-                            setRegPhone(""); // Clear phone when country changes to avoid confusion
-                          }}
-                          className="w-full px-5 py-3.5 rounded-2xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium outline-none appearance-none cursor-pointer"
+                    {showCalendarMenu && (
+                      <div className="bg-white border border-slate-200 rounded p-1.5 shadow-sm space-y-1 text-left text-xs">
+                        <button
+                          type="button"
+                          onClick={addToGoogleCalendar}
+                          className="w-full text-left px-3 py-1.5 hover:bg-slate-50 rounded text-slate-700"
                         >
-                          <option value="">Select Country</option>
-                          {countries.map(c => (
-                            <option key={c.name} value={c.name}>{c.name}</option>
-                          ))}
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none group-hover:text-primary transition-colors" size={18} />
+                          Google Calendar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={addToOutlookCalendar}
+                          className="w-full text-left px-3 py-1.5 hover:bg-slate-50 rounded text-slate-700"
+                        >
+                          Outlook Calendar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={generateEventCalendarFile}
+                          className="w-full text-left px-3 py-1.5 hover:bg-slate-50 rounded text-[#0072CE] font-semibold"
+                        >
+                          Download .ics File
+                        </button>
                       </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-3.5">
+                  {error && (
+                    <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 rounded text-xs">
+                      {error}
                     </div>
+                  )}
 
-                    <div>
-                      <label className="block text-[10px] font-semibold text-text-muted uppercase tracking-[0.2em] mb-2 px-1">Phone Number</label>
-                      <div className="flex items-stretch overflow-hidden bg-gray-50 border border-transparent rounded-2xl focus-within:bg-white focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
-                        <div className="px-5 py-3.5 bg-gray-100/50 border-r border-gray-200 text-text-muted font-semibold text-sm min-w-[70px] flex items-center justify-center">
-                          {countries.find(c => c.name === regCountry)?.code || "+"}
-                        </div>
-                        <input 
-                          type="tel" 
-                          name="phone" 
-                          required
-                          value={regPhone}
-                          onChange={(e) => setRegPhone(e.target.value)}
-                          className="flex-1 px-5 py-3.5 bg-transparent font-medium outline-none" 
-                          placeholder="Phone number" 
-                        />
-                      </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="e.g. Elena Rostova"
+                      className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Official Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="e.g. name@university.edu"
+                      className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Country of Residence *
+                    </label>
+                    <select
+                      name="country"
+                      required
+                      value={regCountry}
+                      onChange={(e) => {
+                        setRegCountry(e.target.value);
+                        setRegPhone("");
+                      }}
+                      className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
+                    >
+                      <option value="">Select Country</option>
+                      {countries.map((c) => (
+                        <option key={c.name} value={c.name}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Phone Number *
+                    </label>
+                    <div className="flex border border-slate-300 rounded bg-white overflow-hidden focus-within:border-[#0072CE] focus-within:ring-1 focus-within:ring-[#0072CE]">
+                      <span className="px-2.5 py-2 bg-slate-100 text-slate-600 text-xs font-mono border-r border-slate-300 flex items-center">
+                        {countries.find((c) => c.name === regCountry)?.code || "+"}
+                      </span>
+                      <input
+                        type="tel"
+                        name="phone"
+                        required
+                        value={regPhone}
+                        onChange={(e) => setRegPhone(e.target.value)}
+                        placeholder="Mobile number"
+                        className="flex-1 px-3 py-2 text-xs bg-transparent focus:outline-none"
+                      />
                     </div>
-                    <button type="submit" className="w-full py-4.5 bg-primary text-white font-semibold rounded-2xl hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-1 active:translate-y-0">Complete Registration</button>
-                  </form>
-                );
-              })()}
+                  </div>
+
+                  <p className="text-[11px] text-slate-500 leading-normal pt-1">
+                    Free participation. By registering, you agree to receive session reminders and contemplation materials under our non-profit civil society charter.
+                  </p>
+
+                  <button
+                    type="submit"
+                    className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs font-semibold rounded transition-colors shadow-xs"
+                  >
+                    Submit Participation Registration
+                  </button>
+                </form>
+              )}
+
             </div>
           </aside>
+
         </div>
       </div>
 
@@ -676,6 +869,7 @@ export default function EventDetailPage() {
           onClose={() => setShowFeedbackForm(false)}
         />
       )}
+
     </div>
   );
 }
