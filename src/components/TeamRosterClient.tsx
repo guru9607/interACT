@@ -67,14 +67,14 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
         {visionaries.length > 0 && (
           <section className="space-y-8">
             <div className="border-b border-slate-200 pb-3">
-              <div className="flex items-center gap-2 text-[10px] font-bold text-[#0072CE] uppercase tracking-wider mb-0.5">
-                <Award size={13} />
+              <div className="flex items-center gap-2 text-xs font-bold text-[#0072CE] uppercase tracking-wider mb-1">
+                <Award size={14} />
                 <span>Tier 01 · Founding Leadership</span>
               </div>
-              <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
                 Visionaries &amp; Co-Founders
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-sm text-slate-600 mt-1">
                 Stewards of the interACT conceptual framework and institutional pedagogy
               </p>
             </div>
@@ -98,26 +98,26 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
 
                   <div className="p-6 flex-1 flex flex-col justify-between space-y-3">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-[#0072CE] uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block mb-1">
+                      <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block mb-1">
                         Co-Founder
                       </span>
                       <h3 className="text-xl font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
                         {person.name}
                       </h3>
-                      <p className="text-xs font-semibold text-slate-600">
+                      <p className="text-sm font-semibold text-slate-700">
                         {person.role}
                       </p>
                       {person.country && (
-                        <div className="flex items-center text-xs text-slate-500 pt-1">
-                          <MapPin size={12} className="mr-1 text-slate-400" />
+                        <div className="flex items-center text-sm text-slate-500 pt-1">
+                          <MapPin size={13} className="mr-1 text-slate-400" />
                           <span>{person.country}</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#0072CE] font-semibold">
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-[#0072CE] font-semibold">
                       <span>View Institutional Dossier</span>
-                      <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                      <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </div>
                 </div>
@@ -130,14 +130,14 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
         {directors.length > 0 && (
           <section className="space-y-6">
             <div className="border-b border-slate-200 pb-3">
-              <div className="flex items-center gap-2 text-[10px] font-bold text-[#0072CE] uppercase tracking-wider mb-0.5">
-                <Compass size={13} />
+              <div className="flex items-center gap-2 text-xs font-bold text-[#0072CE] uppercase tracking-wider mb-1">
+                <Compass size={14} />
                 <span>Tier 02 · Continental Governance</span>
               </div>
-              <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
                 Executive Board &amp; Regional Directors
               </h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-sm text-slate-600 mt-1">
                 Leading continental operations, curriculum compliance, and institutional relationships
               </p>
             </div>
@@ -160,25 +160,25 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
                     </div>
 
                     <div className="min-w-0 flex-1 space-y-1">
-                      <h3 className="text-base font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
+                      <h3 className="text-lg font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
                         {person.name}
                       </h3>
-                      <p className="text-xs text-[#0072CE] font-semibold leading-tight line-clamp-2">
+                      <p className="text-sm text-[#0072CE] font-semibold leading-tight line-clamp-2">
                         {person.role}
                       </p>
                       {person.country && (
-                        <div className="flex items-center text-[11px] text-slate-500 pt-0.5">
-                          <MapPin size={11} className="mr-1 text-slate-400 shrink-0" />
+                        <div className="flex items-center text-xs text-slate-500 pt-0.5">
+                          <MapPin size={12} className="mr-1 text-slate-400 shrink-0" />
                           <span>{person.country}</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
                     <span>Regional Mandate</span>
                     <span className="text-[#0072CE] font-semibold flex items-center gap-1">
-                      Profile <ChevronRight size={12} />
+                      Profile <ChevronRight size={13} />
                     </span>
                   </div>
                 </div>
@@ -192,14 +192,14 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
           <section className="space-y-6 bg-[#F8F9FA] border border-slate-200 rounded-lg p-6 sm:p-8">
             <div className="border-b border-slate-200 pb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-bold text-[#0072CE] uppercase tracking-wider mb-0.5">
-                  <Users size={13} />
+                <div className="flex items-center gap-2 text-xs font-bold text-[#0072CE] uppercase tracking-wider mb-1">
+                  <Users size={14} />
                   <span>Tier 03 · International Outreach</span>
                 </div>
-                <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
                   Global Youth Ambassadors
                 </h2>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-sm text-slate-600 mt-1">
                   Active youth advocates representing interACT across national chapters and universities
                 </p>
               </div>
@@ -225,19 +225,19 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
                       />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-xs font-bold text-slate-900 truncate group-hover:text-[#0072CE] transition-colors">
+                      <h4 className="text-sm font-bold text-slate-900 truncate group-hover:text-[#0072CE] transition-colors">
                         {person.name}
                       </h4>
                       {person.country && (
-                        <div className="flex items-center text-[10px] text-slate-500 mt-0.5">
-                          <MapPin size={10} className="mr-1 text-slate-400 shrink-0" />
+                        <div className="flex items-center text-xs text-slate-500 mt-0.5">
+                          <MapPin size={11} className="mr-1 text-slate-400 shrink-0" />
                           <span className="truncate">{person.country}</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 text-[10px] text-slate-400 flex items-center justify-between font-mono">
+                  <div className="pt-2 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between font-mono">
                     <span>Chapter Envoy</span>
                     <span className="text-[#0072CE] font-bold">→</span>
                   </div>
@@ -252,14 +252,14 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
           <section className="bg-[#0B2545] text-white rounded-lg p-6 sm:p-8 space-y-6">
             <div className="border-b border-[#14335A] pb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-bold text-sky-300 uppercase tracking-wider mb-0.5">
-                  <Layers size={13} />
+                <div className="flex items-center gap-2 text-xs font-bold text-sky-300 uppercase tracking-wider mb-1">
+                  <Layers size={14} />
                   <span>Tier 04 · Operations &amp; Administration</span>
                 </div>
-                <h2 className="text-2xl font-serif font-bold text-white">
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white">
                   Global Operational Secretariat
                 </h2>
-                <p className="text-xs text-slate-300 mt-1">
+                <p className="text-sm text-slate-300 mt-1">
                   Coordination working group managing curriculum development, media, and digital platforms
                 </p>
               </div>
@@ -284,10 +284,10 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
                     />
                   </div>
                   <div>
-                    <h4 className="text-xs font-semibold text-white group-hover:text-sky-200 transition-colors line-clamp-1 leading-snug">
+                    <h4 className="text-sm font-semibold text-white group-hover:text-sky-200 transition-colors line-clamp-1 leading-snug">
                       {person.name}
                     </h4>
-                    <p className="text-[10px] text-slate-300 line-clamp-2 mt-0.5 leading-tight">
+                    <p className="text-xs text-slate-300 line-clamp-2 mt-0.5 leading-tight">
                       {person.role}
                     </p>
                   </div>

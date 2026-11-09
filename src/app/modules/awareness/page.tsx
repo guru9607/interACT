@@ -108,22 +108,22 @@ export default function AwarenessModule() {
             </p>
 
             {/* Quick Specs Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200">
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Duration:</span>
-                <span className="font-semibold text-slate-800">45 minutes</span>
+                <span className="text-slate-500 block text-xs">Duration:</span>
+                <span className="font-semibold text-slate-800 text-sm">45 minutes</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Target Ages:</span>
-                <span className="font-semibold text-slate-800">18–22 &amp; 23–35</span>
+                <span className="text-slate-500 block text-xs">Target Ages:</span>
+                <span className="font-semibold text-slate-800 text-sm">18–22 &amp; 23–35</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Mode:</span>
-                <span className="font-semibold text-slate-800">Experiential Workshop</span>
+                <span className="text-slate-500 block text-xs">Mode:</span>
+                <span className="font-semibold text-slate-800 text-sm">Experiential Workshop</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">UN SDG:</span>
-                <span className="font-semibold text-[#4C9F38]">SDG 3.4 (Well-being)</span>
+                <span className="text-slate-500 block text-xs">UN SDG:</span>
+                <span className="font-semibold text-[#4C9F38] text-sm">SDG 3.4 (Well-being)</span>
               </div>
             </div>
 
@@ -145,13 +145,13 @@ export default function AwarenessModule() {
               <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider block">
                 Session Takeaways
               </span>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
                 What You Will Experience
               </h2>
-              <div className="space-y-2 pt-1 text-xs sm:text-sm text-slate-700">
+              <div className="space-y-2.5 pt-1 text-sm sm:text-base text-slate-700">
                 {learningObjectives.map((obj, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded bg-[#F8F9FA] border border-slate-200">
-                    <CheckCircle2 size={16} className="text-[#4C9F38] shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start gap-2.5 p-3 rounded bg-[#F8F9FA] border border-slate-200">
+                    <CheckCircle2 size={18} className="text-[#4C9F38] shrink-0 mt-0.5" />
                     <span>{obj}</span>
                   </div>
                 ))}
@@ -163,16 +163,16 @@ export default function AwarenessModule() {
               <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block">
                 Core Insights
               </span>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
                 Ideas You Will Explore
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 {coreConcepts.map((item, idx) => (
-                  <div key={idx} className="p-3 bg-white border border-slate-200 rounded space-y-1">
-                    <div className="text-xs font-bold text-[#0B2545]">
+                  <div key={idx} className="p-3.5 bg-white border border-slate-200 rounded-lg space-y-1.5">
+                    <div className="text-sm font-bold text-[#0B2545]">
                       {item.title}
                     </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    <p className="text-sm text-slate-600 leading-relaxed">
                       {item.text}
                     </p>
                   </div>
@@ -196,10 +196,10 @@ export default function AwarenessModule() {
             <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider block mb-1">
               Participant Experience
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               What the 45-Minute Session Is Like
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1 leading-relaxed">
               A gentle, guided progression from internal observation to practical daily application.
             </p>
           </div>
@@ -214,14 +214,14 @@ export default function AwarenessModule() {
                   <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
                     Step {stage.step}
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     {stage.tag}
                   </span>
                 </div>
-                <h3 className="text-base font-serif font-bold text-[#0B2545]">
+                <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                   {stage.title}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {stage.description}
                 </p>
               </div>
@@ -241,34 +241,34 @@ export default function AwarenessModule() {
             <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider block mb-1">
               Age Cohort Adaptation
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               Tailored for Different Life Stages
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
             {/* Group 1 */}
-            <div className="border border-slate-200 rounded-lg p-5 bg-[#F8F9FA] space-y-2">
+            <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-[#F8F9FA] space-y-2">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="font-bold text-xs text-[#0B2545]">Group 1: Ages 18–22</span>
-                <span className="text-[10px] font-mono bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded">
+                <span className="font-bold text-sm text-[#0B2545]">Group 1: Ages 18–22</span>
+                <span className="text-xs font-mono bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded">
                   Engaging &amp; Relatable
                 </span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Connects directly to academic pressure, peer comparison, and career uncertainty. Uses concrete language and active pair sharing.
               </p>
             </div>
 
             {/* Group 2 */}
-            <div className="border border-slate-200 rounded-lg p-5 bg-[#F8F9FA] space-y-2">
+            <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-[#F8F9FA] space-y-2">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="font-bold text-xs text-[#0B2545]">Group 2: Ages 23–35</span>
-                <span className="text-[10px] font-mono bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">
+                <span className="font-bold text-sm text-[#0B2545]">Group 2: Ages 23–35</span>
+                <span className="text-xs font-mono bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">
                   Reflective &amp; Grounded
                 </span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Focuses on professional burnout, decision-making, and relationship dynamics. Encourages deeper quiet introspection.
               </p>
             </div>
@@ -283,13 +283,13 @@ export default function AwarenessModule() {
       <section className="py-10 bg-[#0B2545] text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-sky-300 uppercase tracking-wider block">
               Curriculum Sequence
             </span>
             <h3 className="text-lg sm:text-xl font-serif font-bold text-white">
               Next Module: Contemplation (ACT-102)
             </h3>
-            <p className="text-xs text-slate-300">
+            <p className="text-sm text-slate-300">
               Strengthen the inner core and experience innate qualities under UN SDG 16.
             </p>
           </div>
@@ -297,7 +297,7 @@ export default function AwarenessModule() {
           <div className="shrink-0">
             <Link
               href="/modules/contemplation"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
             >
               Continue to Module 2
               <ArrowRight size={14} className="ml-1.5" />

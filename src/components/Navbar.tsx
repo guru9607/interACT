@@ -132,8 +132,8 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* 3. Official UN Tri-color SDG Ribbon (3px height) framing the bottom of header */}
-      <div className="h-[3px] w-full flex" aria-hidden="true">
+      {/* 3. Official UN Tri-color SDG Ribbon (2px hairline) framing the bottom of header */}
+      <div className="h-[2px] w-full flex" aria-hidden="true">
         <div className="flex-[3] bg-[#4C9F38]" title="SDG 3: Good Health & Well-being" />
         <div className="flex-[3] bg-[#00AED9]" title="SDG 16: Peace & Justice" />
         <div className="flex-[2] bg-[#19486A]" title="SDG 17: Partnerships for the Goals" />

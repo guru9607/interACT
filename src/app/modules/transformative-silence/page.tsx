@@ -116,22 +116,22 @@ export default function TransformativeSilenceModule() {
             </p>
 
             {/* Quick Specs Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200">
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Duration:</span>
-                <span className="font-semibold text-slate-800">60–75 minutes</span>
+                <span className="text-slate-500 block text-xs">Duration:</span>
+                <span className="font-semibold text-slate-800 text-sm">60–75 minutes</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Target Ages:</span>
-                <span className="font-semibold text-slate-800">18–22 &amp; 23–35</span>
+                <span className="text-slate-500 block text-xs">Target Ages:</span>
+                <span className="font-semibold text-slate-800 text-sm">18–22 &amp; 23–35</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Mode:</span>
-                <span className="font-semibold text-slate-800">Experiential Workshop</span>
+                <span className="text-slate-500 block text-xs">Mode:</span>
+                <span className="font-semibold text-slate-800 text-sm">Experiential Workshop</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">UN SDG:</span>
-                <span className="font-semibold text-[#19486A]">SDG 17.17 (Partnership)</span>
+                <span className="text-slate-500 block text-xs">UN SDG:</span>
+                <span className="font-semibold text-[#19486A] text-sm">SDG 17.17 (Partnership)</span>
               </div>
             </div>
 
@@ -150,18 +150,18 @@ export default function TransformativeSilenceModule() {
             <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
               Learning Outcomes
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               What You Will Develop
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-2.5">
+          <div className="grid sm:grid-cols-2 gap-3">
             {learningObjectives.map((obj, idx) => (
               <div
                 key={idx}
-                className="flex items-start gap-2.5 p-3 rounded bg-[#F8F9FA] border border-slate-200 text-xs sm:text-sm text-slate-700"
+                className="flex items-start gap-2.5 p-3 rounded bg-[#F8F9FA] border border-slate-200 text-sm sm:text-base text-slate-700"
               >
-                <CheckCircle2 size={16} className="text-[#19486A] shrink-0 mt-0.5" />
+                <CheckCircle2 size={18} className="text-[#19486A] shrink-0 mt-0.5" />
                 <span>{obj}</span>
               </div>
             ))}
@@ -181,10 +181,10 @@ export default function TransformativeSilenceModule() {
             <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
               Experiential Methodology
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               Five Core Practices
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1 leading-relaxed">
               Practical exercises designed to experience stillness and strengthen intentional response.
             </p>
           </div>
@@ -202,14 +202,14 @@ export default function TransformativeSilenceModule() {
                       <span className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-[#19486A]">
                         <Icon size={16} />
                       </span>
-                      <span className="text-[11px] font-semibold text-slate-400 uppercase">
+                      <span className="text-xs font-semibold text-slate-500 uppercase">
                         {act.tag}
                       </span>
                     </div>
-                    <h3 className="text-sm sm:text-base font-serif font-bold text-[#0B2545]">
+                    <h3 className="text-base sm:text-lg font-serif font-bold text-[#0B2545]">
                       {act.title}
                     </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    <p className="text-sm text-slate-600 leading-relaxed">
                       {act.description}
                     </p>
                   </div>
@@ -231,21 +231,21 @@ export default function TransformativeSilenceModule() {
             <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider block mb-1">
               Inner Capacities
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               Qualities Strengthened in Silence
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {canonicalQualities.map((item, idx) => (
               <div
                 key={idx}
-                className="p-3 bg-[#F8F9FA] rounded border border-slate-200 space-y-1 hover:border-[#19486A] transition-colors"
+                className="p-3.5 bg-[#F8F9FA] rounded-lg border border-slate-200 space-y-1 hover:border-[#19486A] transition-colors"
               >
-                <div className="text-xs font-bold text-[#0B2545]">
+                <div className="text-sm font-bold text-[#0B2545]">
                   {item.quality}
                 </div>
-                <div className="text-[11px] text-slate-500 leading-snug">
+                <div className="text-xs sm:text-sm text-slate-600 leading-snug">
                   {item.meaning}
                 </div>
               </div>
@@ -261,13 +261,13 @@ export default function TransformativeSilenceModule() {
       <section className="py-10 bg-[#0B2545] text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-sky-300 uppercase tracking-wider block">
               Curriculum Complete
             </span>
             <h3 className="text-lg sm:text-xl font-serif font-bold text-white">
               Ready to Join an interACT Gathering?
             </h3>
-            <p className="text-xs text-slate-300">
+            <p className="text-sm text-slate-300">
               Free public workshops are organized regularly across colleges and communities worldwide.
             </p>
           </div>
@@ -275,7 +275,7 @@ export default function TransformativeSilenceModule() {
           <div className="shrink-0 flex gap-2">
             <Link
               href="/join"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
             >
               Find a Workshop
               <ArrowRight size={14} className="ml-1.5" />

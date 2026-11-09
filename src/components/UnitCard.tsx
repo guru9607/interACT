@@ -68,19 +68,19 @@ export default function UnitCard({ title, description, image, href, number }: Un
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
           
           <div className="absolute top-3 left-3 flex items-center gap-1.5">
-            <span className="px-2 py-0.5 rounded bg-white/95 backdrop-blur-xs text-[10px] font-mono font-bold text-slate-800 shadow-xs">
+            <span className="px-2 py-0.5 rounded bg-white/95 backdrop-blur-xs text-xs font-mono font-bold text-slate-800 shadow-xs">
               {meta.code}
             </span>
             <span
-              className={`px-2 py-0.5 rounded text-[10px] font-bold ${meta.bgLight} ${meta.textColor} border ${meta.borderLight} shadow-xs flex items-center gap-1`}
+              className={`px-2 py-0.5 rounded text-xs font-bold ${meta.bgLight} ${meta.textColor} border ${meta.borderLight} shadow-xs flex items-center gap-1`}
             >
-              <IconComponent size={11} />
+              <IconComponent size={12} />
               {meta.sdg}
             </span>
           </div>
 
           <div className="absolute bottom-3 left-3 text-white">
-            <span className="text-[11px] font-mono text-slate-200 block">Module {number}</span>
+            <span className="text-xs font-mono text-slate-200 block font-bold">Module {number}</span>
           </div>
         </div>
 
@@ -90,17 +90,17 @@ export default function UnitCard({ title, description, image, href, number }: Un
             <h3 className="text-xl font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
               {title}
             </h3>
-            <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+            <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
               {description}
             </p>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-400 flex items-center gap-1 font-medium">
-              <Clock size={13} className="text-slate-400" /> ~45 mins
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-sm">
+            <span className="text-slate-500 flex items-center gap-1 font-medium">
+              <Clock size={14} className="text-slate-400" /> ~45 mins
             </span>
             <span className="font-semibold text-[#0072CE] group-hover:text-[#0058A3] inline-flex items-center gap-1">
-              Course Syllabus <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              Course Syllabus <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
             </span>
           </div>
         </div>

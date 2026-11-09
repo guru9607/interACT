@@ -41,22 +41,22 @@ export default function AboutPage() {
           </p>
 
           {/* Quick Index */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200">
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Core Alignment:</span>
-              <span className="font-semibold text-slate-800">SDG 3 · 16 · 17</span>
+              <span className="text-slate-500 block text-xs">Core Alignment:</span>
+              <span className="font-semibold text-slate-800 text-sm">SDG 3 · 16 · 17</span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Target Ages:</span>
-              <span className="font-semibold text-slate-800">Youth (18–35)</span>
+              <span className="text-slate-500 block text-xs">Target Ages:</span>
+              <span className="font-semibold text-slate-800 text-sm">Youth (18–35)</span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Evidence Base:</span>
-              <span className="font-semibold text-slate-800">WHO &amp; UNESCO</span>
+              <span className="text-slate-500 block text-xs">Evidence Base:</span>
+              <span className="font-semibold text-slate-800 text-sm">WHO &amp; UNESCO</span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Access Mode:</span>
-              <span className="font-semibold text-[#0072CE]">100% Free &amp; Open</span>
+              <span className="text-slate-500 block text-xs">Access Mode:</span>
+              <span className="font-semibold text-[#0072CE] text-sm">100% Free &amp; Open</span>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function AboutPage() {
             <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
               SDG Alignment
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               How interACT Advances UN 2030 Targets
             </h2>
           </div>
@@ -88,21 +88,21 @@ export default function AboutPage() {
                   <span className="w-9 h-9 rounded bg-emerald-50 text-[#4C9F38] flex items-center justify-center font-bold border border-emerald-100">
                     <Heart size={18} />
                   </span>
-                  <span className="text-[11px] font-bold text-[#4C9F38] uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     Target 3.4
                   </span>
                 </div>
 
-                <h3 className="text-lg font-serif font-bold text-[#0B2545] mb-2">
+                <h3 className="text-xl font-serif font-bold text-[#0B2545] mb-2">
                   SDG 3: Good Health &amp; Well-being
                 </h3>
 
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
                   By developing self-awareness and somatic grounding, youth build resilience against anxiety, burnout, and emotional fatigue.
                 </p>
 
-                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Mental Well-being</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Mental Well-being</span>
                   <Link href="/modules/awareness" className="font-bold text-[#4C9F38] hover:underline">
                     Module A →
                   </Link>
@@ -119,21 +119,21 @@ export default function AboutPage() {
                   <span className="w-9 h-9 rounded bg-sky-50 text-[#00689D] flex items-center justify-center font-bold border border-sky-100">
                     <ShieldCheck size={18} />
                   </span>
-                  <span className="text-[11px] font-bold text-[#00689D] uppercase tracking-wider bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+                  <span className="text-xs font-bold text-[#00689D] uppercase tracking-wider bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
                     Target 16.1
                   </span>
                 </div>
 
-                <h3 className="text-lg font-serif font-bold text-[#0B2545] mb-2">
+                <h3 className="text-xl font-serif font-bold text-[#0B2545] mb-2">
                   SDG 16: Peace from Within
                 </h3>
 
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
                   Contemplation grounds self-worth in enduring innate qualities, replacing hostility and reactivity with compassion and respect.
                 </p>
 
-                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Conflict Reduction</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Conflict Reduction</span>
                   <Link href="/modules/contemplation" className="font-bold text-[#00689D] hover:underline">
                     Module C →
                   </Link>
@@ -150,21 +150,21 @@ export default function AboutPage() {
                   <span className="w-9 h-9 rounded bg-slate-100 text-[#19486A] flex items-center justify-center font-bold border border-slate-200">
                     <Users size={18} />
                   </span>
-                  <span className="text-[11px] font-bold text-[#19486A] uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
+                  <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
                     Target 17.17
                   </span>
                 </div>
 
-                <h3 className="text-lg font-serif font-bold text-[#0B2545] mb-2">
+                <h3 className="text-xl font-serif font-bold text-[#0B2545] mb-2">
                   SDG 17: Global Partnerships
                 </h3>
 
-                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
                   Shared silence and deep listening quiet polarization, enabling authentic collaboration and empathy across diverse youth communities.
                 </p>
 
-                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Civil Society Action</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Civil Society Action</span>
                   <Link href="/modules/transformative-silence" className="font-bold text-[#19486A] hover:underline">
                     Module T →
                   </Link>
@@ -196,7 +196,7 @@ export default function AboutPage() {
                 <h3 className="text-base sm:text-lg font-serif font-bold text-[#0B2545]">
                   What interACT Is &amp; What interACT Is Not
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   Clear, non-sectarian educational boundaries governing all youth workshops.
                 </p>
               </div>
@@ -208,18 +208,18 @@ export default function AboutPage() {
 
             {showBoundaries && (
               <div className="border-t border-slate-200">
-                <div className="grid grid-cols-2 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
-                  <div className="p-3 bg-emerald-50 text-emerald-900 border-r border-slate-200 flex items-center gap-1.5">
-                    <Check size={14} className="text-emerald-700" />
+                <div className="grid grid-cols-2 text-xs sm:text-sm font-semibold uppercase tracking-wider border-b border-slate-200">
+                  <div className="p-3.5 bg-emerald-50 text-emerald-900 border-r border-slate-200 flex items-center gap-1.5">
+                    <Check size={16} className="text-emerald-700" />
                     <span>interACT IS</span>
                   </div>
-                  <div className="p-3 bg-rose-50 text-rose-900 flex items-center gap-1.5">
-                    <X size={14} className="text-rose-700" />
+                  <div className="p-3.5 bg-rose-50 text-rose-900 flex items-center gap-1.5">
+                    <X size={16} className="text-rose-700" />
                     <span>interACT IS NOT</span>
                   </div>
                 </div>
 
-                <div className="divide-y divide-slate-100 text-xs">
+                <div className="divide-y divide-slate-100 text-sm">
                   {[
                     { is: "Reflective experiential learning", isNot: "Motivational preaching" },
                     { is: "Acknowledging the present moment", isNot: "Distraction from life’s goals" },
@@ -229,11 +229,11 @@ export default function AboutPage() {
                     { is: "Pause-building & intentional response", isNot: "Religious talk" },
                   ].map((row, idx) => (
                     <div key={idx} className="grid grid-cols-2">
-                      <div className="p-3 flex items-start gap-2 text-slate-700 border-r border-slate-100 bg-white">
+                      <div className="p-3.5 flex items-start gap-2.5 text-slate-700 border-r border-slate-100 bg-white">
                         <span className="text-emerald-600 font-bold shrink-0">✓</span>
                         <span>{row.is}</span>
                       </div>
-                      <div className="p-3 flex items-start gap-2 text-slate-500 bg-slate-50/50">
+                      <div className="p-3.5 flex items-start gap-2.5 text-slate-500 bg-slate-50/50">
                         <span className="text-rose-600 font-bold shrink-0">✗</span>
                         <span>{row.isNot}</span>
                       </div>
@@ -252,23 +252,23 @@ export default function AboutPage() {
       ───────────────────────────────────────────────────────────── */}
       <section className="py-10 sm:py-14 bg-[#0B2545] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <h2 className="text-xl sm:text-3xl font-serif font-bold text-white">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white">
             Bring interACT to Your Campus or Community
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
             All curriculum syllabi, participant reflection toolkits, and workshop formats are offered free of charge.
           </p>
           <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/modules"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs sm:text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors"
             >
               Explore Modules
               <ArrowRight size={14} className="ml-1.5" />
             </Link>
             <Link
               href="/join"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs sm:text-sm font-semibold bg-white text-[#0B2545] hover:bg-slate-100 transition-colors"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-sm font-semibold bg-white text-[#0B2545] hover:bg-slate-100 transition-colors"
             >
               Find an Upcoming Event
             </Link>
@@ -279,13 +279,13 @@ export default function AboutPage() {
       {/* ─────────────────────────────────────────────────────────────
           5. SCHOLARLY CITATIONS (COLLAPSIBLE)
       ───────────────────────────────────────────────────────────── */}
-      <section className="bg-white border-t border-slate-200 py-6 text-slate-600 text-xs">
+      <section className="bg-white border-t border-slate-200 py-6 text-slate-600 text-xs sm:text-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <button
             type="button"
             onClick={() => setShowCitations(!showCitations)}
-            className="w-full flex items-center justify-between text-left py-2 font-semibold text-slate-700 uppercase tracking-wider text-[11px] hover:text-[#0072CE] transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between text-left py-2 font-semibold text-slate-700 uppercase tracking-wider text-xs hover:text-[#0072CE] transition-colors cursor-pointer"
           >
             <div className="flex items-center gap-2">
               <BookOpen size={14} className="text-[#0072CE]" />
@@ -298,7 +298,7 @@ export default function AboutPage() {
           </button>
 
           {showCitations && (
-            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3 pt-4 border-t border-slate-100 text-[11px] leading-relaxed">
+            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3 pt-4 border-t border-slate-100 text-xs sm:text-sm leading-relaxed">
               <div>
                 <span className="font-semibold text-slate-800">World Health Organization (2021):</span> Adolescent Mental Health Fact Sheet. Geneva: WHO (SDG 3.4).
               </div>

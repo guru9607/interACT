@@ -53,21 +53,21 @@ export default function Home() {
               </p>
 
               {/* 4 Feature Badges (Compact 2x2 Grid) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs text-slate-700 font-medium">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs sm:text-sm text-slate-700 font-medium">
                 <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-                  <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0" />
+                  <CheckCircle2 size={16} className="text-[#4C9F38] shrink-0" />
                   <span>3 Modular Experiential Tracks</span>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-                  <CheckCircle2 size={15} className="text-[#00AED9] shrink-0" />
+                  <CheckCircle2 size={16} className="text-[#00AED9] shrink-0" />
                   <span>100% Free Open Educational Access</span>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-                  <CheckCircle2 size={15} className="text-[#0072CE] shrink-0" />
+                  <CheckCircle2 size={16} className="text-[#0072CE] shrink-0" />
                   <span>Non-Sectarian &amp; Inclusive</span>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-                  <CheckCircle2 size={15} className="text-[#19486A] shrink-0" />
+                  <CheckCircle2 size={16} className="text-[#19486A] shrink-0" />
                   <span>Standardized 45–75m Sessions</span>
                 </div>
               </div>
@@ -104,10 +104,10 @@ export default function Home() {
             <div className="lg:col-span-5">
               <div className="bg-white border border-slate-200 rounded-lg p-3 sm:p-4 shadow-sm space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                  <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
                     Pedagogical Framework
                   </span>
-                  <span className="text-[10px] font-mono font-bold text-[#0072CE] bg-blue-50 px-2 py-0.5 rounded">
+                  <span className="text-xs font-mono font-bold text-[#0072CE] bg-blue-50 px-2 py-0.5 rounded">
                     UN 2030 AGENDA
                   </span>
                 </div>
@@ -123,7 +123,7 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] sm:text-[11px] pt-1 border-t border-slate-100 font-semibold">
+                <div className="grid grid-cols-3 gap-1.5 text-center text-xs pt-1 border-t border-slate-100 font-semibold">
                   <div className="p-1.5 bg-emerald-50 text-emerald-900 rounded border border-emerald-100">
                     SDG 3: Well-being
                   </div>
@@ -150,7 +150,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="mb-4 sm:mb-6 flex items-center justify-between flex-wrap gap-2">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">
               Why This Initiative Matters · Global Context
             </h2>
             <span className="text-xs text-slate-400">
@@ -165,10 +165,10 @@ export default function Home() {
               <div className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] mb-0.5">
                 1 in 7
               </div>
-              <div className="text-[11px] font-bold text-[#4C9F38] uppercase tracking-wide mb-1">
+              <div className="text-xs font-bold text-[#4C9F38] uppercase tracking-wide mb-1">
                 Adolescents Globally
               </div>
-              <p className="text-xs text-slate-600 leading-snug">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Experience a mental health condition (WHO). interACT provides preventive self-awareness.
               </p>
             </div>
@@ -178,10 +178,10 @@ export default function Home() {
               <div className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] mb-0.5">
                 59%
               </div>
-              <div className="text-[11px] font-bold text-[#00AED9] uppercase tracking-wide mb-1">
+              <div className="text-xs font-bold text-[#00AED9] uppercase tracking-wide mb-1">
                 Youth Distress
               </div>
-              <p className="text-xs text-slate-600 leading-snug">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Feel overwhelmed by current global crises. Inner resilience turns paralysis into positive action.
               </p>
             </div>
@@ -191,11 +191,11 @@ export default function Home() {
               <div className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] mb-0.5">
                 31%
               </div>
-              <div className="text-[11px] font-bold text-[#00689D] uppercase tracking-wide mb-1">
+              <div className="text-xs font-bold text-[#00689D] uppercase tracking-wide mb-1">
                 Anxiety Reduction
               </div>
-              <p className="text-xs text-slate-600 leading-snug">
-                Demonstrated across meta-analyses of standardized contemplative and mindfulness protocols.
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Demonstrated across meta-analyses of standardized contemplative protocols.
               </p>
             </div>
 
@@ -204,11 +204,11 @@ export default function Home() {
               <div className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] mb-0.5">
                 100%
               </div>
-              <div className="text-[11px] font-bold text-[#19486A] uppercase tracking-wide mb-1">
+              <div className="text-xs font-bold text-[#19486A] uppercase tracking-wide mb-1">
                 Open Access
               </div>
-              <p className="text-xs text-slate-600 leading-snug">
-                All workshop modules, thought trackers, and tools are provided free for youth and community groups.
+              <p className="text-sm text-slate-600 leading-relaxed">
+                All workshop modules, thought trackers, and tools are provided free for youth.
               </p>
             </div>
 
@@ -232,7 +232,7 @@ export default function Home() {
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] tracking-tight mb-2">
               The Three Pillars of interACT
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
               Three progressive competencies that link personal inner strength directly with the United Nations Sustainable Development Goals.
             </p>
           </div>
@@ -245,11 +245,11 @@ export default function Home() {
 
               <div className="p-5 sm:p-6 flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-bold text-[#4C9F38] uppercase tracking-wider">
+                  <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider">
                     Pillar I · Awareness
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-[#4C9F38] text-[11px] font-bold border border-emerald-200">
-                    <Heart size={11} />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-[#4C9F38] text-xs font-bold border border-emerald-200">
+                    <Heart size={12} />
                     SDG 3.4
                   </span>
                 </div>
@@ -258,27 +258,27 @@ export default function Home() {
                   Awareness (A)
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
                   Observing internal thoughts, emotions, and physical stress signals without reactive judgment. Discovering the quiet observer self.
                 </p>
 
-                <div className="space-y-1.5 text-xs text-slate-600 mb-6 bg-slate-50 p-3 rounded border border-slate-100">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#4C9F38] shrink-0" />
+                <div className="space-y-2 text-sm text-slate-700 mb-6 bg-slate-50 p-3 rounded border border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0" />
                     <span>Mindful respiration &amp; bodily grounding</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#4C9F38] shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0" />
                     <span>Adapted 5-4-3-2-1 sensory awareness</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#4C9F38] shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0" />
                     <span>The Stimulus-to-Response gap</span>
                   </div>
                 </div>
 
-                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium">Session: 45 min</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                  <span className="text-slate-500 font-medium">Session: 45 min</span>
                   <Link
                     href="/modules/awareness"
                     className="font-bold text-[#4C9F38] hover:underline inline-flex items-center gap-1"
@@ -295,11 +295,11 @@ export default function Home() {
 
               <div className="p-5 sm:p-6 flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-bold text-[#00689D] uppercase tracking-wider">
+                  <span className="text-xs font-bold text-[#00689D] uppercase tracking-wider">
                     Pillar II · Contemplation
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-50 text-[#00689D] text-[11px] font-bold border border-sky-200">
-                    <ShieldCheck size={11} />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-50 text-[#00689D] text-xs font-bold border border-sky-200">
+                    <ShieldCheck size={12} />
                     SDG 16.1
                   </span>
                 </div>
@@ -308,27 +308,27 @@ export default function Home() {
                   Contemplation (C)
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
                   Strengthening your inner core. Grounding self-worth in enduring innate values—calmness, clarity, and respect—rather than external validation.
                 </p>
 
-                <div className="space-y-1.5 text-xs text-slate-600 mb-6 bg-slate-50 p-3 rounded border border-slate-100">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#00AED9] shrink-0" />
+                <div className="space-y-2 text-sm text-slate-700 mb-6 bg-slate-50 p-3 rounded border border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#00AED9] shrink-0" />
                     <span>Four Self-Constructs (Worth, Esteem, Confidence, Respect)</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#00AED9] shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#00AED9] shrink-0" />
                     <span>Direct contemplation of peace &amp; clarity</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#00AED9] shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#00AED9] shrink-0" />
                     <span>Everyday 5-minute anchoring practice</span>
                   </div>
                 </div>
 
-                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium">Session: 45 min</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                  <span className="text-slate-500 font-medium">Session: 45 min</span>
                   <Link
                     href="/modules/contemplation"
                     className="font-bold text-[#00689D] hover:underline inline-flex items-center gap-1"
@@ -345,11 +345,11 @@ export default function Home() {
 
               <div className="p-5 sm:p-6 flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-bold text-[#19486A] uppercase tracking-wider">
+                  <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider">
                     Pillar III · Silence
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-[#19486A] text-[11px] font-bold border border-slate-300">
-                    <Users size={11} />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-[#19486A] text-xs font-bold border border-slate-300">
+                    <Users size={12} />
                     SDG 17.17
                   </span>
                 </div>
@@ -358,27 +358,27 @@ export default function Home() {
                   Transformative Silence (T)
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
                   Experiential stillness that quiets autonomic reactivity. Transitioning from impulsive reaction to intentional, compassionate response.
                 </p>
 
-                <div className="space-y-1.5 text-xs text-slate-600 mb-6 bg-slate-50 p-3 rounded border border-slate-100">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#19486A] shrink-0" />
+                <div className="space-y-2 text-sm text-slate-700 mb-6 bg-slate-50 p-3 rounded border border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#19486A] shrink-0" />
                     <span>Tree Grounding Practice for physical stillness</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#19486A] shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#19486A] shrink-0" />
                     <span>Walking Reflection &amp; Perspective exercises</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 size={13} className="text-[#19486A] shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={15} className="text-[#19486A] shrink-0" />
                     <span>Canonical Inner Qualities Matrix</span>
                   </div>
                 </div>
 
-                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium">Session: 60–75 min</span>
+                <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                  <span className="text-slate-500 font-medium">Session: 60–75 min</span>
                   <Link
                     href="/modules/transformative-silence"
                     className="font-bold text-[#19486A] hover:underline inline-flex items-center gap-1"
@@ -416,15 +416,15 @@ export default function Home() {
               <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-50 text-[#0058A3] border border-blue-200 inline-block">
                 Format 1 · 180 Minutes
               </span>
-              <h3 className="text-base font-semibold text-slate-900">
+              <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                 3-Hour Intensive Workshop
               </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Full sequential ACT arc in one comprehensive session: Awareness (45m) → Contemplation (50m) → Silence (40m) → Integration.
               </p>
               <Link
                 href="/join"
-                className="text-xs font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1 pt-1"
+                className="text-sm font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1 pt-1"
               >
                 Find an Upcoming Session →
               </Link>
@@ -434,15 +434,15 @@ export default function Home() {
               <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-50 text-[#4C9F38] border border-emerald-200 inline-block">
                 Format 2 · Modular
               </span>
-              <h3 className="text-base font-semibold text-slate-900">
+              <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                 Standalone Modular Units
               </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 45-minute modular workshops integrated into campus wellness days, student orientation weeks, or community gatherings.
               </p>
               <Link
                 href="/modules"
-                className="text-xs font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1 pt-1"
+                className="text-sm font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1 pt-1"
               >
                 Browse Curriculum →
               </Link>
@@ -452,15 +452,15 @@ export default function Home() {
               <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-[#19486A] border border-indigo-200 inline-block">
                 Format 3 · Peer Circles
               </span>
-              <h3 className="text-base font-semibold text-slate-900">
+              <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                 Campus &amp; Youth Circles
               </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Regular peer reflection circles guided by trained facilitators using open thought trackers and silence reflections.
               </p>
               <Link
                 href="/about"
-                className="text-xs font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1 pt-1"
+                className="text-sm font-semibold text-[#0072CE] hover:underline inline-flex items-center gap-1 pt-1"
               >
                 Learn About Methodology →
               </Link>
@@ -482,19 +482,19 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white max-w-2xl mx-auto">
             Experience an interACT Workshop in Your Community
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
             All curriculum materials and public workshops are offered free of charge under our commitment to the United Nations 2030 Agenda.
           </p>
           <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/join"
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded text-xs sm:text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-sm"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-sm"
             >
               Find an Upcoming Gathering
             </Link>
             <Link
               href="/modules"
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors"
             >
               Explore Educational Modules
             </Link>
@@ -506,13 +506,13 @@ export default function Home() {
           6. RESEARCH & POLICY CITATIONS (COLLAPSIBLE ON MOBILE)
           Progressive Disclosure to eliminate wall of text
       ───────────────────────────────────────────────────────────── */}
-      <section className="bg-white py-6 border-t border-slate-200 text-slate-500 text-xs">
+      <section className="bg-white py-6 border-t border-slate-200 text-slate-500 text-xs sm:text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <button
             type="button"
             onClick={() => setShowCitations(!showCitations)}
-            className="w-full flex items-center justify-between text-left py-2 font-semibold text-slate-700 uppercase tracking-wider text-[11px] hover:text-[#0072CE] transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between text-left py-2 font-semibold text-slate-700 uppercase tracking-wider text-xs hover:text-[#0072CE] transition-colors cursor-pointer"
           >
             <div className="flex items-center gap-2">
               <BookOpen size={14} className="text-[#0072CE]" />
@@ -525,7 +525,7 @@ export default function Home() {
           </button>
 
           {showCitations && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 pt-4 border-t border-slate-100 text-[11px] leading-relaxed">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 pt-4 border-t border-slate-100 text-xs sm:text-sm leading-relaxed">
               <div>
                 <strong className="text-slate-700">WHO (2021):</strong> Adolescent Mental Health Fact Sheet &amp; Global Guidelines for Non-Communicable Diseases (UN SDG 3.4).
               </div>

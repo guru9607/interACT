@@ -105,22 +105,22 @@ export default function ModulesPage() {
           </p>
 
           {/* Quick Metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200">
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Core Modules:</span>
-              <span className="font-semibold text-slate-800">Awareness · Contemplation · Silence</span>
+              <span className="text-slate-500 block text-xs">Core Modules:</span>
+              <span className="font-semibold text-slate-800 text-sm">Awareness · Contemplation · Silence</span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Age Cohorts:</span>
-              <span className="font-semibold text-slate-800">18–22 &amp; 23–35</span>
+              <span className="text-slate-500 block text-xs">Age Cohorts:</span>
+              <span className="font-semibold text-slate-800 text-sm">18–22 &amp; 23–35</span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">SDG Alignment:</span>
-              <span className="font-semibold text-slate-800">SDGs 3.4 · 16.1 · 17.17</span>
+              <span className="text-slate-500 block text-xs">SDG Alignment:</span>
+              <span className="font-semibold text-slate-800 text-sm">SDGs 3.4 · 16.1 · 17.17</span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-400 block text-[11px]">Format:</span>
-              <span className="font-semibold text-[#0072CE]">100% Free &amp; Open Access</span>
+              <span className="text-slate-500 block text-xs">Format:</span>
+              <span className="font-semibold text-[#0072CE] text-sm">100% Free &amp; Open Access</span>
             </div>
           </div>
         </div>
@@ -136,7 +136,7 @@ export default function ModulesPage() {
             <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
               Curriculum Progression
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               Three Sequential Stages of Growth
             </h2>
           </div>
@@ -176,7 +176,7 @@ export default function ModulesPage() {
                 <h3 className="text-base sm:text-lg font-serif font-bold text-[#0B2545]">
                   What interACT Is &amp; What interACT Is Not
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-sm text-slate-500 mt-0.5">
                   Strict boundaries between contemplative skill-building and therapy or preaching.
                 </p>
               </div>
@@ -188,25 +188,25 @@ export default function ModulesPage() {
 
             {showBoundaries && (
               <div className="border-t border-slate-200">
-                <div className="grid grid-cols-2 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
-                  <div className="p-3 bg-emerald-50 text-emerald-900 border-r border-slate-200 flex items-center gap-1.5">
-                    <Check size={14} className="text-emerald-700" />
+                <div className="grid grid-cols-2 text-xs sm:text-sm font-semibold uppercase tracking-wider border-b border-slate-200">
+                  <div className="p-3.5 bg-emerald-50 text-emerald-900 border-r border-slate-200 flex items-center gap-1.5">
+                    <Check size={16} className="text-emerald-700" />
                     <span>interACT IS</span>
                   </div>
-                  <div className="p-3 bg-rose-50 text-rose-900 flex items-center gap-1.5">
-                    <X size={14} className="text-rose-700" />
+                  <div className="p-3.5 bg-rose-50 text-rose-900 flex items-center gap-1.5">
+                    <X size={16} className="text-rose-700" />
                     <span>interACT IS NOT</span>
                   </div>
                 </div>
 
-                <div className="divide-y divide-slate-100 text-xs">
+                <div className="divide-y divide-slate-100 text-sm">
                   {isIsNotList.map((row, idx) => (
                     <div key={idx} className="grid grid-cols-2">
-                      <div className="p-3 flex items-start gap-2 text-slate-700 border-r border-slate-100 bg-white">
+                      <div className="p-3.5 flex items-start gap-2.5 text-slate-700 border-r border-slate-100 bg-white">
                         <span className="text-emerald-600 font-bold shrink-0">✓</span>
                         <span>{row.is}</span>
                       </div>
-                      <div className="p-3 flex items-start gap-2 text-slate-500 bg-slate-50/50">
+                      <div className="p-3.5 flex items-start gap-2.5 text-slate-500 bg-slate-50/50">
                         <span className="text-rose-600 font-bold shrink-0">✗</span>
                         <span>{row.isNot}</span>
                       </div>
@@ -230,27 +230,27 @@ export default function ModulesPage() {
             <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
               Inner Strengths
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               The Inner Qualities Framework
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {canonicalQualities.map((item, idx) => (
               <div
                 key={idx}
-                className="border border-slate-200 rounded p-3 bg-[#F8F9FA] hover:border-[#0072CE] transition-colors"
+                className="border border-slate-200 rounded-lg p-3.5 bg-[#F8F9FA] hover:border-[#0072CE] transition-colors"
               >
-                <div className="text-xs font-bold text-[#0B2545] mb-0.5">
+                <div className="text-sm font-bold text-[#0B2545] mb-1">
                   {item.quality}
                 </div>
-                <div className="text-[11px] text-slate-500 leading-snug">
+                <div className="text-xs sm:text-sm text-slate-600 leading-snug">
                   {item.meaning}
                 </div>
               </div>
             ))}
-            <div className="border border-dashed border-slate-300 rounded p-3 bg-slate-50 flex items-center justify-center text-center">
-              <span className="text-[11px] text-slate-500 italic">
+            <div className="border border-dashed border-slate-300 rounded-lg p-3.5 bg-slate-50 flex items-center justify-center text-center">
+              <span className="text-xs sm:text-sm text-slate-500 italic">
                 Ever-present within you
               </span>
             </div>
@@ -269,28 +269,28 @@ export default function ModulesPage() {
             <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
               Tailored Delivery
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               Adapted for Two Life Stages
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="border border-slate-200 rounded-lg p-5 bg-white space-y-2">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="font-bold text-xs text-[#4C9F38]">Group 1: Ages 18–22</span>
-                <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">University &amp; Early Career</span>
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-white space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="font-bold text-sm text-[#4C9F38]">Group 1: Ages 18–22</span>
+                <span className="text-xs font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded">University &amp; Early Career</span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Connects to academic stress, peer comparison, and social media habits. Uses direct language, relatable examples, and pair sharing.
               </p>
             </div>
 
-            <div className="border border-slate-200 rounded-lg p-5 bg-white space-y-2">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="font-bold text-xs text-[#0072CE]">Group 2: Ages 23–35</span>
-                <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">Young Professionals</span>
+            <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-white space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="font-bold text-sm text-[#0072CE]">Group 2: Ages 23–35</span>
+                <span className="text-xs font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Young Professionals</span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Focuses on career burnout, emotional boundaries, and relationships. Prioritizes deeper quiet reflection over group activity.
               </p>
             </div>
@@ -306,17 +306,17 @@ export default function ModulesPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-[#F8F9FA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h3 className="text-base sm:text-lg font-serif font-bold text-[#0B2545]">
+              <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                 Host an interACT Workshop on Campus
               </h3>
-              <p className="text-xs text-slate-600">
+              <p className="text-sm text-slate-600">
                 Universities and community centers can host free accredited workshops led by certified facilitators.
               </p>
             </div>
             <div className="shrink-0 flex gap-2">
               <Link
                 href="/join"
-                className="inline-flex items-center justify-center px-4 py-2 bg-[#0072CE] text-white text-xs font-semibold rounded hover:bg-[#0058A3] transition-colors"
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-[#0072CE] text-white text-sm font-semibold rounded hover:bg-[#0058A3] transition-colors"
               >
                 Inquire to Host
               </Link>

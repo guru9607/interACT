@@ -121,22 +121,22 @@ export default function ContemplationModule() {
             </p>
 
             {/* Quick Specs Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200">
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Duration:</span>
-                <span className="font-semibold text-slate-800">45 minutes</span>
+                <span className="text-slate-500 block text-xs">Duration:</span>
+                <span className="font-semibold text-slate-800 text-sm">45 minutes</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Target Ages:</span>
-                <span className="font-semibold text-slate-800">18–22 &amp; 23–35</span>
+                <span className="text-slate-500 block text-xs">Target Ages:</span>
+                <span className="font-semibold text-slate-800 text-sm">18–22 &amp; 23–35</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">Mode:</span>
-                <span className="font-semibold text-slate-800">Experiential Workshop</span>
+                <span className="text-slate-500 block text-xs">Mode:</span>
+                <span className="font-semibold text-slate-800 text-sm">Experiential Workshop</span>
               </div>
               <div className="bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-slate-400 block text-[11px]">UN SDG:</span>
-                <span className="font-semibold text-[#00689D]">SDG 16.1 (Inner Peace)</span>
+                <span className="text-slate-500 block text-xs">UN SDG:</span>
+                <span className="font-semibold text-[#00689D] text-sm">SDG 16.1 (Inner Peace)</span>
               </div>
             </div>
 
@@ -155,10 +155,10 @@ export default function ContemplationModule() {
             <span className="text-xs font-bold text-[#00689D] uppercase tracking-wider block mb-1">
               Core Framework
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               The Four Aspects of Self
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1 leading-relaxed">
               Differentiating self-worth from competence and external performance.
             </p>
           </div>
@@ -167,17 +167,17 @@ export default function ContemplationModule() {
             {definitions.map((item) => (
               <div
                 key={item.term}
-                className="p-4 sm:p-5 bg-[#F8F9FA] rounded-lg border border-slate-200 space-y-2 hover:border-slate-300 transition-colors"
+                className="p-5 bg-[#F8F9FA] rounded-lg border border-slate-200 space-y-2 hover:border-slate-300 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-serif font-bold text-[#0B2545]">
+                  <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                     {item.term}
                   </h3>
-                  <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded">
+                  <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded">
                     {item.nature}
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {item.definition}
                 </p>
               </div>
@@ -197,10 +197,10 @@ export default function ContemplationModule() {
             <span className="text-xs font-bold text-[#00689D] uppercase tracking-wider block mb-1">
               Participant Experience
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
               What the 45-Minute Session Is Like
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1 leading-relaxed">
               Moving from intellectual understanding to direct personal experience of inner qualities.
             </p>
           </div>
@@ -215,14 +215,14 @@ export default function ContemplationModule() {
                   <span className="text-xs font-mono font-bold text-[#00689D] bg-sky-50 px-2 py-0.5 rounded border border-sky-100">
                     Step {stage.step}
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     {stage.tag}
                   </span>
                 </div>
-                <h3 className="text-base font-serif font-bold text-[#0B2545]">
+                <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                   {stage.title}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {stage.description}
                 </p>
               </div>
@@ -243,10 +243,10 @@ export default function ContemplationModule() {
               <Sparkles size={14} />
               <span>Daily Takeaway</span>
             </div>
-            <h3 className="text-lg font-serif font-bold text-[#0B2545]">
+            <h3 className="text-xl font-serif font-bold text-[#0B2545]">
               The 5-Minute Daily Micro-Practice
             </h3>
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed max-w-2xl">
               Participants establish a 5-minute morning or evening routine: pause, choose one quality (peace, calm, or clarity), and sit in quiet attention without checking phones or multitasking.
             </p>
           </div>
@@ -260,13 +260,13 @@ export default function ContemplationModule() {
       <section className="py-10 bg-[#0B2545] text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-sky-300 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-sky-300 uppercase tracking-wider block">
               Curriculum Sequence
             </span>
             <h3 className="text-lg sm:text-xl font-serif font-bold text-white">
               Next Module: Transformative Silence (ACT-103)
             </h3>
-            <p className="text-xs text-slate-300">
+            <p className="text-sm text-slate-300">
               Shift from reaction to intentional response under UN SDG 17.
             </p>
           </div>
@@ -274,7 +274,7 @@ export default function ContemplationModule() {
           <div className="shrink-0">
             <Link
               href="/modules/transformative-silence"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-xs font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded text-sm font-semibold bg-[#0072CE] hover:bg-[#0058A3] text-white transition-colors shadow-xs"
             >
               Continue to Module 3
               <ArrowRight size={14} className="ml-1.5" />

@@ -171,17 +171,17 @@ export default function JoinPage() {
           </p>
 
           {/* Quick Registration Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-slate-200 text-xs text-slate-700">
-            <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-              <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-slate-200 text-xs sm:text-sm text-slate-700">
+            <div className="flex items-center gap-2 p-2.5 bg-white rounded border border-slate-200">
+              <CheckCircle2 size={16} className="text-[#4C9F38] shrink-0" />
               <span>100% Free for All Youth</span>
             </div>
-            <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-              <CheckCircle2 size={15} className="text-[#00AED9] shrink-0" />
+            <div className="flex items-center gap-2 p-2.5 bg-white rounded border border-slate-200">
+              <CheckCircle2 size={16} className="text-[#00AED9] shrink-0" />
               <span>Standardized 3-Hour &amp; Modular Tracks</span>
             </div>
-            <div className="flex items-center gap-2 p-2 bg-white rounded border border-slate-200">
-              <CheckCircle2 size={15} className="text-[#19486A] shrink-0" />
+            <div className="flex items-center gap-2 p-2.5 bg-white rounded border border-slate-200">
+              <CheckCircle2 size={16} className="text-[#19486A] shrink-0" />
               <span>Verifiable Completion Certificate</span>
             </div>
           </div>
@@ -202,13 +202,13 @@ export default function JoinPage() {
               <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
                 Regional Navigation
               </span>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545]">
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
                 Upcoming Scheduled Gatherings
               </h2>
             </div>
             
-            <div className="text-xs text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded">
-              <Filter size={13} className="text-slate-400" />
+            <div className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded">
+              <Filter size={14} className="text-slate-400" />
               <span>Showing: <strong className="text-slate-800">{activeRegion}</strong> Region</span>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function JoinPage() {
                   key={region}
                   type="button"
                   onClick={() => setActiveRegion(region)}
-                  className={`px-4 py-2 rounded text-xs font-semibold tracking-wide transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded text-sm font-semibold tracking-wide transition-colors flex items-center gap-2 ${
                     isActive
                       ? "bg-white text-[#0B2545] shadow-xs border border-slate-200 font-bold"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
@@ -232,7 +232,7 @@ export default function JoinPage() {
                   <span>{region === "Asia" ? "Asia-Pacific" : region}</span>
                   {count > 0 && (
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                      className={`text-xs px-2 py-0.5 rounded-full ${
                         isActive
                           ? "bg-blue-50 text-[#0072CE] font-bold"
                           : "bg-slate-200 text-slate-600"
@@ -283,14 +283,14 @@ export default function JoinPage() {
                       <div className="flex items-start gap-4 sm:gap-5">
                         
                         {/* Tabular Calendar Block */}
-                        <div className="w-16 h-16 sm:w-18 sm:h-18 rounded border border-slate-200 bg-slate-50 flex flex-col items-center justify-center shrink-0 text-center">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#0072CE]">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded border border-slate-200 bg-slate-50 flex flex-col items-center justify-center shrink-0 text-center">
+                          <span className="text-xs font-bold uppercase tracking-wider text-[#0072CE]">
                             {dateObj.month}
                           </span>
-                          <span className="text-xl sm:text-2xl font-serif font-bold text-[#0B2545] leading-none my-0.5">
+                          <span className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545] leading-none my-0.5">
                             {dateObj.day}
                           </span>
-                          <span className="text-[10px] text-slate-500 font-mono">
+                          <span className="text-xs text-slate-500 font-mono">
                             {dateObj.year}
                           </span>
                         </div>
@@ -299,17 +299,17 @@ export default function JoinPage() {
                         <div className="space-y-1.5">
                           <div className="flex flex-wrap items-center gap-2">
                             {isOngoing ? (
-                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                              <span className="px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
                                 Ongoing Session
                               </span>
                             ) : (
-                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-[#0058A3] border border-blue-200">
+                              <span className="px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-[#0058A3] border border-blue-200">
                                 Upcoming Workshop
                               </span>
                             )}
 
                             <span
-                              className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
+                              className={`px-2 py-0.5 rounded text-xs font-semibold border ${
                                 event.type === "Online"
                                   ? "bg-sky-50 text-sky-800 border-sky-200"
                                   : event.type === "In-Person"
@@ -320,8 +320,8 @@ export default function JoinPage() {
                               {event.type}
                             </span>
 
-                            <span className="text-xs text-slate-500 flex items-center gap-1">
-                              <MapPin size={12} className="text-slate-400" />
+                            <span className="text-xs sm:text-sm text-slate-600 flex items-center gap-1">
+                              <MapPin size={13} className="text-slate-400" />
                               {event.location}, {event.country}
                             </span>
                           </div>
@@ -330,13 +330,13 @@ export default function JoinPage() {
                             {event.title}
                           </h3>
 
-                          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600 pt-0.5">
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600 pt-0.5">
                             <span className="flex items-center gap-1.5">
-                              <Calendar size={13} className="text-slate-400" />
+                              <Calendar size={14} className="text-slate-400" />
                               {dateObj.full}
                             </span>
                             <span className="flex items-center gap-1.5">
-                              <Clock size={13} className="text-slate-400" />
+                              <Clock size={14} className="text-slate-400" />
                               {formatTime(event.start_time)} ({event.timezone})
                             </span>
                           </div>
@@ -346,8 +346,8 @@ export default function JoinPage() {
 
                       {/* Right: Institutional Action Button */}
                       <div className="shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 flex items-center justify-between md:justify-end gap-3">
-                        <span className="text-xs font-semibold text-[#0072CE] group-hover:text-[#0058A3] flex items-center gap-1">
-                          View Program &amp; Register <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                        <span className="text-sm font-semibold text-[#0072CE] group-hover:text-[#0058A3] flex items-center gap-1">
+                          View Program &amp; Register <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
                         </span>
                       </div>
 
