@@ -133,11 +133,14 @@ const PortalLoginForm = () => {
         </form>
 
         <div className="pt-2 border-t border-slate-100 flex flex-col items-center space-y-2 text-xs">
-          <p className="text-slate-500 text-center text-[11px] leading-relaxed">
-            Facilitator accounts are provisioned directly by the Secretariat following institutional partner appointment. Public self-registration is closed.
+          <p className="text-slate-500">
+            First time facilitator?{' '}
+            <Link href="/portal/register" className="text-[#0072CE] font-semibold hover:underline">
+              Create portal credentials
+            </Link>
           </p>
-          <Link href="/" className="text-[11px] text-slate-400 hover:text-slate-600">
-            ← Return to Public Website
+          <Link href="/facilitators" className="text-[11px] text-slate-400 hover:text-slate-600">
+            Apply at Facilitator Registry →
           </Link>
         </div>
 

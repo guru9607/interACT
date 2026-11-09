@@ -309,7 +309,7 @@ export default function FacilitatorForm() {
 
   // Submission Success Card Redesign
   if (submitted) {
-    const portalHref = `/portal/login`;
+    const portalHref = `/portal/register?email=${encodeURIComponent(formData.email)}&full_name=${encodeURIComponent(formData.full_name)}`;
 
     return (
       <motion.div

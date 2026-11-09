@@ -91,6 +91,12 @@ export default function PortalPage() {
               <span>Sign In to Portal</span>
               <ArrowRight size={14} />
             </Link>
+            <Link
+              href="/portal/register"
+              className="block text-xs text-[#0072CE] font-semibold hover:underline"
+            >
+              Create Facilitator Login
+            </Link>
           </div>
 
           <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-400">
