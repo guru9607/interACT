@@ -21,7 +21,7 @@ import {
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-slate-800">
-      
+
       {/* ─────────────────────────────────────────────────────────────
           1. INSTITUTIONAL CLASSIFICATION & LEAD DISPATCH (HERO)
           Authentic UN / International Agency Editorial Split Layout
@@ -35,7 +35,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:pt-14 lg:pb-20">
-          
+
           {/* Metadata / Classification Header */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 mb-8 text-xs font-semibold tracking-wider uppercase text-slate-500">
             <div className="flex items-center gap-2 text-[#0072CE]">
@@ -51,10 +51,10 @@ export default function Home() {
 
           {/* Lead Editorial Split */}
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-            
+
             {/* Left 7 Cols: Policy Mandate & Core Action */}
             <div className="lg:col-span-7 space-y-6">
-              
+
               <div className="inline-block px-2.5 py-1 bg-blue-50 border border-blue-200 text-[#0058A3] text-[11px] font-bold uppercase tracking-wider rounded">
                 Official Curriculum Framework
               </div>
@@ -117,7 +117,7 @@ export default function Home() {
             {/* Right 5 Cols: Institutional Dossier & SDG Alignment Graphic */}
             <div className="lg:col-span-5">
               <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-4">
-                
+
                 {/* Visual Header */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
@@ -172,7 +172,7 @@ export default function Home() {
       ───────────────────────────────────────────────────────────── */}
       <section className="bg-white border-b border-slate-200 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="mb-6 flex items-center justify-between flex-wrap gap-2">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Global Evidence Baseline · Why This Initiative Exists
@@ -183,7 +183,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-            
+
             {/* Stat 1 */}
             <div className="pt-4 md:pt-0 md:pr-6">
               <div className="text-3xl lg:text-4xl font-serif font-bold text-[#0B2545] mb-1">
@@ -248,7 +248,7 @@ export default function Home() {
       ───────────────────────────────────────────────────────────── */}
       <section className="py-16 lg:py-24 bg-[#F8F9FA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="max-w-3xl mb-14">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-2">
               <Compass size={14} />
@@ -263,12 +263,12 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            
+
             {/* PILLAR 1: Awareness (SDG 3) */}
             <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col">
               {/* SDG 3 Top Color Stripe */}
               <div className="h-1.5 w-full bg-[#4C9F38]" aria-hidden="true" />
-              
+
               <div className="p-7 flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold text-[#4C9F38] uppercase tracking-wider">
@@ -310,7 +310,7 @@ export default function Home() {
             <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col">
               {/* SDG 16 Top Color Stripe */}
               <div className="h-1.5 w-full bg-[#00AED9]" aria-hidden="true" />
-              
+
               <div className="p-7 flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold text-[#00689D] uppercase tracking-wider">
@@ -352,7 +352,7 @@ export default function Home() {
             <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col">
               {/* SDG 17 Top Color Stripe */}
               <div className="h-1.5 w-full bg-[#19486A]" aria-hidden="true" />
-              
+
               <div className="p-7 flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold text-[#19486A] uppercase tracking-wider">
@@ -379,7 +379,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-medium">Unit 11–15 · ~45 mins</span>
+                  <span className="text-xs text-slate-400 font-medium">Unit 11–15 · 60–75 mins</span>
                   <Link
                     href="/modules/transformative-silence"
                     className="text-xs font-bold text-[#19486A] hover:text-slate-900 inline-flex items-center gap-1"
@@ -402,9 +402,9 @@ export default function Home() {
       ───────────────────────────────────────────────────────────── */}
       <section className="py-16 lg:py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
+
             <div className="lg:col-span-5 space-y-4">
               <div className="text-xs font-bold text-[#0072CE] uppercase tracking-wider">
                 Deployment Model
@@ -427,7 +427,7 @@ export default function Home() {
 
             <div className="lg:col-span-7">
               <div className="border border-slate-200 rounded-lg overflow-hidden divide-y divide-slate-200 bg-white shadow-sm">
-                
+
                 {/* Format 1 */}
                 <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/60 transition-colors">
                   <div>
@@ -521,7 +521,7 @@ export default function Home() {
       ───────────────────────────────────────────────────────────── */}
       <section className="py-16 bg-[#F8F9FA] border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="flex flex-wrap items-center justify-between gap-4 mb-10 border-b border-slate-200 pb-4">
             <div>
               <div className="text-xs font-bold text-[#0072CE] uppercase tracking-wider mb-1">
@@ -540,7 +540,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            
+
             {/* Document 1 */}
             <div className="bg-white border border-slate-200 rounded p-6 shadow-sm flex flex-col justify-between">
               <div>
@@ -629,7 +629,7 @@ export default function Home() {
       <section className="py-16 bg-[#0B2545] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
-            
+
             <div className="lg:col-span-8 space-y-4">
               <div className="text-xs font-bold text-sky-300 uppercase tracking-wider">
                 Civic Engagement &amp; Partnership
@@ -668,7 +668,7 @@ export default function Home() {
       ───────────────────────────────────────────────────────────── */}
       <section className="bg-white py-10 border-t border-slate-200 text-slate-500 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="flex items-center gap-2 mb-4 font-semibold text-slate-700 uppercase tracking-wider text-[11px]">
             <BookOpen size={14} className="text-[#0072CE]" />
             <span>Key Research &amp; Policy Citations</span>

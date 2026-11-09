@@ -7,6 +7,8 @@ import {
   BookOpen,
   Brain,
   CheckCircle2,
+  Check,
+  X,
   ExternalLink,
   FileText,
   Globe,
@@ -327,6 +329,62 @@ export default function AboutPage() {
               </div>
             </div>
 
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          3.5 METHODOLOGICAL SCOPE: WHAT INTERACT IS / IS NOT
+      ───────────────────────────────────────────────────────────── */}
+      <section className="py-16 bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
+              Methodological Integrity · Official Standard
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
+              What interACT Is / What interACT Is Not
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Transparent, non-sectarian educational boundaries governing all interACT youth sessions.
+            </p>
+          </div>
+
+          <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+              <div className="p-3.5 bg-emerald-50/80 text-emerald-900 border-b md:border-b-0 md:border-r border-slate-200 flex items-center gap-2">
+                <Check size={16} className="text-emerald-700" />
+                <span>interACT IS</span>
+              </div>
+              <div className="p-3.5 bg-rose-50/80 text-rose-900 flex items-center gap-2">
+                <X size={16} className="text-rose-700" />
+                <span>interACT IS NOT</span>
+              </div>
+            </div>
+
+            <div className="divide-y divide-slate-100 text-xs sm:text-sm">
+              {[
+                { is: "Reflective experiential learning", isNot: "Motivational preaching" },
+                { is: "Acknowledging the present moment", isNot: "Distraction from life’s goals or plans" },
+                { is: "Strengthening your inner core", isNot: "Therapy or counselling" },
+                { is: "Developing self-worth, self-confidence, self-esteem, & self-respect", isNot: "Spiritual conversion" },
+                { is: "Rejuvenating exercise with moments of guided silence", isNot: "Trauma processing or emotional treatment" },
+                { is: "Pause-building & intentional response training", isNot: "Religious talk" },
+              ].map((row, idx) => (
+                <div key={idx} className="grid grid-cols-1 md:grid-cols-2">
+                  <div className="p-4 flex items-start gap-2.5 text-slate-700 md:border-r border-slate-100 bg-white">
+                    <span className="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span>
+                    <span>{row.is}</span>
+                  </div>
+                  <div className="p-4 flex items-start gap-2.5 text-slate-500 bg-slate-50/50">
+                    <span className="text-rose-600 font-bold shrink-0 mt-0.5">✗</span>
+                    <span>{row.isNot}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
         </div>

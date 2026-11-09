@@ -182,3 +182,60 @@ Fixed at the very top of every page:
      - `DOC-ACT-SYS`: Portal & Field Operations Guide (`#0B2545`)
      - `DOC-IA-CERT-SVC`: Serialized Certificate Generation Authority (`#0B2545`)
 
+
+---
+
+## 8. Canonical Facilitator Module Manual & Methodological Standards
+
+> **Canonical Document Reference:** `interACT Facilitator Module Manual`  
+> **Source:** Official interACT Curriculum Repository (Google Doc: `1m9DHjIGBeL0Nv349JOW1J9uLJRtHKmjsoTK1dhM2-Lc`)
+
+### A. What interACT Is / What interACT Is Not
+| interACT IS (✓) | interACT IS NOT (✗) |
+| :--- | :--- |
+| **Reflective experiential learning** | Motivational preaching |
+| **Acknowledging the present moment** | Distraction from life’s goals or plans |
+| **Strengthening your inner core** | Therapy or counselling |
+| **Developing self-worth, self-confidence, self-esteem, & self-respect** | Spiritual conversion |
+| **Rejuvenating exercise with moments of guided silence** | Trauma processing or emotional treatment |
+| **Pause-building & intentional response training** | Religious talk |
+
+### B. Target Demographic Cohorts & Age Differentiation
+- **Group 1 (Ages 18–22: University & Early Career):**
+  - Focus: Relatability, immediate experiential verification, and simplicity.
+  - Delivery: Concrete everyday language, shared peer themes (stress, comparison, uncertainty), active pair sharing.
+  - Silence Duration: 2–3 minutes guided contemplation.
+- **Group 2 (Ages 23–35: Young Professionals & Adults):**
+  - Focus: Depth of reflection and application to adult responsibilities.
+  - Delivery: Respectful, grounded tone (not motivational), themes of burnout, boundaries, and the 'not enough' gap.
+  - Silence Duration: 4–5 minutes introspective silence with minimal facilitator interruption.
+
+### C. Standard Modular Structure & Timings
+1. **Module 1 — Awareness (A) [45 min · SDG 3.4]:**
+   - Focus: Observing the inner self without judgment or reaction.
+   - Core Activities: Guided breath & environment awareness (5–7m), Adapted 5-4-3-2-1 Sensory Grounding (10m), Paired reflection (10–12m), Daily micro-pause commitment.
+2. **Module 2 — Contemplation (C) [45 min · SDG 16.1]:**
+   - Subtitle: *What are my innate qualities? — Strengthening Your Inner Core*
+   - Focus: Shifting from external validation to internal stability.
+   - Core Activities: External vs Internal influence diagnostic (5m), 4-step Contemplation on an innate quality (15m), Everyday 5-minute micro-practice.
+   - Four Self-Constructs:
+     - **Self-worth:** Deep inner feeling that *"I am valuable as I am"* — independent of achievements.
+     - **Self-esteem:** Evaluation across life domains (studies, work, appearance) — fluid.
+     - **Self-confidence:** Belief in *"I can handle this"* based on abilities and past experience.
+     - **Self-respect:** Honoring values, thoughts, and feelings in daily actions.
+3. **Module 3 — Transformative Silence (T) [60–75 min · SDG 17.17]:**
+   - Subtitle: *Aligned with the interACT Standards Framework*
+   - Focus: Reflective silence supporting grounding and intentional response rather than automatic reaction.
+   - Core Activities: Tree Grounding Practice, Guided Nature & Stream Reflection, Walking Reflection (3 sheets), Perspective Reflection Practice, Transformative Silence Scrabble Activity.
+
+### D. Canonical Inner Qualities Framework
+- **Awareness:** Noticing without reacting
+- **Calmness:** Emotional steadiness
+- **Clarity:** Thoughtful understanding
+- **Respect:** Valuing self and others
+- **Compassion:** Empathy and care
+- **Courage:** Constructive response under difficulty
+- **Responsibility:** Intentional action
+
+### E. Standardized Feedback Protocol
+All workshop feedback instruments are synchronized with the 4-question canonical schema for each modular session (Awareness, Contemplation, Transformative Silence, and Complete Workshop).

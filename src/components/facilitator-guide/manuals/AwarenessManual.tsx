@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Info, Clock, CheckCircle2, Users, FileText } from "lucide-react";
+import { Info, Clock, CheckCircle2, Users, FileText, Sparkles } from "lucide-react";
 
 export function AwarenessManual() {
   return (
@@ -12,11 +12,11 @@ export function AwarenessManual() {
               ACT-101
             </span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-[#4C9F38]">
-              SDG Target 3.4 · Non-Communicable Conditions &amp; Mental Health
+              Module 1 — Awareness (A) · UN SDG Target 3.4
             </span>
           </div>
           <p className="text-xs text-slate-600">
-            For the combined 3-hour journey, use the{" "}
+            For the combined workshop, consult the{" "}
             <Link
               href="/facilitator-guide/three-hour-program"
               className="font-semibold text-[#0072CE] underline"
@@ -28,41 +28,45 @@ export function AwarenessManual() {
         </div>
         <div className="text-right shrink-0">
           <span className="text-[11px] font-mono text-slate-500 block">Duration: 45 min</span>
-          <span className="text-[10px] font-semibold text-slate-400 uppercase">Target: 18–35 Years</span>
+          <span className="text-[10px] font-semibold text-slate-400 uppercase">Ages 18–22 &amp; 23–35</span>
         </div>
       </div>
 
       {/* Module Overview */}
       <section className="space-y-2">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#0B2545] border-b border-slate-200 pb-1">
-          1. Module Overview &amp; Scientific Premise
+          1. Module Overview
         </h2>
-        <p className="text-slate-600">
-          Module ACT-101 introduces the cognitive capacity to recognize one's internal state—thoughts, emotions, and bodily sensations—without immediate judgment, rumination, or reactive behavior. It establishes a baseline of internal observation for subsequent interACT stages. The module does not focus on problem-solving or psychological analysis; the pedagogical emphasis is strictly centered on presence, sensory stillness, and cognitive defusion.
-        </p>
+          <p className="text-slate-600 leading-relaxed">
+            The “Awareness” module introduces participants to the skill of recognizing their inner self. This includes just noticing the thoughts &amp; emotions they come across, and the bodily sensations experienced without any judgement or reaction. The purpose is to create self-awareness that will enable a thorough reflection and spontaneous action in later stages of the interACT framework.
+          </p>
+          <p className="text-slate-600 leading-relaxed">
+            This module is not focused on problem-solving. Instead, it emphasizes observation, presence, and reflection of inner me.
+          </p>
       </section>
 
       {/* Learning Objectives */}
       <section className="space-y-2">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#0B2545] border-b border-slate-200 pb-1">
-          2. Measurable Learning Objectives
+          2. Learning Objectives
         </h2>
+        <p className="text-xs text-slate-500">By the end of the session, participants will:</p>
         <ul className="grid sm:grid-cols-2 gap-2 pt-1 text-slate-600">
           <li className="flex items-start gap-2 bg-slate-50 border border-slate-200 p-3 rounded">
             <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0 mt-0.5" />
-            <span>Notice thoughts, emotions, and somatic sensations as they arise in real time.</span>
+            <span>Develop the ability to notice their thoughts, emotions, and sensations.</span>
           </li>
           <li className="flex items-start gap-2 bg-slate-50 border border-slate-200 p-3 rounded">
             <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0 mt-0.5" />
-            <span>Distinguish experiencing an involuntary thought from being defined by it.</span>
+            <span>Differentiate between what is told to them and how they feel about it.</span>
           </li>
           <li className="flex items-start gap-2 bg-slate-50 border border-slate-200 p-3 rounded">
             <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0 mt-0.5" />
-            <span>Cultivate neurological comfort with brief pauses before initiating behavioral reactions.</span>
+            <span>Find it easier to pause and think before acting.</span>
           </li>
           <li className="flex items-start gap-2 bg-slate-50 border border-slate-200 p-3 rounded">
             <CheckCircle2 size={15} className="text-[#4C9F38] shrink-0 mt-0.5" />
-            <span>Identify awareness as the foundational prerequisite for self-determination.</span>
+            <span>Realize that awareness is a prerequisite for any action.</span>
           </li>
         </ul>
       </section>
@@ -70,152 +74,166 @@ export function AwarenessManual() {
       {/* Core Concepts */}
       <section className="space-y-2">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#0B2545] border-b border-slate-200 pb-1">
-          3. Core Pedagogical Concepts
+          3. Core Concepts
         </h2>
         <div className="grid sm:grid-cols-2 gap-3 pt-1 text-xs text-slate-600">
           <div className="border border-slate-200 p-3 rounded bg-white">
-            <strong className="text-[#0B2545] block mb-1">Observation vs. Evaluation:</strong>
-            Cultivating the neutral stance of the witness rather than critical self-judgment.
+            <strong className="text-[#0B2545] block mb-1">Inner Goodness:</strong>
+            Awareness is to observe the inner goodness that forms our true nature.
           </div>
           <div className="border border-slate-200 p-3 rounded bg-white">
-            <strong className="text-[#0B2545] block mb-1">Transient Nature of State:</strong>
-            Internal emotions and thoughts are dynamic phenomena that crest and pass if not reinforced.
+            <strong className="text-[#0B2545] block mb-1">Dynamic &amp; Transient:</strong>
+            Internal experience (thoughts, emotions, sensations) is dynamic and transient.
           </div>
           <div className="border border-slate-200 p-3 rounded bg-white">
-            <strong className="text-[#0B2545] block mb-1">The Stimulus-Response Gap:</strong>
-            Franklian psychological space where human choice, dignity, and calm reside.
+            <strong className="text-[#0B2545] block mb-1">Stimulus &amp; Response Gap:</strong>
+            There is space between stimulus and response where choice resides.
           </div>
           <div className="border border-slate-200 p-3 rounded bg-white">
-            <strong className="text-[#0B2545] block mb-1">Awareness Precedes Choice:</strong>
-            One cannot change an autonomic habit loop that one has not consciously registered.
+            <strong className="text-[#0B2545] block mb-1">Thoughts as Seeds:</strong>
+            Awareness enables us to choose our thoughts (the seeds) for our future actions.
           </div>
         </div>
       </section>
 
-      {/* Session Flow */}
+      {/* Session Flow — 45 Minutes */}
       <section className="space-y-3">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#0B2545] border-b border-slate-200 pb-1">
-          4. Structured Session Flow (45 Minutes)
+          4. Session Flow — 45 Minutes
         </h2>
         <div className="border border-slate-200 rounded divide-y divide-slate-100 overflow-hidden">
           <div className="p-3.5 bg-slate-50 flex items-start gap-3">
             <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:00 – 0:05</span>
-            <div className="text-xs">
-              <strong className="text-[#0B2545] block">Opening &amp; Orientation (5 min)</strong>
-              <p className="text-slate-600">
-                Introduce awareness experiential premise. Framing: “Notice what is happening within us without needing to change it immediately today—we observe rather than fix.” Establish psychological safety: voluntary participation, no compulsory sharing.
-              </p>
+              <div className="text-xs space-y-1">
+                <strong className="text-[#0B2545] block">Opening (5 minutes)</strong>
+                <p className="text-slate-600">
+                  Introduce awareness in simple terms. Suggested framing: <em>“Awareness is the conscious act of turning inward to observe our thoughts, emotions, and the inner goodness that forms our true nature.”</em>
+                </p>
+                <p className="text-slate-500">
+                  Establish psychological safety: participation is voluntary; sharing is optional; no correct or incorrect experiences.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="p-3.5 bg-white flex items-start gap-3">
-            <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:05 – 0:12</span>
-            <div className="text-xs">
-              <strong className="text-[#0B2545] block">Guided Somatosensory Awareness (7 min)</strong>
-              <p className="text-slate-600">
-                Comfortable seated posture. Attention directed to natural respiration (without controlling rhythm); expansion to bodily sensations; observing fleeting thoughts without cognitive engagement.
-              </p>
-            </div>
-          </div>
+            <div className="p-3.5 bg-white flex items-start gap-3">
+              <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:05 – 0:12</span>
+                <div className="text-xs space-y-1">
+                  <strong className="text-[#0B2545] block">Guided Awareness Exercise (5–7 minutes)</strong>
+                  <p className="text-slate-600">
+                    Invite participants to sit comfortably. Pay attention to breathing (without controlling it). Slowly expand awareness to the immediate environment (feeling wind/air, hot or cold). Observe thoughts as they come and go. When carried away, gently bring attention back to observing them. Keep instructions simple and neutral.
+                  </p>
+                </div>
+              </div>
 
-          <div className="p-3.5 bg-slate-50 flex items-start gap-3">
-            <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:12 – 0:22</span>
-            <div className="text-xs">
-              <strong className="text-[#0B2545] block">Sensory Grounding Protocol (10 min)</strong>
-              <p className="text-slate-600">
-                Adapted 5-4-3-2-1 empirical grounding: 5 things seen, 4 things felt physically, 3 things heard, 2 internal bodily states noticed. Brief debrief: What was noticed? How did mental chatter shift?
-              </p>
-            </div>
-          </div>
+              <div className="p-3.5 bg-slate-50 flex items-start gap-3">
+                <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:12 – 0:22</span>
+                  <div className="text-xs space-y-1">
+                    <strong className="text-[#0B2545] block">Experiential Activity: Sensory Awareness (10 minutes)</strong>
+                    <p className="text-slate-600">
+                      Conduct adapted 5-4-3-2-1 group activity: 5 things seen, 4 things heard (physical sensations), 3 things felt, 2 things smelled, 1 thing noticed internally (thoughts or emotions). Briefly debrief: What did you notice? Was it easy or difficult to stay focused?
+                    </p>
+                  </div>
+                </div>
 
-          <div className="p-3.5 bg-white flex items-start gap-3">
-            <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:22 – 0:34</span>
-            <div className="text-xs">
-              <strong className="text-[#0B2545] block">Paired Reflection Pods (12 min)</strong>
-              <p className="text-slate-600">
-                Dyad sharing prompts: What surprises emerged during observation? How often do you pause during academic or workplace stress? Facilitator monitors equal speaking time and prevents intellectual arguing.
-              </p>
-            </div>
-          </div>
+                <div className="p-3.5 bg-white flex items-start gap-3">
+                  <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:22 – 0:34</span>
+                    <div className="text-xs space-y-1">
+                      <strong className="text-[#0B2545] block">Paired or Small Group Reflection (10–12 minutes)</strong>
+                      <p className="text-slate-600">
+                        Prompts: What did you notice about your thoughts during the exercise? Did anything surprise you? How often do you usually pause and notice your inner state? Facilitator role: encourage equal participation, do not interpret or analyze responses, maintain neutral supportive tone.
+                      </p>
+                    </div>
+                  </div>
 
-          <div className="p-3.5 bg-slate-50 flex items-start gap-3">
-            <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:34 – 0:42</span>
-            <div className="text-xs">
-              <strong className="text-[#0B2545] block">Plenary Synthesis (8 min)</strong>
-              <p className="text-slate-600">
-                Summarize: awareness is a trainable attentional muscle; noticing is distinct from reacting; micro-pauses alter decision pathways. Inquiry: “What might shift if you paused for 10 seconds before reacting today?”
-              </p>
-            </div>
-          </div>
+                  <div className="p-3.5 bg-slate-50 flex items-start gap-3">
+                      <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:34 – 0:40</span>
+                      <div className="text-xs space-y-1">
+                        <strong className="text-[#0B2545] block">Whole Group Integration (5–6 minutes)</strong>
+                        <p className="text-slate-600">
+                          Highlight key takeaways: Awareness is a skill that can be practiced; noticing is different from reacting; even brief pauses change how we respond. Optional prompt: <em>“If you become more aware of your internal state, how would your day be?”</em>
+                        </p>
+                      </div>
+                    </div>
 
-          <div className="p-3.5 bg-white flex items-start gap-3">
-            <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:42 – 0:45</span>
-            <div className="text-xs">
-              <strong className="text-[#0B2545] block">Closing Commitment (3 min)</strong>
-              <p className="text-slate-600">
-                Reinforce that awareness precedes reflection (Module C) and silence (Module T). Participants select one routine daily trigger (e.g. unlocking their phone) to serve as an awareness anchor.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+                    <div className="p-3.5 bg-white flex items-start gap-3">
+                        <span className="font-mono font-bold text-xs text-[#0B2545] w-24 shrink-0">0:40 – 0:45</span>
+                        <div className="text-xs space-y-1">
+                          <strong className="text-[#0B2545] block">Closing &amp; Everyday Practice (2–3 minutes)</strong>
+                          <p className="text-slate-600">
+                            Reinforce: <em>“Awareness is the starting point. Before we can reflect or take action, we need to be able to notice what is happening within us.”</em> Invite participants to take one pause during the day to notice thoughts and feelings.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
 
-      {/* Age Adaptations */}
-      <section className="space-y-3">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-[#0B2545] border-b border-slate-200 pb-1">
-          5. Demographic Cohort Adaptations
-        </h2>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="border border-slate-200 bg-white p-4 rounded space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="font-bold text-xs text-[#0B2545]">Cohort Group 1: Ages 18–22</span>
-              <span className="text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">University / Early Career</span>
-            </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Focus on relatability, cognitive overload, academic stress, social media comparison, and career uncertainty. Use concrete, direct vocabulary with higher interactive pacing. Avoid esoteric or clinical terminology.
-            </p>
-          </div>
+                  {/* Adaptation by Age Group */}
+                  <section className="space-y-3">
+                    <h2 className="text-sm font-bold uppercase tracking-wider text-[#0B2545] border-b border-slate-200 pb-1">
+                      5. Adaptation by Age Group
+                    </h2>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="border border-slate-200 bg-white p-4 rounded space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-xs text-[#0B2545]">Group 1: Ages 18–22</span>
+                          <span className="text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">Tone: Direct, Engaging</span>
+                        </div>
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                          <strong>Focus:</strong> Relatability, immediate experience, and simplicity.
+                        </p>
+                        <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                          <li>Use more concrete language; keep explanations brief.</li>
+                          <li>Emphasize shared experiences (stress, comparison, uncertainty).</li>
+                          <li>Allow slightly more time for interactive elements.</li>
+                        </ul>
+                      </div>
 
-          <div className="border border-slate-200 bg-white p-4 rounded space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="font-bold text-xs text-[#0B2545]">Cohort Group 2: Ages 23–35</span>
-              <span className="text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">Young Professionals</span>
-            </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Focus on workplace burnout, relational boundary setting, decision-making under executive fatigue, and habituation loops. Facilitator tone should be reflective, collegial, and grounded in applied behavioral science.
-            </p>
-          </div>
-        </div>
-      </section>
+                      <div className="border border-slate-200 bg-white p-4 rounded space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-xs text-[#0B2545]">Group 2: Ages 23–35</span>
+                          <span className="text-[10px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">Tone: Respectful, Grounded</span>
+                        </div>
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                          <strong>Focus:</strong> Depth of reflection and application to daily responsibilities.
+                        </p>
+                        <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                          <li>Allow for more subtle reflection.</li>
+                          <li>Include prompts related to decision-making, work, and relationships.</li>
+                          <li>Encourage linking awareness to patterns of behavior.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </section>
 
-      {/* Facilitator Protocol & Materials */}
-      <div className="grid sm:grid-cols-2 gap-4 pt-2">
-        <section className="border border-slate-200 bg-slate-50 p-4 rounded space-y-2">
-          <h3 className="font-bold text-xs uppercase tracking-wider text-[#0B2545] flex items-center gap-1.5">
-            <Users size={14} className="text-[#0072CE]" />
-            Facilitation Standards
-          </h3>
-          <ul className="list-disc pl-5 space-y-1 text-xs text-slate-600">
-            <li>Maintain an emotionally grounded, neutral, and unhurried tone.</li>
-            <li>Prioritize direct subjective experience over theoretical lectures.</li>
-            <li>Protect silence; do not impulsively fill quiet moments.</li>
-            <li>Maintain non-judgmental acceptance of all participant responses.</li>
-          </ul>
-        </section>
+                  {/* Facilitator Guidelines & Materials */}
+                  <div className="grid sm:grid-cols-2 gap-4 pt-2">
+                    <section className="border border-slate-200 bg-slate-50 p-4 rounded space-y-2">
+                      <h3 className="font-bold text-xs uppercase tracking-wider text-[#0B2545] flex items-center gap-1.5">
+                        <Users size={14} className="text-[#0072CE]" />
+                        Facilitator Guidelines
+                      </h3>
+                      <ul className="list-disc pl-5 space-y-1 text-xs text-slate-600">
+                        <li>Maintain a calm, neutral, and non-judgmental tone.</li>
+                        <li>Avoid over-explaining concepts; prioritize experience.</li>
+                        <li>Do not position yourself as an authority on participants' internal states.</li>
+                        <li>Allow silence; do not rush to fill gaps.</li>
+                        <li>Ensure psychological safety at all times.</li>
+                      </ul>
+                    </section>
 
-        <section className="border border-slate-200 bg-slate-50 p-4 rounded space-y-2">
-          <h3 className="font-bold text-xs uppercase tracking-wider text-[#0B2545] flex items-center gap-1.5">
-            <FileText size={14} className="text-[#0072CE]" />
-            Room Setup &amp; Materials
-          </h3>
-          <ul className="list-disc pl-5 space-y-1 text-xs text-slate-600">
-            <li>Silent countdown timekeeper / phone in airplane mode.</li>
-            <li>Optional slides with minimal text (high contrast, UN palette).</li>
-            <li>Acoustically quiet room with chairs arranged in circle or semi-circle.</li>
-            <li>Notebooks and pens for written reflection exercises.</li>
-          </ul>
-        </section>
-      </div>
-    </div>
-  );
+                    <section className="border border-slate-200 bg-slate-50 p-4 rounded space-y-2">
+                      <h3 className="font-bold text-xs uppercase tracking-wider text-[#0B2545] flex items-center gap-1.5">
+                        <FileText size={14} className="text-[#0072CE]" />
+                        Materials Required &amp; Outcomes
+                      </h3>
+                      <ul className="list-disc pl-5 space-y-1 text-xs text-slate-600">
+                        <li>Timer or clock.</li>
+                        <li>Slides (optional, minimal text).</li>
+                        <li>Quiet, distraction-reduced environment.</li>
+                        <li>Participants leave with practical understanding, direct experience, and a simple daily tool.</li>
+                      </ul>
+                    </section>
+                  </div>
+                </div>
+                );
 }
