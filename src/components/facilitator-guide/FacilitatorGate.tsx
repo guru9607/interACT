@@ -22,9 +22,6 @@ export const FacilitatorGate = ({ children }: { children: ReactNode }) => {
   if (!auth.userId || !auth.isStaff) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] flex flex-col justify-between text-slate-800 font-sans">
-        {/* SDG Tri-Color Ribbon */}
-        <div className="h-1 w-full bg-gradient-to-r from-[#4C9F38] via-[#00AED9] to-[#19486A]" />
-
         <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12">
           <div className="max-w-xl w-full bg-white border border-slate-200 shadow-xs rounded-lg p-6 sm:p-10 space-y-6">
             {/* Header Stamp */}

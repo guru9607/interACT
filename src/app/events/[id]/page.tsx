@@ -340,12 +340,6 @@ export default function EventDetailPage() {
           1. INSTITUTIONAL HEADER & EVENT CLASSIFICATION
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
-        <div className="h-1 w-full flex" aria-hidden="true">
-          <span className="flex-1 bg-[#4C9F38]" />
-          <span className="flex-1 bg-[#00AED9]" />
-          <span className="flex-1 bg-[#19486A]" />
-        </div>
-
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10">
           
           <div className="flex items-center justify-between gap-4 mb-4">

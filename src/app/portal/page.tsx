@@ -189,14 +189,6 @@ export default function PortalPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col font-sans text-slate-800">
-      
-      {/* Universal 3-Color Ribbon */}
-      <div className="h-1 w-full flex" aria-hidden="true">
-        <span className="flex-1 bg-[#4C9F38]" />
-        <span className="flex-1 bg-[#00AED9]" />
-        <span className="flex-1 bg-[#19486A]" />
-      </div>
-
       {/* Institutional Top App Bar */}
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">

@@ -87,9 +87,6 @@ export default function FacilitatorGuidePage() {
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-slate-800 font-sans flex flex-col justify-between">
       <div>
-        {/* Top 3px SDG Tri-Color Ribbon */}
-        <div className="h-1 w-full bg-gradient-to-r from-[#4C9F38] via-[#00AED9] to-[#19486A]" />
-
         {/* Institutional Utility Header */}
         <header className="bg-white border-b border-slate-200">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
