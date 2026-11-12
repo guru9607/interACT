@@ -38,11 +38,10 @@ const regions = ["Asia", "Americas", "Europe", "Africa", "Oceania"] as const;
 export default function JoinPage() {
   const [activeRegion, setActiveRegion] = useState<typeof regions[number]>("Asia");
   const [events, setEvents] = useState<Event[]>([]);
-  const [pastEvents, setPastEvents] = useState<Event[]>([]);
+  const [allPastEvents, setAllPastEvents] = useState<Event[]>([]);
+  const [visiblePastCount, setVisiblePastCount] = useState(6);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMorePast, setHasMorePast] = useState(false);
-  const pastBatchSize = 9;
+  const pastBatchSize = 6;
 
   useEffect(() => {
     async function fetchEvents() {
@@ -52,47 +51,38 @@ export default function JoinPage() {
         const now = new Date();
         now.setHours(0, 0, 0, 0);
 
-        // Fetch all active events (Upcoming or Ongoing)
-        const { data: allActive, error: activeError } = await ro
+        // Fetch all events ordered by date descending
+        const { data: allData, error } = await ro
           .from("events")
           .select("*")
-          .in("status", ["upcoming", "ongoing"])
-          .order("date", { ascending: true });
+          .order("date", { ascending: false });
 
-        if (activeError) throw activeError;
+        if (error) throw error;
 
         const upcoming: Event[] = [];
-        const pastFromActive: Event[] = [];
+        const past: Event[] = [];
 
-        (allActive || []).forEach((event) => {
+        (allData || []).forEach((event) => {
           const sessions = (event as any).sessions || [];
           const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
           const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
           lastDate.setHours(0, 0, 0, 0);
 
-          if (lastDate >= now) {
+          if ((event.status === "upcoming" || event.status === "ongoing") && lastDate >= now) {
             upcoming.push(event as Event);
           } else {
-            pastFromActive.push(event as Event);
+            past.push(event as Event);
           }
         });
 
+        // Upcoming sorted ascending (closest date first)
+        upcoming.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        // Past sorted strictly descending (latest / most recent first)
+        past.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
         setEvents(upcoming);
-
-        // Fetch manual past/completed events
-        const { data: completedData, error: completedError } = await ro
-          .from("events")
-          .select("*")
-          .eq("status", "completed")
-          .order("date", { ascending: false })
-          .range(0, pastBatchSize - 1);
-
-        if (completedError) throw completedError;
-
-        // Combine auto-completed active events with explicitly completed events
-        const combinedPast = [...pastFromActive, ...(completedData || [])];
-        setPastEvents(combinedPast.slice(0, pastBatchSize));
-        setHasMorePast(combinedPast.length >= pastBatchSize);
+        setAllPastEvents(past);
       } catch (err) {
         console.error("Error fetching events:", err);
       } finally {
@@ -103,25 +93,11 @@ export default function JoinPage() {
     fetchEvents();
   }, []);
 
-  const loadMorePast = async () => {
-    if (loadingMore) return;
-    try {
-      setLoadingMore(true);
-      const ro = getSupabaseAnonRead();
-      const { data, error } = await ro
-        .from("events")
-        .select("*")
-        .eq("status", "completed")
-        .order("date", { ascending: false })
-        .range(pastEvents.length, pastEvents.length + pastBatchSize - 1);
+  const visiblePastEvents = allPastEvents.slice(0, visiblePastCount);
+  const hasMorePast = visiblePastCount < allPastEvents.length;
 
-      if (error) throw error;
-      if (data) setPastEvents((prev) => [...prev, ...data]);
-    } catch (err) {
-      console.error("Error loading more past events:", err);
-    } finally {
-      setLoadingMore(false);
-    }
+  const loadMorePast = () => {
+    setVisiblePastCount((prev) => prev + pastBatchSize);
   };
 
   const filteredEvents = events.filter((event) => event.region === activeRegion);
@@ -381,29 +357,29 @@ export default function JoinPage() {
 
 
       {/* ─────────────────────────────────────────────────────────────
-          3. FIELD ARCHIVE & HISTORICAL MILESTONES
-          Visual Documentation of Completed Gatherings
+          3. PAST GATHERINGS & WORKSHOPS ARCHIVE
+          Visual Documentation of Completed Gatherings (Sorted Latest First)
       ───────────────────────────────────────────────────────────── */}
-      {!loading && pastEvents.length > 0 && (
-        <section className="py-14 md:py-20 bg-[#F8F9FA] border-b border-slate-200">
+      {!loading && visiblePastEvents.length > 0 && (
+        <section className="py-12 sm:py-16 bg-[#F8F9FA] border-b border-slate-200">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-10">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
               <div>
                 <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
-                  Historical Records
+                  Documented Impact
                 </span>
-                <h2 className="text-2xl font-serif font-bold text-[#0B2545]">
-                  Completed Field Deployments &amp; Assemblies
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
+                  Past Gatherings &amp; Workshops
                 </h2>
               </div>
-              <span className="text-xs text-slate-500">
-                Official records of community and school cohorts
+              <span className="text-xs sm:text-sm text-slate-500">
+                Photographic records and retrospective documentation worldwide
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pastEvents.map((event) => (
+              {visiblePastEvents.map((event) => (
                 <Link key={event.id} href={`/events/${event.id}`} className="group block">
                   <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all flex flex-col h-full">
                     
@@ -421,8 +397,8 @@ export default function JoinPage() {
                         </div>
                       )}
                       <div className="absolute top-3 left-3">
-                        <span className="px-2 py-0.5 rounded bg-white/90 backdrop-blur-xs text-[10px] font-bold text-slate-700 uppercase tracking-wider border border-slate-200 shadow-xs">
-                          Completed Field Session
+                        <span className="px-2.5 py-0.5 rounded bg-white/95 backdrop-blur-xs text-xs font-bold text-slate-700 uppercase tracking-wider border border-slate-200 shadow-xs">
+                          Past Gathering
                         </span>
                       </div>
                     </div>
@@ -430,25 +406,25 @@ export default function JoinPage() {
                     {/* Metadata & Title */}
                     <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                       <div>
-                        <div className="flex items-center gap-3 text-[11px] text-slate-500 mb-1.5">
-                          <span className="flex items-center gap-1">
-                            <Calendar size={12} className="text-slate-400" />
+                        <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-500 mb-1.5">
+                          <span className="flex items-center gap-1.5">
+                            <Calendar size={13} className="text-slate-400" />
                             {new Date(event.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                           </span>
                           <span>•</span>
-                          <span className="flex items-center gap-1">
-                            <MapPin size={12} className="text-slate-400" />
+                          <span className="flex items-center gap-1.5">
+                            <MapPin size={13} className="text-slate-400" />
                             {event.location}, {event.country}
                           </span>
                         </div>
-                        <h3 className="text-base font-semibold text-slate-900 group-hover:text-[#0072CE] transition-colors line-clamp-2 leading-snug">
+                        <h3 className="text-lg font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors line-clamp-2 leading-snug">
                           {event.title}
                         </h3>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-[#0072CE] font-semibold">
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-[#0072CE] font-semibold">
                         <span>View Documentation &amp; Artifacts</span>
-                        <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
 
@@ -458,21 +434,13 @@ export default function JoinPage() {
             </div>
 
             {hasMorePast && (
-              <div className="mt-12 text-center">
+              <div className="mt-10 text-center">
                 <button
                   type="button"
                   onClick={loadMorePast}
-                  disabled={loadingMore}
-                  className="px-6 py-2.5 bg-white border border-slate-300 text-sm font-semibold text-[#0B2545] rounded hover:bg-slate-50 transition-colors disabled:opacity-50 inline-flex items-center gap-2 shadow-xs"
+                  className="px-6 py-2.5 bg-white border border-slate-300 text-sm font-semibold text-[#0B2545] rounded-md hover:bg-slate-50 transition-colors inline-flex items-center gap-2 shadow-xs cursor-pointer"
                 >
-                  {loadingMore ? (
-                    <>
-                      <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-slate-600 border-t-transparent" />
-                      Loading Archives...
-                    </>
-                  ) : (
-                    "Load Historical Archives"
-                  )}
+                  Load More Past Gatherings ({allPastEvents.length - visiblePastCount} remaining)
                 </button>
               </div>
             )}
