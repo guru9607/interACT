@@ -61,8 +61,10 @@ export default async function TeamPage() {
           {/* 4-Column Governance Ledger */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-slate-200">
             <div className="bg-white p-2.5 rounded border border-slate-200">
-              <span className="text-slate-500 block text-xs">Leadership:</span>
-              <span className="font-semibold text-slate-800 text-sm">25 Officers</span>
+              <span className="text-slate-500 block text-xs">Facilitators:</span>
+              <span className="font-semibold text-slate-800 text-sm">
+                {team.length > 0 ? `${team.length} Facilitators` : "25 Facilitators"}
+              </span>
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
               <span className="text-slate-500 block text-xs">Geographic Reach:</span>
@@ -74,7 +76,7 @@ export default async function TeamPage() {
             </div>
             <div className="bg-white p-2.5 rounded border border-slate-200">
               <span className="text-slate-500 block text-xs">Status:</span>
-              <span className="font-semibold text-[#0072CE] text-sm">Civil Society Initiative</span>
+              <span className="font-semibold text-[#0072CE] text-sm">Global Youth Initiative</span>
             </div>
           </div>
         </div>
@@ -99,7 +101,7 @@ export default async function TeamPage() {
                 Institutional Governance &amp; Pro-Bono Commitment
               </h4>
               <p className="leading-relaxed text-sm text-slate-600">
-                All officers, directors, mentors, and ambassadors of the interACT initiative serve on a voluntary, non-remunerated civil society basis. interACT is committed to transparent, non-sectarian youth development in alignment with United Nations Sustainable Development Goals 3, 16, and 17.
+                All facilitators, directors, mentors, and ambassadors of the interACT initiative serve on a voluntary, non-remunerated civil society basis. interACT is committed to transparent, non-sectarian youth development in alignment with United Nations Sustainable Development Goals 3, 16, and 17.
               </p>
             </div>
           </div>

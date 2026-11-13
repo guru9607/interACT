@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Calendar,
@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   ChevronRight,
   Info,
+  Video,
 } from "lucide-react";
 import { getSupabaseAnonRead } from "@/lib/supabase/anon-read";
 
@@ -27,80 +28,139 @@ type Event = {
   timezone: string;
   location: string;
   country: string;
-  region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
+  region: "Global" | "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
   type: "Online" | "In-Person" | "Hybrid";
   status?: "upcoming" | "completed";
   image_url?: string;
 };
 
-const regions = ["Asia", "Americas", "Europe", "Africa", "Oceania"] as const;
+const regions = ["Global", "Asia", "Americas", "Europe", "Africa", "Oceania"] as const;
 
 export default function JoinPage() {
-  const [activeRegion, setActiveRegion] = useState<typeof regions[number]>("Asia");
+  const [activeRegion, setActiveRegion] = useState<typeof regions[number]>("Global");
   const [events, setEvents] = useState<Event[]>([]);
-  const [allPastEvents, setAllPastEvents] = useState<Event[]>([]);
-  const [visiblePastCount, setVisiblePastCount] = useState(6);
-  const [loading, setLoading] = useState(true);
-  const pastBatchSize = 6;
+  const [loadingUpcoming, setLoadingUpcoming] = useState(true);
+
+  // On-demand pagination for Past Workshops (6 per page)
+  const [pastPageCache, setPastPageCache] = useState<Record<number, Event[]>>({});
+  const [currentPastPage, setCurrentPastPage] = useState(1);
+  const [totalPastCount, setTotalPastCount] = useState(0);
+  const [loadingPastPage, setLoadingPastPage] = useState(true);
+  const pastSectionRef = useRef<HTMLDivElement | null>(null);
+
+  const pastPageSize = 6;
+
+  // On-demand page loader
+  const loadPastPage = async (page: number, shouldScroll = false) => {
+    // If already in memory cache, switch instantly without network call
+    if (pastPageCache[page]) {
+      setCurrentPastPage(page);
+      if (shouldScroll && pastSectionRef.current) {
+        pastSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return;
+    }
+
+    try {
+      setLoadingPastPage(true);
+      const ro = getSupabaseAnonRead();
+      const today = new Date().toISOString().split("T")[0];
+      const start = (page - 1) * pastPageSize;
+      const end = start + pastPageSize - 1;
+
+      // Query only the requested 6 events on demand, ordered date descending
+      const { data, count, error } = await ro
+        .from("events")
+        .select("*", { count: "exact" })
+        .or(`status.eq.completed,date.lt.${today}`)
+        .order("date", { ascending: false })
+        .range(start, end);
+
+      if (error) throw error;
+
+      if (count !== null && count !== undefined) {
+        setTotalPastCount(count);
+      }
+      setPastPageCache((prev) => ({ ...prev, [page]: (data as Event[]) || [] }));
+      setCurrentPastPage(page);
+
+      if (shouldScroll && pastSectionRef.current) {
+        pastSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } catch (err) {
+      console.error("Error loading past workshops on demand:", err);
+    } finally {
+      setLoadingPastPage(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchEvents() {
+    async function fetchUpcomingEvents() {
       const ro = getSupabaseAnonRead();
       try {
-        setLoading(true);
+        setLoadingUpcoming(true);
         const now = new Date();
         now.setHours(0, 0, 0, 0);
 
-        // Fetch all events ordered by date descending
-        const { data: allData, error } = await ro
+        // Fetch all active/upcoming events
+        const { data: allActive, error: activeError } = await ro
           .from("events")
           .select("*")
-          .order("date", { ascending: false });
+          .in("status", ["upcoming", "ongoing"])
+          .order("date", { ascending: true });
 
-        if (error) throw error;
+        if (activeError) throw activeError;
 
         const upcoming: Event[] = [];
-        const past: Event[] = [];
-
-        (allData || []).forEach((event) => {
+        (allActive || []).forEach((event) => {
           const sessions = (event as any).sessions || [];
           const sessionDates = sessions.map((s: any) => new Date(s.date).getTime());
           const lastDate = sessions.length > 0 ? new Date(Math.max(...sessionDates)) : new Date(event.date);
           lastDate.setHours(0, 0, 0, 0);
 
-          if ((event.status === "upcoming" || event.status === "ongoing") && lastDate >= now) {
+          if (lastDate >= now) {
             upcoming.push(event as Event);
-          } else {
-            past.push(event as Event);
           }
         });
 
-        // Upcoming sorted ascending (closest date first)
-        upcoming.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-        // Past sorted strictly descending (latest / most recent first)
-        past.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
         setEvents(upcoming);
-        setAllPastEvents(past);
       } catch (err) {
-        console.error("Error fetching events:", err);
+        console.error("Error fetching upcoming events:", err);
       } finally {
-        setLoading(false);
+        setLoadingUpcoming(false);
       }
     }
 
-    fetchEvents();
+    fetchUpcomingEvents();
+    loadPastPage(1, false);
   }, []);
 
-  const visiblePastEvents = allPastEvents.slice(0, visiblePastCount);
-  const hasMorePast = visiblePastCount < allPastEvents.length;
+  const totalPastPages = Math.max(1, Math.ceil(totalPastCount / pastPageSize));
+  const displayedPastEvents = pastPageCache[currentPastPage] || [];
 
-  const loadMorePast = () => {
-    setVisiblePastCount((prev) => prev + pastBatchSize);
+  // Compute numbered pagination items (1, 2, 3...)
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    if (totalPastPages <= 5) {
+      for (let i = 1; i <= totalPastPages; i++) pages.push(i);
+    } else {
+      if (currentPastPage <= 3) {
+        pages.push(1, 2, 3, 4, "...", totalPastPages);
+      } else if (currentPastPage >= totalPastPages - 2) {
+        pages.push(1, "...", totalPastPages - 3, totalPastPages - 2, totalPastPages - 1, totalPastPages);
+      } else {
+        pages.push(1, "...", currentPastPage - 1, currentPastPage, currentPastPage + 1, "...", totalPastPages);
+      }
+    }
+    return pages;
   };
 
-  const filteredEvents = events.filter((event) => event.region === activeRegion);
+  const filteredEvents = events.filter((event) => {
+    if (activeRegion === "Global") {
+      return event.region === "Global" || (event.type || "").toLowerCase() === "online";
+    }
+    return event.region === activeRegion;
+  });
 
   // Helper to format 24h time to 12h
   const formatTime = (time: string) => {
@@ -179,20 +239,27 @@ export default function JoinPage() {
                 Regional Navigation
               </span>
               <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
-                Upcoming Scheduled Gatherings
+                Upcoming Workshops
               </h2>
             </div>
             
             <div className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded">
               <Filter size={14} className="text-slate-400" />
-              <span>Showing: <strong className="text-slate-800">{activeRegion}</strong> Region</span>
+              <span>
+                Showing: <strong className="text-slate-800">{activeRegion === "Global" ? "Global (Online)" : activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}</strong>
+              </span>
             </div>
           </div>
 
           {/* Regional Grouping Tabs */}
-          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100 rounded border border-slate-200 mb-8 max-w-2xl">
+          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100 rounded border border-slate-200 mb-8 max-w-3xl">
             {regions.map((region) => {
-              const count = events.filter((e) => e.region === region).length;
+              const count = events.filter((e) => {
+                if (region === "Global") {
+                  return e.region === "Global" || (e.type || "").toLowerCase() === "online";
+                }
+                return e.region === region;
+              }).length;
               const isActive = activeRegion === region;
               return (
                 <button
@@ -205,7 +272,7 @@ export default function JoinPage() {
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
                   }`}
                 >
-                  <span>{region === "Asia" ? "Asia-Pacific" : region}</span>
+                  <span>{region === "Global" ? "Global (Online)" : region === "Asia" ? "Asia-Pacific" : region}</span>
                   {count > 0 && (
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full ${
@@ -224,7 +291,7 @@ export default function JoinPage() {
 
           {/* Event Registry Rows */}
           <div className="space-y-4">
-            {loading ? (
+            {loadingUpcoming ? (
               <div className="text-center py-16 border border-dashed border-slate-200 rounded-lg">
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0072CE] border-t-transparent mx-auto mb-3" />
                 <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">
@@ -297,8 +364,17 @@ export default function JoinPage() {
                             </span>
 
                             <span className="text-xs sm:text-sm text-slate-600 flex items-center gap-1">
-                              <MapPin size={13} className="text-slate-400" />
-                              {event.location}, {event.country}
+                              {event.type === "Online" || event.region === "Global" ? (
+                                <>
+                                  <Video size={13} className="text-sky-600 shrink-0" />
+                                  <span>Live on Zoom · Global Online</span>
+                                </>
+                              ) : (
+                                <>
+                                  <MapPin size={13} className="text-slate-400 shrink-0" />
+                                  <span>{event.location}, {event.country}</span>
+                                </>
+                              )}
                             </span>
                           </div>
 
@@ -335,10 +411,12 @@ export default function JoinPage() {
               <div className="text-center py-16 bg-[#F8F9FA] rounded-lg border border-slate-200 p-8 space-y-3">
                 <Info size={24} className="text-slate-400 mx-auto" />
                 <h4 className="text-sm font-semibold text-slate-800">
-                  No Public Gatherings Scheduled in {activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}
+                  No Workshops Scheduled in {activeRegion === "Global" ? "Global (Online)" : activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}
                 </h4>
                 <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                  Upcoming workshop dates for this regional grouping are currently being finalized with institutional facilitators. You may also propose a session in your community.
+                  {activeRegion === "Global"
+                    ? "Upcoming global online workshops are being scheduled with international guest speakers. Check back soon or register for an in-person session."
+                    : "Upcoming workshop dates for this regional grouping are currently being finalized with institutional facilitators. You may also propose a session in your community."}
                 </p>
                 <div className="pt-2">
                   <Link
@@ -357,97 +435,156 @@ export default function JoinPage() {
 
 
       {/* ─────────────────────────────────────────────────────────────
-          3. PAST GATHERINGS & WORKSHOPS ARCHIVE
-          Visual Documentation of Completed Gatherings (Sorted Latest First)
+          3. PAST WORKSHOPS ARCHIVE
+          Visual Documentation of Past Workshops (Sorted Latest First)
+          On-Demand Pagination (6 per page)
       ───────────────────────────────────────────────────────────── */}
-      {!loading && visiblePastEvents.length > 0 && (
-        <section className="py-12 sm:py-16 bg-[#F8F9FA] border-b border-slate-200">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
-              <div>
-                <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
-                  Documented Impact
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
-                  Past Gatherings &amp; Workshops
-                </h2>
-              </div>
-              <span className="text-xs sm:text-sm text-slate-500">
-                Photographic records and retrospective documentation worldwide
+      <section ref={pastSectionRef} className="py-12 sm:py-16 bg-[#F8F9FA] border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
+            <div>
+              <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
+                Documented Impact
               </span>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#0B2545]">
+                Past Workshops
+              </h2>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {visiblePastEvents.map((event) => (
-                <Link key={event.id} href={`/events/${event.id}`} className="group block">
-                  <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all flex flex-col h-full">
-                    
-                    {/* Documentary Photo Container */}
-                    <div className="aspect-16/10 relative overflow-hidden bg-slate-100 border-b border-slate-200">
-                      {event.image_url ? (
-                        <img
-                          src={event.image_url}
-                          alt={event.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-slate-300">
-                          <ImageIcon size={40} />
-                        </div>
-                      )}
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-0.5 rounded bg-white/95 backdrop-blur-xs text-xs font-bold text-slate-700 uppercase tracking-wider border border-slate-200 shadow-xs">
-                          Past Gathering
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Metadata & Title */}
-                    <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                      <div>
-                        <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-500 mb-1.5">
-                          <span className="flex items-center gap-1.5">
-                            <Calendar size={13} className="text-slate-400" />
-                            {new Date(event.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-                          </span>
-                          <span>•</span>
-                          <span className="flex items-center gap-1.5">
-                            <MapPin size={13} className="text-slate-400" />
-                            {event.location}, {event.country}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors line-clamp-2 leading-snug">
-                          {event.title}
-                        </h3>
-                      </div>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-[#0072CE] font-semibold">
-                        <span>View Documentation &amp; Artifacts</span>
-                        <ChevronRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </div>
-
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {hasMorePast && (
-              <div className="mt-10 text-center">
-                <button
-                  type="button"
-                  onClick={loadMorePast}
-                  className="px-6 py-2.5 bg-white border border-slate-300 text-sm font-semibold text-[#0B2545] rounded-md hover:bg-slate-50 transition-colors inline-flex items-center gap-2 shadow-xs cursor-pointer"
-                >
-                  Load More Past Gatherings ({allPastEvents.length - visiblePastCount} remaining)
-                </button>
-              </div>
-            )}
-
+            <span className="text-xs sm:text-sm text-slate-500">
+              Visual documentation and community records worldwide
+            </span>
           </div>
-        </section>
-      )}
+
+          {loadingPastPage && displayedPastEvents.length === 0 ? (
+            <div className="text-center py-16 border border-dashed border-slate-200 rounded-lg bg-white">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0072CE] border-t-transparent mx-auto mb-3" />
+              <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">
+                Loading Past Workshops...
+              </p>
+            </div>
+          ) : displayedPastEvents.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedPastEvents.map((event) => (
+                  <Link key={event.id} href={`/events/${event.id}`} className="group block">
+                    <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all flex flex-col h-full">
+                      
+                      {/* Documentary Photo Container */}
+                      <div className="aspect-16/10 relative overflow-hidden bg-slate-100 border-b border-slate-200">
+                        {event.image_url ? (
+                          <img
+                            src={event.image_url}
+                            alt={event.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-300">
+                            <ImageIcon size={40} />
+                          </div>
+                        )}
+                        <div className="absolute top-3 left-3">
+                          <span className="px-2.5 py-0.5 rounded bg-white/95 backdrop-blur-xs text-xs font-bold text-slate-700 uppercase tracking-wider border border-slate-200 shadow-xs">
+                            Past Workshop
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Metadata & Title */}
+                      <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                          <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-500 mb-1.5">
+                            <span className="flex items-center gap-1.5">
+                              <Calendar size={13} className="text-slate-400" />
+                              {new Date(event.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                            </span>
+                            <span>•</span>
+                            <span className="flex items-center gap-1.5">
+                              <MapPin size={13} className="text-slate-400" />
+                              {event.location}, {event.country}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors line-clamp-2 leading-snug">
+                            {event.title}
+                          </h3>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-[#0072CE] font-semibold">
+                          <span>View Workshop Details</span>
+                          <ChevronRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+                        </div>
+                      </div>
+
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* Numbered Pagination Controls (1, 2, 3...) */}
+              {totalPastPages > 1 && (
+                <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 pt-6">
+                  <div className="text-xs sm:text-sm text-slate-500 font-medium">
+                    Showing{" "}
+                    <strong className="text-slate-800">
+                      {(currentPastPage - 1) * pastPageSize + 1}–{Math.min(currentPastPage * pastPageSize, totalPastCount)}
+                    </strong>{" "}
+                    of <strong className="text-slate-800">{totalPastCount}</strong> past workshops
+                  </div>
+
+                  <nav aria-label="Workshops Pagination" className="inline-flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => loadPastPage(currentPastPage - 1, true)}
+                      disabled={currentPastPage === 1 || loadingPastPage}
+                      className="px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
+                    >
+                      Previous
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {getPageNumbers().map((p, idx) =>
+                        typeof p === "number" ? (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => loadPastPage(p, true)}
+                            disabled={loadingPastPage}
+                            className={`min-w-8 h-8 sm:min-w-9 sm:h-9 px-2 text-xs sm:text-sm font-semibold rounded border transition-colors ${
+                              currentPastPage === p
+                                ? "bg-[#0072CE] text-white border-[#0072CE] shadow-xs"
+                                : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
+                            }`}
+                          >
+                            {p}
+                          </button>
+                        ) : (
+                          <span key={idx} className="px-1.5 text-slate-400 text-sm">
+                            ...
+                          </span>
+                        )
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => loadPastPage(currentPastPage + 1, true)}
+                      disabled={currentPastPage === totalPastPages || loadingPastPage}
+                      className="px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
+                    >
+                      Next
+                    </button>
+                  </nav>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center py-12 text-slate-400 text-xs sm:text-sm">
+              No past workshop records found.
+            </div>
+          )}
+
+        </div>
+      </section>
 
 
       {/* ─────────────────────────────────────────────────────────────
@@ -460,10 +597,10 @@ export default function JoinPage() {
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-2 text-xs font-bold text-[#0072CE] uppercase tracking-wider">
                 <ShieldCheck size={16} />
-                <span>Hosting Institutional Gatherings</span>
+                <span>Hosting Institutional Workshops</span>
               </div>
               <h3 className="text-xl font-serif font-bold text-[#0B2545]">
-                Bring an interACT Gathering to Your University or Community
+                Bring an interACT Workshop to Your University or Community
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Certified facilitators can host official workshops with full access to accredited curriculum slide decks, thought trackers, and automatic participant certification under our UN 2030 Agenda alignment.
@@ -471,10 +608,10 @@ export default function JoinPage() {
             </div>
             <div className="shrink-0 flex flex-col sm:flex-row gap-3">
               <a
-                href="mailto:support@theinteract.org?subject=Inquiry:%20Host%20an%20interACT%20Gathering"
+                href="mailto:support@theinteract.org?subject=Inquiry:%20Host%20an%20interACT%20Workshop"
                 className="inline-flex items-center justify-center px-5 py-2.5 bg-[#0072CE] text-white text-xs font-semibold rounded hover:bg-[#0058A3] transition-colors shadow-xs"
               >
-                Inquire to Host a Gathering
+                Inquire to Host a Workshop
               </a>
               <Link
                 href="/modules"

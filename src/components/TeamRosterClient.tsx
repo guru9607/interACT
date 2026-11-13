@@ -79,14 +79,14 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto">
               {visionaries.map((person) => (
                 <div
                   key={person.id}
                   onClick={() => openModal(person)}
-                  className="group bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all cursor-pointer flex flex-col sm:flex-row"
+                  className="group bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all cursor-pointer flex flex-row items-stretch"
                 >
-                  <div className="w-full sm:w-2/5 aspect-4/5 sm:aspect-auto relative bg-slate-100 shrink-0 border-b sm:border-b-0 sm:border-r border-slate-200 min-h-[220px]">
+                  <div className="w-28 sm:w-2/5 aspect-4/5 sm:aspect-auto relative bg-slate-100 shrink-0 border-r border-slate-200 min-h-[140px] sm:min-h-[220px]">
                     <Image
                       src={person.image_url || getInitialsAvatar(person.name)}
                       alt={person.name}
@@ -96,28 +96,28 @@ export default function TeamRosterClient({ team }: TeamRosterClientProps) {
                     />
                   </div>
 
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-3">
+                  <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
                     <div className="space-y-1">
-                      <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block mb-1">
+                      <span className="text-[10px] sm:text-xs font-bold text-[#0072CE] uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block mb-0.5 sm:mb-1">
                         Co-Founder
                       </span>
-                      <h3 className="text-xl font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
+                      <h3 className="text-base sm:text-xl font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors leading-snug">
                         {person.name}
                       </h3>
-                      <p className="text-sm font-semibold text-slate-700">
+                      <p className="text-xs sm:text-sm font-semibold text-slate-700">
                         {person.role}
                       </p>
                       {person.country && (
-                        <div className="flex items-center text-sm text-slate-500 pt-1">
-                          <MapPin size={13} className="mr-1 text-slate-400" />
+                        <div className="flex items-center text-xs sm:text-sm text-slate-500 pt-0.5 sm:pt-1">
+                          <MapPin size={12} className="mr-1 text-slate-400 shrink-0" />
                           <span>{person.country}</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm text-[#0072CE] font-semibold">
-                      <span>View Institutional Dossier</span>
-                      <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                    <div className="pt-2 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-[#0072CE] font-semibold">
+                      <span className="truncate">View Dossier</span>
+                      <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform shrink-0 ml-1" />
                     </div>
                   </div>
                 </div>

@@ -544,6 +544,8 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
     
     const payload = {
       ...formData,
+      region: formData.region === "Global" ? "Asia" : formData.region,
+      type: formData.region === "Global" ? "Online" : formData.type,
       agenda: [],
       date: firstSession.date,
       act_module: firstSession.module,
@@ -642,6 +644,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
               value={formData.region}
               onChange={(e) => setFormData({ ...formData, region: e.target.value })}
             >
+              <option value="Global">Global (Online)</option>
               <option value="Americas">Americas</option>
               <option value="Europe">Europe</option>
               <option value="Africa">Africa</option>

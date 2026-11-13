@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   FileText,
   Info,
+  Video,
 } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -53,7 +54,7 @@ type Event = {
   date: string;
   location: string;
   country: string;
-  region: "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
+  region: "Global" | "Americas" | "Europe" | "Africa" | "Asia" | "Oceania";
   type: "Online" | "In-Person" | "Hybrid";
   status: "upcoming" | "completed";
   image_url: string | null;
@@ -347,7 +348,7 @@ export default function EventDetailPage() {
               href="/join"
               className="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-[#0072CE] transition-colors"
             >
-              <ArrowLeft size={14} className="mr-1.5" /> Back to Gatherings Registry
+              <ArrowLeft size={14} className="mr-1.5" /> Back to Workshops
             </Link>
             <span className="text-[11px] font-mono text-slate-500 bg-slate-200/60 px-2 py-0.5 rounded">
               DOSSIER: IA-EV-{event.id}
@@ -361,7 +362,7 @@ export default function EventDetailPage() {
               <div className="flex flex-wrap items-center gap-2">
                 {isCompleted ? (
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-300">
-                    Concluded Gathering
+                    Past Workshop
                   </span>
                 ) : isOngoing ? (
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
@@ -398,8 +399,17 @@ export default function EventDetailPage() {
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <MapPin size={14} className="text-[#0072CE]" />
-                  <span>{event.location}, {event.country}</span>
+                  {event.type === "Online" || event.region === "Global" ? (
+                    <>
+                      <Video size={14} className="text-sky-600 shrink-0" />
+                      <span className="font-semibold text-slate-800">Online · Live on Zoom</span>
+                    </>
+                  ) : (
+                    <>
+                      <MapPin size={14} className="text-[#0072CE] shrink-0" />
+                      <span>{event.location}, {event.country}</span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -418,7 +428,7 @@ export default function EventDetailPage() {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">
-                      Facilitator / Lead
+                      {event.type === "Online" || event.region === "Global" ? "Featured Speaker / Host" : "Facilitator / Lead"}
                     </span>
                     <span className="text-sm font-semibold text-slate-900 leading-tight block">
                       {event.facilitators[0].name}
@@ -505,9 +515,9 @@ export default function EventDetailPage() {
               <h2 className="text-xl font-serif font-bold text-[#0B2545]">
                 Curriculum Scope &amp; Pedagogical Intent
               </h2>
-              <p className="text-sm text-slate-700 leading-relaxed font-normal">
+              <div className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal whitespace-pre-line">
                 {event.description}
-              </p>
+              </div>
             </section>
 
             {/* Sessions Roadmap */}
@@ -518,7 +528,7 @@ export default function EventDetailPage() {
                     Scheduled Session Arc
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Progressive modules deployed across this gathering
+                    Progressive modules deployed across this workshop
                   </p>
                 </div>
                 {event.sessions.length > 0 && (
@@ -687,23 +697,23 @@ export default function EventDetailPage() {
                 </span>
                 <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                   {isCompleted
-                    ? "Gathering Concluded"
+                    ? "Workshop Concluded"
                     : isOngoing
-                    ? "Gathering in Progress"
-                    : "Register for Gathering"}
+                    ? "Workshop in Progress"
+                    : "Register for Workshop"}
                 </h3>
               </div>
 
               {isCompleted ? (
                 <div className="space-y-4 text-xs text-slate-600">
                   <p className="leading-relaxed">
-                    This gathering has completed its scheduled curriculum delivery. Materials and certificates have been issued to verified attendees.
+                    This workshop has completed its scheduled curriculum delivery. Materials and certificates have been issued to verified attendees.
                   </p>
                   <Link
                     href="/join"
                     className="block w-full text-center py-2.5 bg-[#0B2545] hover:bg-slate-800 text-white font-semibold rounded text-xs transition-colors"
                   >
-                    Explore Other Upcoming Gatherings
+                    Explore Other Upcoming Workshops
                   </Link>
                 </div>
               ) : submitted ? (
