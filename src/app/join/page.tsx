@@ -191,14 +191,14 @@ export default function JoinPage() {
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-800">
-
+      
       {/* ─────────────────────────────────────────────────────────────
           1. INSTITUTIONAL HEADER & REGISTRY CLASSIFICATION
           UN DGC Standard Event Registry Banner
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
-
+          
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-3">
             <Globe size={14} className="shrink-0" />
             <span>Global Youth Registry · Workshops &amp; Gatherings</span>
@@ -238,7 +238,7 @@ export default function JoinPage() {
       ───────────────────────────────────────────────────────────── */}
       <section className="py-8 sm:py-12 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
+          
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
             <div>
               <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
@@ -248,7 +248,7 @@ export default function JoinPage() {
                 Upcoming Workshops
               </h2>
             </div>
-
+            
             <div className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded">
               <Filter size={14} className="text-slate-400" />
               <span>
@@ -267,18 +267,20 @@ export default function JoinPage() {
                   key={region}
                   type="button"
                   onClick={() => setActiveRegion(region)}
-                  className={`px-4 py-2 rounded text-sm font-semibold tracking-wide transition-colors flex items-center gap-2 ${isActive
+                  className={`px-4 py-2 rounded text-sm font-semibold tracking-wide transition-colors flex items-center gap-2 ${
+                    isActive
                       ? "bg-white text-[#0B2545] shadow-xs border border-slate-200 font-bold"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-                    }`}
+                  }`}
                 >
                   <span>{region === "Asia" ? "Asia-Pacific" : region}</span>
                   {count > 0 && (
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${isActive
+                      className={`text-xs px-2 py-0.5 rounded-full ${
+                        isActive
                           ? "bg-blue-50 text-[#0072CE] font-bold"
                           : "bg-slate-200 text-slate-600"
-                        }`}
+                      }`}
                     >
                       {count}
                     </span>
@@ -300,7 +302,7 @@ export default function JoinPage() {
             ) : filteredEvents.length > 0 ? (
               filteredEvents.map((event) => {
                 const dateObj = formatEventDate(event.date);
-
+                
                 // Determine ongoing vs upcoming status
                 const now = new Date();
                 now.setHours(0, 0, 0, 0);
@@ -320,10 +322,10 @@ export default function JoinPage() {
                 return (
                   <Link key={event.id} href={`/events/${event.id}`} className="block group">
                     <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-white hover:border-[#0072CE] hover:shadow-xs transition-all flex flex-col md:flex-row md:items-center justify-between gap-5">
-
+                      
                       {/* Left: Tabular Date Badge + Core Information */}
                       <div className="flex items-start gap-4 sm:gap-5">
-
+                        
                         {/* Tabular Calendar Block */}
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded border border-slate-200 bg-slate-50 flex flex-col items-center justify-center shrink-0 text-center">
                           <span className="text-xs font-bold uppercase tracking-wider text-[#0072CE]">
@@ -351,12 +353,13 @@ export default function JoinPage() {
                             )}
 
                             <span
-                              className={`px-2 py-0.5 rounded text-xs font-semibold border ${event.type === "Online"
+                              className={`px-2 py-0.5 rounded text-xs font-semibold border ${
+                                event.type === "Online"
                                   ? "bg-sky-50 text-sky-800 border-sky-200"
                                   : event.type === "In-Person"
-                                    ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                                    : "bg-purple-50 text-purple-800 border-purple-200"
-                                }`}
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                  : "bg-purple-50 text-purple-800 border-purple-200"
+                              }`}
                             >
                               {event.type}
                             </span>
@@ -446,7 +449,7 @@ export default function JoinPage() {
       ───────────────────────────────────────────────────────────── */}
       <section ref={pastSectionRef} className="py-12 sm:py-16 bg-[#F8F9FA] border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
+          
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
             <div>
               <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
@@ -474,7 +477,7 @@ export default function JoinPage() {
                 {displayedPastEvents.map((event) => (
                   <Link key={event.id} href={`/events/${event.id}`} className="group block">
                     <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all flex flex-col h-full">
-
+                      
                       {/* Documentary Photo Container */}
                       <div className="aspect-16/10 relative overflow-hidden bg-slate-100 border-b border-slate-200">
                         {event.image_url ? (
@@ -576,10 +579,11 @@ export default function JoinPage() {
                             type="button"
                             onClick={() => loadPastPage(p, true)}
                             disabled={loadingPastPage}
-                            className={`min-w-8 h-8 sm:min-w-9 sm:h-9 px-2 text-xs sm:text-sm font-semibold rounded border transition-colors ${currentPastPage === p
+                            className={`min-w-8 h-8 sm:min-w-9 sm:h-9 px-2 text-xs sm:text-sm font-semibold rounded border transition-colors ${
+                              currentPastPage === p
                                 ? "bg-[#0072CE] text-white border-[#0072CE] shadow-xs"
                                 : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
-                              }`}
+                            }`}
                           >
                             {p}
                           </button>
