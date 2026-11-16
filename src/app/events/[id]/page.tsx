@@ -39,6 +39,7 @@ type Facilitator = {
 
 type Session = {
   id: string;
+  title?: string;
   date: string;
   module: ACTModule;
   start_time?: string;
@@ -80,6 +81,7 @@ export default function EventDetailPage() {
   const [regCountry, setRegCountry] = useState("");
   const [regPhone, setRegPhone] = useState("");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [copiedMeetingId, setCopiedMeetingId] = useState(false);
 
   const eventId = parseInt(params.id as string, 10);
 
@@ -328,21 +330,55 @@ export default function EventDetailPage() {
   const isCompleted = event.status === "completed" || lastDate < now;
   const isOngoing = !isCompleted && firstDate <= now && lastDate >= now;
 
-  const images = Array.isArray(event.image_urls)
+  const isGlobalYouthSeries = /global youth series|\bgys\b/i.test(event.title || "");
+  const images = Array.isArray(event.image_urls) && event.image_urls.length > 0
     ? event.image_urls
     : event.image_url
-    ? [event.image_url]
-    : [];
+      ? [event.image_url]
+      : isGlobalYouthSeries
+        ? ["https://soxoovfassgdnsgqtfvi.supabase.co/storage/v1/object/public/event-images/global-youth-series-banner.jpg"]
+        : [];
+
+  // Parse online / zoom details and custom speaker from special_note if present
+  let zoomDetails: {
+    zoom_url?: string;
+    meeting_id?: string;
+    speaker?: { name: string; role: string; image_url?: string };
+    timezones?: { city: string; time: string }[];
+  } | null = null;
+
+  if (event.special_note) {
+    try {
+      if (event.special_note.startsWith("{")) {
+        zoomDetails = JSON.parse(event.special_note);
+      } else if (event.special_note.includes("zoom.us")) {
+        const urlMatch = event.special_note.match(/https?:\/\/[^\s|]+/);
+        const idMatch = event.special_note.match(/(?:Meeting ID:?\s*)(\d[\d\s]+)/i);
+        zoomDetails = {
+          zoom_url: urlMatch ? urlMatch[0] : undefined,
+          meeting_id: idMatch ? idMatch[1].trim() : undefined,
+        };
+      }
+    } catch {
+      // Fallback if not valid JSON
+    }
+  }
+
+  const speaker = zoomDetails?.speaker || (event.facilitators && event.facilitators.length > 0 ? {
+    name: event.facilitators[0].name,
+    role: event.facilitators[0].role,
+    image_url: event.facilitators[0].image_url
+  } : null);
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-800">
-      
+
       {/* ─────────────────────────────────────────────────────────────
           1. INSTITUTIONAL HEADER & EVENT CLASSIFICATION
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10">
-          
+
           <div className="flex items-center justify-between gap-4 mb-4">
             <Link
               href="/join"
@@ -356,9 +392,9 @@ export default function EventDetailPage() {
           </div>
 
           <div className="grid lg:grid-cols-12 gap-8 items-start">
-            
+
             <div className="lg:col-span-7 space-y-4">
-              
+
               <div className="flex flex-wrap items-center gap-2">
                 {isCompleted ? (
                   <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-300">
@@ -413,13 +449,13 @@ export default function EventDetailPage() {
                 </div>
               </div>
 
-              {event.facilitators && event.facilitators.length > 0 && (
+              {speaker && (
                 <div className="pt-2 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded border border-slate-300 bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
-                    {event.facilitators[0].image_url ? (
+                  <div className="w-11 h-11 rounded border border-slate-300 bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
+                    {speaker.image_url ? (
                       <img
-                        src={event.facilitators[0].image_url}
-                        alt=""
+                        src={speaker.image_url}
+                        alt={speaker.name}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -427,14 +463,14 @@ export default function EventDetailPage() {
                     )}
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">
-                      {event.type === "Online" || event.region === "Global" ? "Featured Speaker / Host" : "Facilitator / Lead"}
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#0072CE] block">
+                      {event.type === "Online" || event.region === "Global" ? "Featured Speaker" : "Facilitator / Lead"}
                     </span>
                     <span className="text-sm font-semibold text-slate-900 leading-tight block">
-                      {event.facilitators[0].name}
+                      {speaker.name}
                     </span>
                     <span className="text-xs text-slate-500 block">
-                      {event.facilitators[0].role}
+                      {speaker.role}
                     </span>
                   </div>
                 </div>
@@ -503,10 +539,10 @@ export default function EventDetailPage() {
       ───────────────────────────────────────────────────────────── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-12 gap-10 items-start">
-          
+
           {/* Main Column (8 cols): Description & Session Arc */}
           <div className="lg:col-span-7 space-y-10">
-            
+
             {/* Description */}
             <section className="space-y-3">
               <div className="text-xs font-bold text-[#0072CE] uppercase tracking-wider">
@@ -525,10 +561,12 @@ export default function EventDetailPage() {
               <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                 <div>
                   <h3 className="text-lg font-serif font-bold text-[#0B2545]">
-                    Scheduled Session Arc
+                    Program Schedule
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Progressive modules deployed across this workshop
+                    {event.sessions.length === 1
+                      ? "Session timing and agenda outline"
+                      : "Progressive modules deployed across this workshop"}
                   </p>
                 </div>
                 {event.sessions.length > 0 && (
@@ -561,15 +599,14 @@ export default function EventDetailPage() {
                     >
                       <div className="flex items-start gap-3">
                         <div
-                          className={`w-8 h-8 rounded text-white font-bold text-xs flex items-center justify-center shrink-0 ${
-                            isModA
-                              ? "bg-[#4C9F38]"
-                              : isModC
+                          className={`w-8 h-8 rounded text-white font-bold text-xs flex items-center justify-center shrink-0 ${isModA
+                            ? "bg-[#4C9F38]"
+                            : isModC
                               ? "bg-[#00AED9]"
                               : isModT
-                              ? "bg-[#19486A]"
-                              : "bg-[#0072CE]"
-                          }`}
+                                ? "bg-[#19486A]"
+                                : "bg-[#0072CE]"
+                            }`}
                         >
                           {idx + 1}
                         </div>
@@ -579,25 +616,10 @@ export default function EventDetailPage() {
                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                               {formatDate(session.date)}
                             </span>
-                            {isModA && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-[#4C9F38] border border-emerald-200">
-                                SDG 3.4
-                              </span>
-                            )}
-                            {isModC && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-50 text-[#00689D] border border-sky-200">
-                                SDG 16.1
-                              </span>
-                            )}
-                            {isModT && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-[#19486A] border border-slate-300">
-                                SDG 17.17
-                              </span>
-                            )}
                           </div>
 
                           <h4 className="text-base font-semibold text-slate-900 leading-snug">
-                            {MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
+                            {session.title || MODULE_LABELS[session.module as keyof typeof MODULE_LABELS] || session.module}
                           </h4>
 
                           {(session.start_time || session.end_time) && (
@@ -690,17 +712,21 @@ export default function EventDetailPage() {
           {/* Right Column (5 cols): Official Registration Box */}
           <aside className="lg:col-span-5">
             <div className="border border-slate-200 rounded-lg p-6 bg-[#F8F9FA] shadow-xs space-y-5 sticky top-24">
-              
+
               <div className="border-b border-slate-200 pb-3">
                 <span className="text-[10px] font-bold text-[#0072CE] uppercase tracking-wider block mb-0.5">
-                  Institutional Participation
+                  {event.type === "Online" || event.region === "Global"
+                    ? "Global Online Access"
+                    : "Institutional Participation"}
                 </span>
                 <h3 className="text-lg font-serif font-bold text-[#0B2545]">
                   {isCompleted
                     ? "Workshop Concluded"
                     : isOngoing
-                    ? "Workshop in Progress"
-                    : "Register for Workshop"}
+                      ? "Workshop in Progress"
+                      : event.type === "Online" || event.region === "Global"
+                        ? "Join Online Session"
+                        : "Register for Workshop"}
                 </h3>
               </div>
 
@@ -767,93 +793,164 @@ export default function EventDetailPage() {
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-3.5">
-                  {error && (
-                    <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 rounded text-xs">
-                      {error}
+                <div className="space-y-4">
+                  {/* Zoom Direct Access Box if Online */}
+                  {zoomDetails?.zoom_url && (
+                    <div className="p-4 bg-sky-50/70 border border-sky-200 rounded-lg space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-sky-950 flex items-center gap-1.5">
+                          <Video size={15} className="text-[#0072CE]" />
+                          Zoom Live Broadcast
+                        </span>
+                        <span className="text-[10px] uppercase font-bold px-2 py-0.5 bg-white text-sky-800 rounded border border-sky-200 shadow-2xs">
+                          Open to All
+                        </span>
+                      </div>
+
+                      <a
+                        href={zoomDetails.zoom_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-3 bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs sm:text-sm font-semibold rounded flex items-center justify-center gap-2 transition-colors shadow-xs"
+                      >
+                        <Video size={16} /> Join Live on Zoom
+                      </a>
+
+                      {zoomDetails.meeting_id && (
+                        <div className="flex items-center justify-between text-xs bg-white px-3 py-2 rounded border border-sky-200/80">
+                          <span className="text-slate-600 font-mono text-[11px]">
+                            ID: <strong className="text-slate-900">{zoomDetails.meeting_id}</strong>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(zoomDetails?.meeting_id || "");
+                              setCopiedMeetingId(true);
+                              setTimeout(() => setCopiedMeetingId(false), 2000);
+                            }}
+                            className="text-[11px] font-semibold text-[#0072CE] hover:underline cursor-pointer"
+                          >
+                            {copiedMeetingId ? "Copied!" : "Copy ID"}
+                          </button>
+                        </div>
+                      )}
+
+                      {zoomDetails.timezones && zoomDetails.timezones.length > 0 && (
+                        <div className="pt-2 border-t border-sky-200/60 text-[11px] text-slate-600 space-y-1">
+                          <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
+                            Global Broadcast Times:
+                          </span>
+                          <div className="grid grid-cols-2 gap-1 font-medium">
+                            {zoomDetails.timezones.map((tz, i) => (
+                              <div key={i} className="text-slate-700">
+                                {tz.city}: <strong className="text-slate-900">{tz.time}</strong>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      placeholder="e.g. Elena Rostova"
-                      className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Official Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      placeholder="e.g. name@university.edu"
-                      className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Country of Residence *
-                    </label>
-                    <select
-                      name="country"
-                      required
-                      value={regCountry}
-                      onChange={(e) => {
-                        setRegCountry(e.target.value);
-                        setRegPhone("");
-                      }}
-                      className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
-                    >
-                      <option value="">Select Country</option>
-                      {countries.map((c) => (
-                        <option key={c.name} value={c.name}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Phone Number *
-                    </label>
-                    <div className="flex border border-slate-300 rounded bg-white overflow-hidden focus-within:border-[#0072CE] focus-within:ring-1 focus-within:ring-[#0072CE]">
-                      <span className="px-2.5 py-2 bg-slate-100 text-slate-600 text-xs font-mono border-r border-slate-300 flex items-center">
-                        {countries.find((c) => c.name === regCountry)?.code || "+"}
+                  {/* Pre-registration Form */}
+                  <div className="space-y-3">
+                    <div className="pt-1 border-t border-slate-200/70">
+                      <span className="text-xs font-semibold text-slate-700 block">
+                        {zoomDetails?.zoom_url
+                          ? "Want an email reminder? Pre-register below:"
+                          : "Complete registration below to reserve your place:"}
                       </span>
-                      <input
-                        type="tel"
-                        name="phone"
-                        required
-                        value={regPhone}
-                        onChange={(e) => setRegPhone(e.target.value)}
-                        placeholder="Mobile number"
-                        className="flex-1 px-3 py-2 text-xs bg-transparent focus:outline-none"
-                      />
                     </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-3.5">
+                      {error && (
+                        <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 rounded text-xs">
+                          {error}
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          required
+                          placeholder="e.g. Elena Rostova"
+                          className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Official Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          required
+                          placeholder="e.g. name@university.edu"
+                          className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Country of Residence *
+                        </label>
+                        <select
+                          name="country"
+                          required
+                          value={regCountry}
+                          onChange={(e) => {
+                            setRegCountry(e.target.value);
+                            setRegPhone("");
+                          }}
+                          className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded focus:outline-none focus:border-[#0072CE] focus:ring-1 focus:ring-[#0072CE]"
+                        >
+                          <option value="">Select Country</option>
+                          {countries.map((c) => (
+                            <option key={c.name} value={c.name}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Phone Number *
+                        </label>
+                        <div className="flex border border-slate-300 rounded bg-white overflow-hidden focus-within:border-[#0072CE] focus-within:ring-1 focus-within:ring-[#0072CE]">
+                          <span className="px-2.5 py-2 bg-slate-100 text-slate-600 text-xs font-mono border-r border-slate-300 flex items-center">
+                            {countries.find((c) => c.name === regCountry)?.code || "+"}
+                          </span>
+                          <input
+                            type="tel"
+                            name="phone"
+                            required
+                            value={regPhone}
+                            onChange={(e) => setRegPhone(e.target.value)}
+                            placeholder="Mobile number"
+                            className="flex-1 px-3 py-2 text-xs bg-transparent focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <p className="text-[11px] text-slate-500 leading-normal pt-1">
+                        Free participation. By registering, you agree to receive session reminders and contemplation materials under our non-profit civil society charter.
+                      </p>
+
+                      <button
+                        type="submit"
+                        className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs font-semibold rounded transition-colors shadow-xs"
+                      >
+                        Submit Participation Registration
+                      </button>
+                    </form>
                   </div>
-
-                  <p className="text-[11px] text-slate-500 leading-normal pt-1">
-                    Free participation. By registering, you agree to receive session reminders and contemplation materials under our non-profit civil society charter.
-                  </p>
-
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 bg-[#0072CE] hover:bg-[#0058A3] text-white text-xs font-semibold rounded transition-colors shadow-xs"
-                  >
-                    Submit Participation Registration
-                  </button>
-                </form>
+                </div>
               )}
 
             </div>

@@ -507,6 +507,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
         ...formData.sessions,
         { 
           id: crypto.randomUUID(), 
+          title: "",
           date: "", 
           module: "awareness",
           start_time: lastSession?.start_time || "10:00",
@@ -644,7 +645,7 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
               value={formData.region}
               onChange={(e) => setFormData({ ...formData, region: e.target.value })}
             >
-              <option value="Global">Global (Online)</option>
+              <option value="Global">Global</option>
               <option value="Americas">Americas</option>
               <option value="Europe">Europe</option>
               <option value="Africa">Africa</option>
@@ -714,6 +715,19 @@ function CreateEventForm({ onSuccess, conductors, initialData }: { onSuccess: ()
                 )}
                 
                 <div className="grid md:grid-cols-4 gap-4 items-end">
+                  <div className="space-y-1.5 md:col-span-4">
+                    <label className="text-[10px] uppercase font-semibold text-text-muted tracking-wider">
+                      Session Topic / Custom Title (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Master the Self, Lead the Future (leave blank to default to module name)"
+                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg outline-none focus:border-primary text-sm"
+                      value={session.title || ""}
+                      onChange={(e) => updateSession(session.id, 'title', e.target.value)}
+                    />
+                  </div>
+
                   <div className="space-y-1.5 md:col-span-1">
                     <label className="text-[10px] uppercase font-semibold text-text-muted tracking-wider">Day {idx + 1} Date</label>
                     <input

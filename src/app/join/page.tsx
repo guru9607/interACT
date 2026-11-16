@@ -155,12 +155,18 @@ export default function JoinPage() {
     return pages;
   };
 
-  const filteredEvents = events.filter((event) => {
-    if (activeRegion === "Global") {
-      return event.region === "Global" || (event.type || "").toLowerCase() === "online";
+  const isEventInRegion = (event: Event, region: typeof regions[number]) => {
+    const isGlobal = event.region === "Global" || (event.country || "").toLowerCase() === "global";
+    if (region === "Global") {
+      return isGlobal;
     }
-    return event.region === activeRegion;
-  });
+    if (isGlobal) {
+      return false;
+    }
+    return event.region === region;
+  };
+
+  const filteredEvents = events.filter((event) => isEventInRegion(event, activeRegion));
 
   // Helper to format 24h time to 12h
   const formatTime = (time: string) => {
@@ -185,14 +191,14 @@ export default function JoinPage() {
 
   return (
     <div className="bg-white min-h-screen font-sans text-slate-800">
-      
+
       {/* ─────────────────────────────────────────────────────────────
           1. INSTITUTIONAL HEADER & REGISTRY CLASSIFICATION
           UN DGC Standard Event Registry Banner
       ───────────────────────────────────────────────────────────── */}
       <section className="relative border-b border-slate-200 bg-[#F8F9FA]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 sm:pt-10 sm:pb-14">
-          
+
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0072CE] mb-3">
             <Globe size={14} className="shrink-0" />
             <span>Global Youth Registry · Workshops &amp; Gatherings</span>
@@ -232,7 +238,7 @@ export default function JoinPage() {
       ───────────────────────────────────────────────────────────── */}
       <section className="py-8 sm:py-12 bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
             <div>
               <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
@@ -242,11 +248,11 @@ export default function JoinPage() {
                 Upcoming Workshops
               </h2>
             </div>
-            
+
             <div className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded">
               <Filter size={14} className="text-slate-400" />
               <span>
-                Showing: <strong className="text-slate-800">{activeRegion === "Global" ? "Global (Online)" : activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}</strong>
+                Showing: <strong className="text-slate-800">{activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}</strong>
               </span>
             </div>
           </div>
@@ -254,32 +260,25 @@ export default function JoinPage() {
           {/* Regional Grouping Tabs */}
           <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100 rounded border border-slate-200 mb-8 max-w-3xl">
             {regions.map((region) => {
-              const count = events.filter((e) => {
-                if (region === "Global") {
-                  return e.region === "Global" || (e.type || "").toLowerCase() === "online";
-                }
-                return e.region === region;
-              }).length;
+              const count = events.filter((e) => isEventInRegion(e, region)).length;
               const isActive = activeRegion === region;
               return (
                 <button
                   key={region}
                   type="button"
                   onClick={() => setActiveRegion(region)}
-                  className={`px-4 py-2 rounded text-sm font-semibold tracking-wide transition-colors flex items-center gap-2 ${
-                    isActive
+                  className={`px-4 py-2 rounded text-sm font-semibold tracking-wide transition-colors flex items-center gap-2 ${isActive
                       ? "bg-white text-[#0B2545] shadow-xs border border-slate-200 font-bold"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-                  }`}
+                    }`}
                 >
-                  <span>{region === "Global" ? "Global (Online)" : region === "Asia" ? "Asia-Pacific" : region}</span>
+                  <span>{region === "Asia" ? "Asia-Pacific" : region}</span>
                   {count > 0 && (
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${
-                        isActive
+                      className={`text-xs px-2 py-0.5 rounded-full ${isActive
                           ? "bg-blue-50 text-[#0072CE] font-bold"
                           : "bg-slate-200 text-slate-600"
-                      }`}
+                        }`}
                     >
                       {count}
                     </span>
@@ -301,7 +300,7 @@ export default function JoinPage() {
             ) : filteredEvents.length > 0 ? (
               filteredEvents.map((event) => {
                 const dateObj = formatEventDate(event.date);
-                
+
                 // Determine ongoing vs upcoming status
                 const now = new Date();
                 now.setHours(0, 0, 0, 0);
@@ -321,10 +320,10 @@ export default function JoinPage() {
                 return (
                   <Link key={event.id} href={`/events/${event.id}`} className="block group">
                     <div className="border border-slate-200 rounded-lg p-5 sm:p-6 bg-white hover:border-[#0072CE] hover:shadow-xs transition-all flex flex-col md:flex-row md:items-center justify-between gap-5">
-                      
+
                       {/* Left: Tabular Date Badge + Core Information */}
                       <div className="flex items-start gap-4 sm:gap-5">
-                        
+
                         {/* Tabular Calendar Block */}
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded border border-slate-200 bg-slate-50 flex flex-col items-center justify-center shrink-0 text-center">
                           <span className="text-xs font-bold uppercase tracking-wider text-[#0072CE]">
@@ -352,27 +351,33 @@ export default function JoinPage() {
                             )}
 
                             <span
-                              className={`px-2 py-0.5 rounded text-xs font-semibold border ${
-                                event.type === "Online"
+                              className={`px-2 py-0.5 rounded text-xs font-semibold border ${event.type === "Online"
                                   ? "bg-sky-50 text-sky-800 border-sky-200"
                                   : event.type === "In-Person"
-                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                                  : "bg-purple-50 text-purple-800 border-purple-200"
-                              }`}
+                                    ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                    : "bg-purple-50 text-purple-800 border-purple-200"
+                                }`}
                             >
                               {event.type}
                             </span>
 
                             <span className="text-xs sm:text-sm text-slate-600 flex items-center gap-1">
-                              {event.type === "Online" || event.region === "Global" ? (
+                              {event.type === "Online" || isEventInRegion(event, "Global") || (event.location || "").toLowerCase().includes("zoom") ? (
                                 <>
                                   <Video size={13} className="text-sky-600 shrink-0" />
-                                  <span>Live on Zoom · Global Online</span>
+                                  <span>
+                                    {(event.location || "").toLowerCase().includes("zoom")
+                                      ? event.location
+                                      : "Live on Zoom"}
+                                    {event.country && event.country.toLowerCase() !== "global" && event.country.toLowerCase() !== "online"
+                                      ? ` (${event.country})`
+                                      : ""}
+                                  </span>
                                 </>
                               ) : (
                                 <>
                                   <MapPin size={13} className="text-slate-400 shrink-0" />
-                                  <span>{event.location}, {event.country}</span>
+                                  <span>{event.location}{event.country ? `, ${event.country}` : ""}</span>
                                 </>
                               )}
                             </span>
@@ -411,11 +416,11 @@ export default function JoinPage() {
               <div className="text-center py-16 bg-[#F8F9FA] rounded-lg border border-slate-200 p-8 space-y-3">
                 <Info size={24} className="text-slate-400 mx-auto" />
                 <h4 className="text-sm font-semibold text-slate-800">
-                  No Workshops Scheduled in {activeRegion === "Global" ? "Global (Online)" : activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}
+                  No Workshops Scheduled in {activeRegion === "Asia" ? "Asia-Pacific" : activeRegion}
                 </h4>
                 <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
                   {activeRegion === "Global"
-                    ? "Upcoming global online workshops are being scheduled with international guest speakers. Check back soon or register for an in-person session."
+                    ? "Upcoming global workshops are being scheduled with international guest speakers. Check back soon or register for an in-person session."
                     : "Upcoming workshop dates for this regional grouping are currently being finalized with institutional facilitators. You may also propose a session in your community."}
                 </p>
                 <div className="pt-2">
@@ -441,7 +446,7 @@ export default function JoinPage() {
       ───────────────────────────────────────────────────────────── */}
       <section ref={pastSectionRef} className="py-12 sm:py-16 bg-[#F8F9FA] border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-8">
             <div>
               <span className="text-xs font-bold text-[#0072CE] uppercase tracking-wider block mb-1">
@@ -469,12 +474,18 @@ export default function JoinPage() {
                 {displayedPastEvents.map((event) => (
                   <Link key={event.id} href={`/events/${event.id}`} className="group block">
                     <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs hover:border-[#0072CE] transition-all flex flex-col h-full">
-                      
+
                       {/* Documentary Photo Container */}
                       <div className="aspect-16/10 relative overflow-hidden bg-slate-100 border-b border-slate-200">
                         {event.image_url ? (
                           <img
                             src={event.image_url}
+                            alt={event.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
+                          />
+                        ) : /global youth series|\bgys\b/i.test(event.title || "") ? (
+                          <img
+                            src="https://soxoovfassgdnsgqtfvi.supabase.co/storage/v1/object/public/event-images/global-youth-series-banner.jpg"
                             alt={event.title}
                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
                           />
@@ -500,8 +511,24 @@ export default function JoinPage() {
                             </span>
                             <span>•</span>
                             <span className="flex items-center gap-1.5">
-                              <MapPin size={13} className="text-slate-400" />
-                              {event.location}, {event.country}
+                              {event.type === "Online" || (event.country || "").toLowerCase() === "global" || (event.location || "").toLowerCase().includes("zoom") ? (
+                                <>
+                                  <Video size={13} className="text-sky-600 shrink-0" />
+                                  <span>
+                                    {(event.location || "").toLowerCase().includes("zoom")
+                                      ? event.location
+                                      : "Live on Zoom"}
+                                    {event.country && event.country.toLowerCase() !== "global" && event.country.toLowerCase() !== "online"
+                                      ? ` (${event.country})`
+                                      : ""}
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <MapPin size={13} className="text-slate-400 shrink-0" />
+                                  <span>{event.location}{event.country ? `, ${event.country}` : ""}</span>
+                                </>
+                              )}
                             </span>
                           </div>
                           <h3 className="text-lg font-serif font-bold text-[#0B2545] group-hover:text-[#0072CE] transition-colors line-clamp-2 leading-snug">
@@ -549,11 +576,10 @@ export default function JoinPage() {
                             type="button"
                             onClick={() => loadPastPage(p, true)}
                             disabled={loadingPastPage}
-                            className={`min-w-8 h-8 sm:min-w-9 sm:h-9 px-2 text-xs sm:text-sm font-semibold rounded border transition-colors ${
-                              currentPastPage === p
+                            className={`min-w-8 h-8 sm:min-w-9 sm:h-9 px-2 text-xs sm:text-sm font-semibold rounded border transition-colors ${currentPastPage === p
                                 ? "bg-[#0072CE] text-white border-[#0072CE] shadow-xs"
                                 : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
-                            }`}
+                              }`}
                           >
                             {p}
                           </button>
